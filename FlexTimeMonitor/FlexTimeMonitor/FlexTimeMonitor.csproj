@@ -93,6 +93,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileUtils.cs" />
     <Compile Include="WorkHistory.cs" />
     <Compile Include="XmlManager.cs" />
     <Compile Include="Options.xaml.cs">

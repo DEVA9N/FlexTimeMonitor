@@ -8,11 +8,11 @@
     <Setting Name="BreakPeriod" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">00:30:00</Value>
     </Setting>
-    <Setting Name="LogfileName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="ApplicationName" Type="System.String" Scope="User">
       <Value Profile="(Default)">FlexTimeMonitor</Value>
+    </Setting>
+    <Setting Name="LogfileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

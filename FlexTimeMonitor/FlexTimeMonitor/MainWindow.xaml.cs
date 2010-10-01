@@ -40,19 +40,19 @@ namespace A9N.FlexTimeMonitor
             // TODO: replace Load and Save
             // The current implementation is dangerous. It overwrites files when first installed (config path == ""?)
             // 
-            // New policy:
+            // New policy: Policy warn on load, solve on close.
             // 1. First start: check if file name is configured (which is not the case on the real first start)
             // 2. Create default file name and file if it does not already exist
             // 3. If that file exists - use it - never overwrite a file without impoting it's content first
             // After this point:
             // The file name != String.Empty. If so do not take further file check actions. The user is to be informed
-            // about file issues via a Messagebox and has to resolve the problems on It's own
+            // about file issues via a Messagebox and has to resolve the problems on It's own.
 
             // IDEA:
-            // -Make hint with default file name / maybe even a button
+            // -Show hint with default file name / or a "DefaultButton"
             // -Create a max log period in months. Delete older entries automatically
             // -Automatically create weekly backups and monthly ones.
-
+            // -Save configuration in default path (not that cryptic path used by the installed application)
             LoadHistory();
 
             // Get today from history - never get it somewhere else!
@@ -62,6 +62,20 @@ namespace A9N.FlexTimeMonitor
             SaveHistory();
         }
 
+
+        private String CreateDefaultFileName()
+        {
+            // Create default filename
+            String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
+            String appName = Settings.Default.ApplicationName + "\\";
+
+            return myDocuments + appName + "timelog.xml";
+        }
+
+        private void CreateBackup()
+        { 
+        
+        }
 
         #region Systray icon
 
@@ -119,20 +133,60 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
-        /// Load history from file. The filename is configured in the default settings.
+        /// The major goal is still to get the application running savely without user interaction.
+        /// 
         /// </summary>
         private void LoadHistory()
         {
+            String fileName = Settings.Default.LogfileName;
+
+            // There is no fileName configured - create new default fileName
+            if (fileName == String.Empty)
+            {
+                Settings.Default.LogfileName = CreateDefaultFileName();
+                Settings.Default.Save();
+                fileName = Settings.Default.LogfileName;
+            }
+
+            // At this point there is a valid filename but unknown if that file exists
+            if (File.Exists(fileName) == false)
+            {
+                // Create path
+
+                // Create file
+
+            }
+
+            // The file exists, but it's inaccessible. There is a major problem which can not be resolved by this application 
+            // Note that the file name and path may also be user defined.
+            if (FileUtils.TryOpen(fileName) == false)
+            {
+                String error = "";
+                error += "The application is unable to access the log file\n ";
+                error += Settings.Default.LogfileName + "\n";
+                error += "Please check if the file name is valid and the destination is not write protected";
+
+                MessageBox.Show(error, "Unable to access file");
+
+                // TODO: make sure it stops immediatly
+                Application.Current.Shutdown();
+            }
+
+            // Load file content
             try
             {
                 history = XmlManager.Read<WorkHistory>(Settings.Default.LogfileName);
             }
             catch (Exception e)
             {
+                // NOTE: this is a crucial spot! The file is existant but it is unkown if it contains data or if that data is valid.
+                // That's why it is important to create a backup in case of an error during deserialization.
                 System.Diagnostics.Debug.WriteLine("Unable to load history file " + Settings.Default.LogfileName + "\n" + e);
+                CreateBackup();
             }
 
-            // These things should be done even and espacially if the load fails - don't put this in the try catch block!
+            // These things should be done even and espacially if the load fails. 
+            // This step will erase the previous history entrys in the case that the file deserialization threw an exception.
             if (history == null)
             {
                 history = new WorkHistory();
@@ -142,6 +196,7 @@ namespace A9N.FlexTimeMonitor
             dataGridWorkDays.ItemsSource = history;
         }
 
+
         /// <summary>
         /// Save history to file.
         /// </summary>
@@ -149,6 +204,8 @@ namespace A9N.FlexTimeMonitor
         {
             try
             {
+                // Do all the file checking stuff again...
+
                 // Make the file ready to be saved - this espacially involves the path which must be present
                 if (File.Exists(Settings.Default.LogfileName) == false)
                 {
