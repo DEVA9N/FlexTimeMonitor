@@ -15,6 +15,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     class HistoryFile
     {
+        private String fileName;
 
         /// <summary>
         /// Create new instance with defined file name
@@ -22,7 +23,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="fileName"></param>
         public HistoryFile(String fileName)
         {
-            this.FileName = fileName;
+            this.fileName = fileName;
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace A9N.FlexTimeMonitor
         /// <exception cref="System.IO.FileLoadException">Thrown when reading from invalid file.</exception>
         public WorkHistory Load()
         {
-            if (File.Exists(FileName))
+            if (File.Exists(fileName))
             {
                 // It is still possible that the data is invalid and an exception is thrown.
                 // This is good though! The User of this method should decide what to do with a broken file.
@@ -43,7 +44,7 @@ namespace A9N.FlexTimeMonitor
                 }
                 catch (Exception e)
                 {
-                    throw new System.IO.FileLoadException("Unable read data (" + FileName + "). Manually repair or erase file.");
+                    throw new System.IO.FileLoadException("Unable read data (" + fileName + "). Manually repair or erase file.");
                 }
             }
             else
@@ -62,7 +63,7 @@ namespace A9N.FlexTimeMonitor
         {
             try
             {
-                FileInfo info = new FileInfo(FileName);
+                FileInfo info = new FileInfo(fileName);
 
                 // Make the file ready to be saved - this espacially involves the path which must be present
                 if (info.Exists == false)
@@ -76,18 +77,28 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Unable to access history file" + FileName + "\n" + e);
+                System.Diagnostics.Debug.WriteLine("Unable to access history file" + fileName + "\n" + e);
             }
 
             try
             {
-                Write(FileName, history);
+                Write(fileName, history);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Unable to save history to file " + FileName + "\n" + e);
+                System.Diagnostics.Debug.WriteLine("Unable to save history to file " + fileName + "\n" + e);
             }
         }
+
+        /// <summary>
+        /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
+        /// directory. The name will include the date and time of the backup.
+        /// </summary>
+        public void CreateBackup()
+        {
+            throw new NotImplementedException();
+        }
+
 
         #region XML (de)serialization
 
@@ -130,8 +141,5 @@ namespace A9N.FlexTimeMonitor
         }
 
         #endregion
-
-        public String FileName { get; private set; }
-
     }
 }

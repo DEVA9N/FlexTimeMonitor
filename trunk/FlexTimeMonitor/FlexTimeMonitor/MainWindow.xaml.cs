@@ -39,19 +39,12 @@ namespace A9N.FlexTimeMonitor
 
             InitializeSystrayIcon();
 
-            // Note this will only be visible in the deployed version - not during debugging
-            AddVersionString();
+            // Add version string
+            Title += " - " + System.Windows.Forms.Application.ProductVersion;
+
+            UpdateConfiguration();
 
             historyFile = new HistoryFile(GetFileName());
-
-            // TODO: replace Load and Save
-            // The current implementation is dangerous. It overwrites files when first installed (config path == ""?)
-
-            // IDEA:
-            // -Show hint with default file name / or a "DefaultButton"
-            // -Create a max log period in months. Delete older entries automatically
-            // -Automatically create weekly backups and monthly ones.
-            // -Save configuration in default path (not that cryptic path used by the installed application)
 
             // Will try to open an existing history file. If none is found it will create a new one.
             // If reading or writing fails the user is informed and the application is shut down without writing data.
@@ -59,7 +52,6 @@ namespace A9N.FlexTimeMonitor
             {
                 history = historyFile.Load();
 
-                // This will bind the current history to the datagrid
                 dataGridWorkDays.ItemsSource = history;
 
                 // Get today from history - never get it somewhere else!
@@ -67,7 +59,8 @@ namespace A9N.FlexTimeMonitor
 
                 // This will make sure that the start is logged correctly even if the computer crashes
                 historyFile.Save(history);
-
+                
+                // Application is running smoothly so data can be saved on exit
                 saveHistoryOnExit = true;
             }
             catch (Exception e)
@@ -78,9 +71,6 @@ namespace A9N.FlexTimeMonitor
                 Application.Current.Shutdown();
             }
         }
-
-
-
 
         #region Systray icon
 
@@ -112,10 +102,10 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
-            systrayIcon.BalloonTipText = "Start: " + today.Start.ToString("t");
-            systrayIcon.BalloonTipText += "\nEstimated: " + today.Estimated.ToString("t");
-            systrayIcon.BalloonTipText += "\nElapsed: " + TimeSpanTotalToString(today.Elapsed);
-            systrayIcon.BalloonTipText += "\nRemaining: " + TimeSpanTotalToString(today.Remaining);
+            systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.ToString("t");
+            systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.ToString("t");
+            systrayIcon.BalloonTipText += "\nElapsed:\t\t" + today.Elapsed.ToString(@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nRemaining:\t" + today.OverTime.ToString(@"hh\:mm");
             systrayIcon.ShowBalloonTip(10);
         }
 
@@ -124,17 +114,12 @@ namespace A9N.FlexTimeMonitor
         #region Helper methods
 
         /// <summary>
-        /// Adds a version string to the main window title.
-        /// NOTE: The string will only be visible in the deployed application and
-        /// not during development.
+        /// Will be called on each startup and check if the configuration has
+        /// to be imported from a recent program versions config.
         /// </summary>
-        private void AddVersionString()
-        {
-            //if (ApplicationDeployment.IsNetworkDeployed)
-            //{
-            //    Version currentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-            //    Title += " - " + currentVersion.ToString();
-            //}
+        private void UpdateConfiguration()
+        { 
+            // TODO: enter code here
         }
 
         /// <summary>
@@ -155,30 +140,38 @@ namespace A9N.FlexTimeMonitor
             return Settings.Default.LogfileName;
         }
 
-
-
         /// <summary>
         /// Converts the ToString result to 
         /// 9:47 format. 
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        private static String TimeSpanTotalToString(TimeSpan t)
+        private String TimeSpanTotalToString(TimeSpan t)
         {
             if (t != null)
             {
                 bool isNegative = t.Ticks < 0;
                 String prefix = isNegative ? "-" : "";
+                int totalMinutes = (int)Math.Abs(t.TotalMinutes);
+                int hours = totalMinutes / 60;
+                int minutes = totalMinutes - (hours * 60);
 
-                return prefix + t.ToString(@"hh\:mm");
+                return prefix + hours.ToString() + ":" + minutes.ToString("00");
             }
             return "";
         }
+
 
         #endregion
 
         #region Window Events
 
+        /// <summary>
+        /// This event is called when the main window is closed. It doesn't matter if it is closed
+        /// by user or by exception. It will be called either way!
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // Remove systray icon
@@ -246,8 +239,14 @@ namespace A9N.FlexTimeMonitor
 
         #region Menu item events
 
-        private void menuItemFile_Click(object sender, RoutedEventArgs e)
+        private void MenuItemQuit_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
+
+        private void MenuItemQuitWithoutSave_Click(object sender, RoutedEventArgs e)
+        {
+            saveHistoryOnExit = false;
             Close();
         }
 
@@ -260,14 +259,13 @@ namespace A9N.FlexTimeMonitor
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
 
-            String aboutText = "   " + Title + "\n\n";
+            String aboutText = Title + "\n\n";
             aboutText += "©2009 Andre Janßen - http://a9n.de";
 
             MessageBox.Show(aboutText, ApplicationName);
         }
 
         #endregion
-
 
     }
 }
