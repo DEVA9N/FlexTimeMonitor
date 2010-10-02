@@ -32,6 +32,7 @@ namespace A9N.FlexTimeMonitor
         /// <returns></returns>
         private String TimeSpanTotalToString(TimeSpan t)
         {
+            // This suxx - I should really find a proper way to remove this...
             if (t != null)
             {
                 bool isNegative = t.Ticks < 0;
