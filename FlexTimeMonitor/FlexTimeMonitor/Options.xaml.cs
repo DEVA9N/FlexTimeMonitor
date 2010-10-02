@@ -24,7 +24,7 @@ namespace A9N.FlexTimeMonitor
 
             textBoxWorkPeriod.Text = Properties.Settings.Default.WorkPeriod.ToString();
             textBoxBreakPeriod.Text = Properties.Settings.Default.BreakPeriod.ToString();
-            textBoxFile.Text = Properties.Settings.Default.LogfileName;
+            //textBoxFile.Text = Properties.Settings.Default.LogfileName;
         }
 
         private void buttonOk_Click(object sender, RoutedEventArgs e)
@@ -49,11 +49,11 @@ namespace A9N.FlexTimeMonitor
 
             bool parseWorkSuccess = TimeSpan.TryParse(textBoxWorkPeriod.Text, out resultWork);
             bool parseBreakSuccess = TimeSpan.TryParse(textBoxBreakPeriod.Text, out resultBreak);
-            bool parsePathSuccess = System.IO.File.Exists(textBoxFile.Text);
+            //bool parsePathSuccess = System.IO.File.Exists(textBoxFile.Text);
 
             textBoxWorkPeriod.Foreground = parseWorkSuccess ? validResultBrush : invalidResultBrush;
             textBoxBreakPeriod.Foreground = parseBreakSuccess ? validResultBrush : invalidResultBrush;
-            textBoxFile.Foreground = parsePathSuccess ? validResultBrush : invalidResultBrush;
+            //textBoxFile.Foreground = parsePathSuccess ? validResultBrush : invalidResultBrush;
 
             bool allValuesValid = parseWorkSuccess && parseBreakSuccess;// && parsePathSuccess;
 
@@ -61,7 +61,7 @@ namespace A9N.FlexTimeMonitor
             {
                 Properties.Settings.Default.WorkPeriod = resultWork;
                 Properties.Settings.Default.BreakPeriod = resultBreak;
-                Properties.Settings.Default.LogfileName = textBoxFile.Text;
+                //Properties.Settings.Default.LogfileName = textBoxFile.Text;
                 Properties.Settings.Default.Save();
                 return true;
             }
@@ -77,7 +77,7 @@ namespace A9N.FlexTimeMonitor
             {
                 if (System.IO.File.Exists(ofd.FileName))
                 {
-                    textBoxFile.Text = ofd.FileName;
+                    //textBoxFile.Text = ofd.FileName;
                     Properties.Settings.Default.LogfileName = ofd.FileName;
                 }
             }

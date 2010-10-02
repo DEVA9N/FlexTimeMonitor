@@ -1,7 +1,7 @@
 ﻿<Window x:Class="A9N.FlexTimeMonitor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Time Manager Dlx" Height="346" Width="532" Closing="Window_Closing" Icon="/FlexTimeMonitor;component/Icons/Icon_16.ico" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="200">
+        Title="Flex Time Monitor" Height="346" Width="532" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="200">
     <Grid>
         <StatusBar Name="statusBar1" DockPanel.Dock="Bottom" Width="Auto" Height="23" DataContext="{Binding}" VerticalAlignment="Bottom">
             <TextBlock>Days</TextBlock>

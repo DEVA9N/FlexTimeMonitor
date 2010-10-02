@@ -1,0 +1,7 @@
+﻿Version 1.1.x
+------------------
+- completely rewritten for .NET 4.0 and WPF
+- added menu
+- added options dialog
+- addes editable table
+- added possibility to add a note
