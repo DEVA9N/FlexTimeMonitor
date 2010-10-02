@@ -1,7 +1,7 @@
 ﻿<Window x:Class="A9N.FlexTimeMonitor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Flex Time Monitor" Height="346" Width="532" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="200">
+        Title="Flex Time Monitor" Height="400" Width="640" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="300" Icon="/FlexTimeMonitor;component/Icons/Icon_16.ico">
     <Grid>
         <StatusBar Name="statusBar1" DockPanel.Dock="Bottom" Width="Auto" Height="23" DataContext="{Binding}" VerticalAlignment="Bottom">
             <TextBlock>Days</TextBlock>
@@ -16,19 +16,27 @@
             <TextBlock>Difference</TextBlock>
             <TextBlock Name="statusBarDifferenceValue" Width="60"></TextBlock>
         </StatusBar>
-        <DataGrid AutoGenerateColumns="False" Name="dataGridWorkDays" ItemsSource="{Binding}" GridLinesVisibility="All" Margin="12,27,12,29" SelectionChanged="dataGridWorkDays_SelectionChanged" IsReadOnly="False">
+        <DataGrid AutoGenerateColumns="False" 
+                  Name="dataGridWorkDays" 
+                  ItemsSource="{Binding}" 
+                  GridLinesVisibility="All" 
+                  Margin="12,27,12,29" 
+                  SelectionChanged="dataGridWorkDays_SelectionChanged" 
+                  IsReadOnly="False"
+                  RowBackground="White"
+                  AlternatingRowBackground="GhostWhite">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Binding="{Binding Start, StringFormat={}\{0:dd.MM.yyyy\}}" />
-                <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat=t}" />
-                <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat=t}" />
-                <DataGridTextColumn Header="Estimated"  Binding="{Binding Estimated, StringFormat=t}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Overtime"  Binding="{Binding OverTimeString}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Note"  Binding="{Binding Note}" />
+                <DataGridTextColumn Header="Date"  Binding="{Binding Start, StringFormat={}\{0:dd.MM.yyyy\}}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat={}\{0:HH:mm:ss\}}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat={}\{0:HH:mm:ss\}}" IsReadOnly="True" MinWidth="80" />
+                 <DataGridTextColumn Header="Overtime"  Binding="{Binding OverTime}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="Note"  Binding="{Binding Note}" MinWidth="200" />
             </DataGrid.Columns>
         </DataGrid>
         <Menu Width="Auto" Height="25" Name="mainMenu" DockPanel.Dock="Top" VerticalAlignment="Top">
-            <MenuItem Header="File" Name="menuItemFile" Click="menuItemFile_Click">
-                <MenuItem Header="Quit" Name="MenuItemQuit" />
+            <MenuItem Header="File" Name="menuItemFile">
+                <MenuItem Header="Quit" Name="MenuItemQuit" Click="MenuItemQuit_Click" />
+                <MenuItem Header="Quit without save" Name="MenuItemQuitWithoutSave" Click="MenuItemQuitWithoutSave_Click" />
             </MenuItem>
             <MenuItem Header="Options" Name="menuItemOptions">
                 <MenuItem Header="Edit" Click="MenuItemEditOptions_Click_1" Name="menuItemEditOptions" />
