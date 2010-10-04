@@ -2,8 +2,28 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Flex Time Monitor" Height="400" Width="640" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="300" Icon="/FlexTimeMonitor;component/Icons/Icon_16.ico">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="MenuBarBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White" Offset="0" />
+            <GradientStop Color="White" Offset="1" />
+            <GradientStop Color="#FFC9C9C9" Offset="0.074" />
+            <GradientStop Color="#FFD6D6D6" Offset="0.934" />
+            <GradientStop Color="#FFF3F3F3" Offset="0.508" />
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="MenuBarBrushLight" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White" Offset="1" />
+            <GradientStop Color="White" Offset="0" />
+            <GradientStop Color="White" Offset="0.525" />
+            <GradientStop Color="#FFE1E1E1" Offset="0.066" />
+            <GradientStop Color="#FFE1E1E1" Offset="0.902" />
+        </LinearGradientBrush>
+    </Window.Resources>
     <Grid>
-        <StatusBar Name="statusBar1" DockPanel.Dock="Bottom" Width="Auto" Height="23" DataContext="{Binding}" VerticalAlignment="Bottom">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="359*" />
+            <ColumnDefinition Width="259*" />
+        </Grid.ColumnDefinitions>
+        <StatusBar Name="statusBar1" DockPanel.Dock="Bottom" Width="Auto" Height="23" DataContext="{Binding}" VerticalAlignment="Bottom" Background="{StaticResource MenuBarBrushLight}" Grid.ColumnSpan="2">
             <TextBlock>Days</TextBlock>
             <TextBlock Name="statusBarDayCountValue" Width="60"></TextBlock>
             <Separator/>
@@ -20,11 +40,9 @@
                   Name="dataGridWorkDays" 
                   ItemsSource="{Binding}" 
                   GridLinesVisibility="All" 
-                  Margin="12,27,12,29" 
+                  Margin="0,23,0,21" 
                   SelectionChanged="dataGridWorkDays_SelectionChanged" 
-                  IsReadOnly="False"
-                  RowBackground="White"
-                  AlternatingRowBackground="GhostWhite">
+                  IsReadOnly="False" Grid.ColumnSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date"  Binding="{Binding Start, StringFormat={}\{0:dd.MM.yyyy\}}" IsReadOnly="True" MinWidth="80" />
                 <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat={}\{0:HH:mm:ss\}}" IsReadOnly="True" MinWidth="80" />
@@ -32,8 +50,27 @@
                  <DataGridTextColumn Header="Overtime"  Binding="{Binding OverTime}" IsReadOnly="True" MinWidth="80" />
                 <DataGridTextColumn Header="Note"  Binding="{Binding Note}" MinWidth="200" />
             </DataGrid.Columns>
+            <DataGrid.AlternatingRowBackground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="White" Offset="1" />
+                    <GradientStop Color="#FFF0F1FF" Offset="0.052" />
+                    <GradientStop Color="#FFEFF2FF" Offset="0.956" />
+                    <GradientStop Color="White" Offset="0.488" />
+                </LinearGradientBrush>
+            </DataGrid.AlternatingRowBackground>
+            <DataGrid.RowBackground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="White" Offset="1" />
+                    <GradientStop Color="#FFE4E4E4" Offset="0.047" />
+                    <GradientStop Color="#FFE7E7E7" Offset="0.948" />
+                    <GradientStop Color="White" Offset="0.523" />
+                    <GradientStop Color="#FFDDEEFF" Offset="1" />
+                </LinearGradientBrush>
+            </DataGrid.RowBackground>
         </DataGrid>
-        <Menu Width="Auto" Height="25" Name="mainMenu" DockPanel.Dock="Top" VerticalAlignment="Top">
+        <Menu Width="Auto" Height="25" Name="mainMenu" DockPanel.Dock="Top" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="File" Name="menuItemFile">
                 <MenuItem Header="Quit" Name="MenuItemQuit" Click="MenuItemQuit_Click" />
                 <MenuItem Header="Quit without save" Name="MenuItemQuitWithoutSave" Click="MenuItemQuitWithoutSave_Click" />
@@ -44,6 +81,15 @@
             <MenuItem Header="Help" Name="menuItemHelp">
                 <MenuItem Header="About" Click="MenuItemAbout_Click" Name="menuItemAbout" />
             </MenuItem>
+            <Menu.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="White" Offset="1" />
+                    <GradientStop Color="#FFE5E5E5" Offset="0.508" />
+                    <GradientStop Color="#FFC1C1C1" Offset="0.05" />
+                    <GradientStop Color="#FFBBBBBB" Offset="0.956" />
+                </LinearGradientBrush>
+            </Menu.Background>
         </Menu>
     </Grid>
 </Window>
