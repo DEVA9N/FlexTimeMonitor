@@ -24,7 +24,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const String ApplicationName = "FlexTimeMonitor";
+        private const String ApplicationName = "Flex Time Monitor";
         private const String DefaultLogfileName = "flextimelog.xml";
 
         private bool saveHistoryOnExit = false;
@@ -102,9 +102,15 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
+            // Another try - is not formating well either
+            //systrayIcon.BalloonTipText = String.Format("{0,-20} {1,10}\n", "Start:", today.Start.ToString("t"));
+            //systrayIcon.BalloonTipText += String.Format("{0,-20} {1,10}\n", "Estimated:", today.Estimated.ToString("t"));
+            //systrayIcon.BalloonTipText += String.Format("{0,-20} {1,10}\n", "Elapsed:", today.Elapsed.ToString(@"hh\:mm"));
+            //systrayIcon.BalloonTipText += String.Format("{0,-20} {1,10}", "Remaining:", today.OverTime.ToString(@"hh\:mm"));
+
             systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.ToString("t");
             systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.ToString("t");
-            systrayIcon.BalloonTipText += "\nElapsed:\t\t" + today.Elapsed.ToString(@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nElapsed:\t" + today.Elapsed.ToString(@"hh\:mm");
             systrayIcon.BalloonTipText += "\nRemaining:\t" + today.OverTime.ToString(@"hh\:mm");
             systrayIcon.ShowBalloonTip(10);
         }
