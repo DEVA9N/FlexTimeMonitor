@@ -55,14 +55,13 @@ namespace A9N.FlexTimeMonitor
         {
             get
             {
-                // NOTE: this is a complicated implementation - but neccessary for the propper ToString (HH:mm:ss)
+                // NOTE: this is a complicated implementation - but neccessary for the propper ToString (-hh:mm:ss)
                 // Until I find a propper way to display the correct format in the main window's datagrid I will stick with it...
                 TimeSpan overtime = Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
                 return new TimeSpan(overtime.Hours, overtime.Minutes, overtime.Seconds);
-
-                // This is the nice implementation - use this when fixed that formating issue
-                //return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
             }
+            // This is nice but won't work unless I get the StringFormat in xaml to display a negative time
+            //get { return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
         }
 
         /// <summary>
@@ -82,16 +81,11 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
-        /// Remaining time
+        /// Remaining time - oppoosite of OverTime (5min Remaining == -5min OverTime)
         /// </summary>
         public TimeSpan Remaining
         {
-            get
-            {
-                TimeSpan remaining = Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-
-                return remaining > TimeSpan.Zero ? TimeSpan.Zero : remaining;
-            }
+            get { return TimeSpan.Zero - OverTime; }
         }
 
         /// <summary>

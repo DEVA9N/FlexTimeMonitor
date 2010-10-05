@@ -35,6 +35,8 @@ namespace A9N.FlexTimeMonitor
 
         public MainWindow()
         {
+            EnforceSingleInstance();
+
             InitializeComponent();
 
             InitializeSystrayIcon();
@@ -102,22 +104,33 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
-            // Another try - is not formating well either
-            //systrayIcon.BalloonTipText = String.Format("{0,-20} {1,10}\n", "Start:", today.Start.ToString("t"));
-            //systrayIcon.BalloonTipText += String.Format("{0,-20} {1,10}\n", "Estimated:", today.Estimated.ToString("t"));
-            //systrayIcon.BalloonTipText += String.Format("{0,-20} {1,10}\n", "Elapsed:", today.Elapsed.ToString(@"hh\:mm"));
-            //systrayIcon.BalloonTipText += String.Format("{0,-20} {1,10}", "Remaining:", today.OverTime.ToString(@"hh\:mm"));
-
             systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.ToString("t");
             systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.ToString("t");
             systrayIcon.BalloonTipText += "\nElapsed:\t" + today.Elapsed.ToString(@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nRemaining:\t" + today.OverTime.ToString(@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nRemaining:\t" + today.Remaining.ToString(@"\-hh\:mm");
             systrayIcon.ShowBalloonTip(10);
         }
 
         #endregion
 
         #region Helper methods
+
+        /// <summary>
+        /// Multiple instance are useless and therefore forbidden.
+        /// </summary>
+        private void EnforceSingleInstance()
+        {
+            bool isFirstInstance;
+
+            System.Threading.Mutex firstInstanceMutex = new System.Threading.Mutex(true, ApplicationName, out isFirstInstance);
+
+            if (isFirstInstance == false)
+            {
+                saveHistoryOnExit = false;
+                MessageBox.Show("Flex Time Monitor is already running.", "Error");
+                Application.Current.Shutdown();
+            }
+        }
 
         /// <summary>
         /// Will be called on each startup and check if the configuration has
@@ -156,17 +169,10 @@ namespace A9N.FlexTimeMonitor
         {
             if (t != null)
             {
-                bool isNegative = t.Ticks < 0;
-                String prefix = isNegative ? "-" : "";
-                int totalMinutes = (int)Math.Abs(t.TotalMinutes);
-                int hours = totalMinutes / 60;
-                int minutes = totalMinutes - (hours * 60);
-
-                return prefix + hours.ToString() + ":" + minutes.ToString("00");
+                return ((int)t.TotalHours).ToString() + ":" + t.Minutes.ToString() + ":" + t.Seconds.ToString();             
             }
             return "";
         }
-
 
         #endregion
 
