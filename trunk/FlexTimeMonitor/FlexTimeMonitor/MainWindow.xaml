@@ -44,10 +44,12 @@
                   SelectionChanged="dataGridWorkDays_SelectionChanged" 
                   IsReadOnly="False" Grid.ColumnSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Binding="{Binding Start, StringFormat={}\{0:dd.MM.yyyy\}}" IsReadOnly="True" MinWidth="80" />
-                <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat={}\{0:HH:mm:ss\}}" IsReadOnly="True" MinWidth="80" />
-                <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat={}\{0:HH:mm:ss\}}" IsReadOnly="True" MinWidth="80" />
-                 <DataGridTextColumn Header="Overtime"  Binding="{Binding OverTime}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="Date"  Binding="{Binding Start, StringFormat={}{0:dd.MM.yyyy}}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat={}{0:HH:mm:ss}}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat={}{0:HH:mm:ss}}" IsReadOnly="True" MinWidth="80" />
+                <DataGridTextColumn Header="Overtime"  Binding="{Binding OverTime}" IsReadOnly="True" MinWidth="80" />
+                <!--This is nearly ok. But the missing minus is a big problem.-->
+                <!--<DataGridTextColumn Header="Overtime"  Binding="{Binding OverTime, StringFormat={}{0:hh':'mm':'ss}}" IsReadOnly="True" MinWidth="80" />-->
                 <DataGridTextColumn Header="Note"  Binding="{Binding Note}" MinWidth="200" />
             </DataGrid.Columns>
             <DataGrid.AlternatingRowBackground>

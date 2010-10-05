@@ -42,7 +42,7 @@ namespace A9N.FlexTimeMonitor
                 {
                     return Read<WorkHistory>(Settings.Default.LogfileName);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new System.IO.FileLoadException("Unable read data (" + fileName + "). Manually repair or erase file.");
                 }
