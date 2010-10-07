@@ -40,7 +40,7 @@ namespace A9N.FlexTimeMonitor
             InitializeComponent();
 
             // Add version string
-            Title += " - " + System.Windows.Forms.Application.ProductVersion;
+            Title += " - " + GetVersion();
 
             UpdateConfiguration();
 
@@ -158,6 +158,21 @@ namespace A9N.FlexTimeMonitor
             }
 
             return Settings.Default.LogfileName;
+        }
+
+        private String GetVersion()
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                // This version matches the published version and is only available in the published application
+                return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+            }
+            else
+            {
+                // This return the AssemblyInfos' version which differs to the deployment version
+                return System.Windows.Forms.Application.ProductVersion;
+            }
+            // Todo: Cgeck if it a good idea to sync those numbers
         }
 
         /// <summary>
