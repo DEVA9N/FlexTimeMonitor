@@ -39,8 +39,6 @@ namespace A9N.FlexTimeMonitor
 
             InitializeComponent();
 
-            InitializeSystrayIcon();
-
             // Add version string
             Title += " - " + System.Windows.Forms.Application.ProductVersion;
 
@@ -72,6 +70,9 @@ namespace A9N.FlexTimeMonitor
                 // This will close the application but will also trigger the MainWindow's closing event!
                 Application.Current.Shutdown();
             }
+
+            // This is last since it relys on today and a working application
+            InitializeSystrayIcon();
         }
 
         #region Systray icon
