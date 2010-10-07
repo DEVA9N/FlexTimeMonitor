@@ -71,7 +71,7 @@ namespace A9N.FlexTimeMonitor
                 Application.Current.Shutdown();
             }
 
-            // This is last since it relys on today and a working application
+            // This is last since it relys on today (after history.GetToday) and a working application
             InitializeSystrayIcon();
         }
 
@@ -134,8 +134,8 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
-        /// Will be called on each startup and check if the configuration has
-        /// to be imported from a recent program versions config.
+        /// Updates users' application configuration to be used in this version
+        /// Once this is done this Method does nothing
         /// </summary>
         private void UpdateConfiguration()
         { 
@@ -170,7 +170,7 @@ namespace A9N.FlexTimeMonitor
         {
             if (t != null)
             {
-                return ((int)t.TotalHours).ToString() + ":" + t.Minutes.ToString() + ":" + t.Seconds.ToString();             
+                return ((int)t.TotalHours).ToString() + ":" + Math.Abs(t.Minutes).ToString() + ":" + Math.Abs(t.Seconds).ToString();             
             }
             return "";
         }
