@@ -59,7 +59,7 @@ namespace A9N.FlexTimeMonitor
 
                 // This will make sure that the start is logged correctly even if the computer crashes
                 historyFile.Save(history);
-                
+
                 // Application is running smoothly so data can be saved on exit
                 saveHistoryOnExit = true;
             }
@@ -105,8 +105,8 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
-            systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.ToString("t");
-            systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.ToString("t");
+            systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.TimeOfDay.ToString(@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.TimeOfDay.ToString(@"hh\:mm");
             systrayIcon.BalloonTipText += "\nElapsed:\t" + today.Elapsed.ToString(@"hh\:mm");
             systrayIcon.BalloonTipText += "\nRemaining:\t" + today.Remaining.ToString(@"\-hh\:mm");
             systrayIcon.ShowBalloonTip(10);
@@ -138,7 +138,7 @@ namespace A9N.FlexTimeMonitor
         /// Once this is done this Method does nothing
         /// </summary>
         private void UpdateConfiguration()
-        { 
+        {
             // TODO: enter code here
         }
 
@@ -185,7 +185,10 @@ namespace A9N.FlexTimeMonitor
         {
             if (t != null)
             {
-                return ((int)t.TotalHours).ToString() + ":" + Math.Abs(t.Minutes).ToString() + ":" + Math.Abs(t.Seconds).ToString();             
+                String hours = ((int)t.TotalHours).ToString("00");
+                String minutes = Math.Abs(t.Minutes).ToString("00");
+                String seconds = Math.Abs(t.Seconds).ToString("00");
+                return String.Format("{0}:{1}:{2}", hours, minutes, seconds);
             }
             return "";
         }
