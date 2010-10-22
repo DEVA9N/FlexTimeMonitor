@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -48,6 +49,31 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
+        #region Studpid input hacks
+
+        // Note: there is something like Dependency Property which may or may not be suitable to handle the input data. But I have no time to check that further.
+        // Non the less: there has to be a way to handle the input, maybe with a direct data access (like WCF: Message Handling).
+
+        /// <summary>
+        /// Temporarily used to access Start.
+        /// Will prevent a unwanted date change. You can't just simply replace "Start" 
+        /// since there would be no nice way to set the date (well you could create
+        /// another date property but that is even worse).
+        /// </summary>
+        [XmlIgnore]
+        public DateTime StartHack { get { return Start; } set { Start = new DateTime(Start.Year, Start.Month, Start.Day, value.Hour, value.Minute, value.Second); } }
+
+        /// <summary>
+        /// Temporarily used to access End.
+        /// Will prevent a unwanted date change. You can't just simply replace "End" 
+        /// since there would be no nice way to set the date (well you could create
+        /// another date property but that is even worse).
+        /// </summary>
+        [XmlIgnore]
+        public DateTime EndHack { get { return End; } set { End = new DateTime(End.Year, End.Month, End.Day, value.Hour, value.Minute, value.Second); } }
+
+        #endregion
+        
         /// <summary>
         /// The difference between Difference and the complete workday (including break period)
         /// </summary>
