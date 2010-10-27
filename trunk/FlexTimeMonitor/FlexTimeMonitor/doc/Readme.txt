@@ -5,22 +5,27 @@
 1. About:
 --------------------------------------------------------------------------------
 
-This program keeps track of your work time. Once installed on your work PC it will 
-log your working-day start and end. You can use it to keep track of your working 
-hours per week and month or some other period of time.
+This program keeps track of your work time. Once installed it will log your PCs'
+start and shutdown. With this data it can easily calculate your attendance. The 
+results are shown as table. All entries may be modified and you may also add notes.
 
-It offers various informations about your recent working time. Just test it!
-Hint: you can select multiple entries.
+There is no voodoo going on. All data is stored in a simple xml file which can also
+be viewed and edited with your favorite text editor. Also it does only keep track
+of the start and end and will not bulge your system with megabytes of reboot logs. 
+
+Complete control: you can either start it automatically (just copy a application 
+link to your autostart folder) or manually every tim you like. So you can easily 
+log  your efforts on some project.
 
 2. Install:
 --------------------------------------------------------------------------------
-1. Unzip files
-2. Copy files to some place (e.g. C:\Programme\TimeManagerDlx)
-3. Create new link to TimeManagerDlx.exe
-4. Copy this link to Autostart folder
-5. done
+Make a backup of your history and deinstall (important) any previous versions of
+Flex Time Monitor before proceeding.
 
-Now TMDlx will be started every time you start your computer.
+1. Unzip files
+2. Run setup.exe
+3. Copy "doc/Autostart FlexTimeMonitor" to autostart
+4. done
 
 3. Usage:
 --------------------------------------------------------------------------------
@@ -36,8 +41,7 @@ Selecting multiple entries will show an overview of the overall time worked and
 the time you should have worked. This is shown in the status bar.
 
 You can add notes to your log file (e.g. working at home). It is possible to
-edit the table fields for start and end too. But I will discourage you from doing
-so. There is a lot of missing error handling.
+edit the table fields for start and end too.
 
 It's important to minimize the program if you want it to be minimized! A lot of
 programms in the history used the close button to minimize. This doesn't make 
