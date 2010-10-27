@@ -1,4 +1,12 @@
-﻿Version 1.1.x
+﻿Version 1.2.0.20
+------------------
+- fixed cell time format (24:00)
+- fixed cell edit with correct date
+- fixed bug which erased the history after a new version was installed
+- fixed some calculatings
+- added better visual styless
+
+Version 1.1.x
 ------------------
 - completely rewritten for .NET 4.0 and WPF
 - added menu
