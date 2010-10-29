@@ -39,9 +39,6 @@ namespace A9N.FlexTimeMonitor
 
             InitializeComponent();
 
-            // Add version string
-            Title += " - " + GetVersion();
-
             UpdateConfiguration();
 
             historyFile = new HistoryFile(GetFileName());
@@ -52,13 +49,22 @@ namespace A9N.FlexTimeMonitor
             {
                 history = historyFile.Load();
 
-                dataGridWorkDays.ItemsSource = history;
-
                 // Get today from history - never get it somewhere else!
                 today = history.GetToday();
 
                 // This will make sure that the start is logged correctly even if the computer crashes
                 historyFile.Save(history);
+
+                dataGridWorkDays.ItemsSource = history;
+
+                // Set focus on last item
+                if (dataGridWorkDays.Items.Count > 0)
+                {
+                    dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
+                }
+
+                // This is last since it relys on today (after history.GetToday) and a working application
+                InitializeSystrayIcon();
 
                 // Application is running smoothly so data can be saved on exit
                 saveHistoryOnExit = true;
@@ -70,9 +76,6 @@ namespace A9N.FlexTimeMonitor
                 // This will close the application but will also trigger the MainWindow's closing event!
                 Application.Current.Shutdown();
             }
-
-            // This is last since it relys on today (after history.GetToday) and a working application
-            InitializeSystrayIcon();
         }
 
         #region Systray icon
@@ -172,7 +175,7 @@ namespace A9N.FlexTimeMonitor
                 // This return the AssemblyInfos' version which differs to the deployment version
                 return System.Windows.Forms.Application.ProductVersion;
             }
-            // Todo: Cgeck if it a good idea to sync those numbers
+            // Todo: Check if it a good idea to sync those numbers
         }
 
         /// <summary>
@@ -289,11 +292,16 @@ namespace A9N.FlexTimeMonitor
 
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
+            String newLine = Environment.NewLine;
+            String caption = "About " + ApplicationName;
 
-            String aboutText = Title + "\n\n";
-            aboutText += "©2009 Andre Janßen - http://a9n.de";
+            String aboutText = "";
+            aboutText += ApplicationName + newLine + newLine;
+            aboutText += GetVersion() + newLine + newLine;
+            aboutText += "Copyright © 2009-2010 Andre Janßen" + newLine + newLine;
+            aboutText += "Visit http://a9n.de for further information";
 
-            MessageBox.Show(aboutText, ApplicationName);
+             MessageBox.Show(aboutText, caption);
         }
 
         #endregion

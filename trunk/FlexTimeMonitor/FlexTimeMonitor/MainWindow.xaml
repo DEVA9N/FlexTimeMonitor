@@ -42,7 +42,7 @@
                   GridLinesVisibility="All" 
                   Margin="0,23,0,21" 
                   SelectionChanged="dataGridWorkDays_SelectionChanged" 
-                  IsReadOnly="False" Grid.ColumnSpan="2">
+                  IsReadOnly="False" Grid.ColumnSpan="2" CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date"  Binding="{Binding Start, StringFormat={}{0:dd.MM.yyyy}}" IsReadOnly="True" MinWidth="80" />
                 <DataGridTextColumn Header="Start"  Binding="{Binding StartHack, StringFormat={}{0:HH:mm:ss}}" IsReadOnly="False" MinWidth="80" />
