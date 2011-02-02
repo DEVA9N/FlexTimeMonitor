@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using System.Runtime.CompilerServices;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -21,6 +22,24 @@ namespace A9N.FlexTimeMonitor
             Start = DateTime.Now;
             End = DateTime.Now;
         }
+
+        #region Helper
+
+        /// <summary>
+        /// Puts the TimeSpan in [-]hh:mm (hh=00-23, mm=00-59) format. Supports negative TimeSpans
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public String TimeSpanToString(TimeSpan t)
+        {
+            String sign = t < TimeSpan.Zero ? "-" : "";
+            String hours = Math.Abs((int)t.TotalHours).ToString("00");
+            String minutes = Math.Abs(t.Minutes).ToString("00");
+            return String.Format("{0}{1}:{2}", sign, hours, minutes);
+        }
+
+        #endregion
 
         /// <summary>
         /// Start time
@@ -79,33 +98,29 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         public TimeSpan OverTime
         {
-            get
-            {
-                // This will prevent output clutter ("T" will result in "-01:23:45:123245", "hh\:mm" in "01:23" ignoring the negative value)
-                TimeSpan result = Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-                return new TimeSpan(result.Hours, result.Minutes, result.Seconds);
-            }
+            get { return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
         }
+
+        /// <summary>
+        /// This is a workaround for the missing capability of TimeSpan formating to handle negative values.
+        /// This property is used as a binding in the xaml code.
+        /// </summary>
+        public String OverTimeString { get { return TimeSpanHelper.TimeSpanToString(OverTime); } }
 
         /// <summary>
         /// Difference between start and now
         /// </summary>
         public TimeSpan Elapsed
         {
-            get
-            {
-                // This will prevent output clutter ("T" will result in "-01:23:45:123245", "hh\:mm" in "01:23" ignoring the negative value)
-                TimeSpan result = End - Start;
-                return new TimeSpan(result.Hours, result.Minutes, result.Seconds);
-            }
+            get { return End - Start; }
         }
 
         /// <summary>
         /// Estimated end time
         /// </summary>
-        public DateTime Estimated
+        public TimeSpan Estimated
         {
-            get { return Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
+            get { return (Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod)).TimeOfDay; }
         }
 
         /// <summary>
