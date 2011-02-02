@@ -108,10 +108,11 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
-            systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.TimeOfDay.ToString(@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.TimeOfDay.ToString(@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nElapsed:\t" + today.Elapsed.ToString(@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nRemaining:\t" + today.Remaining.ToString(@"\-hh\:mm");
+            // There is an issue with the TimeSpan format
+            systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.TimeOfDay.ToString("T");//(@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.TimeOfDay.ToString("T");//(@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nElapsed:\t" + today.Elapsed.ToString("T");// (@"hh\:mm");
+            systrayIcon.BalloonTipText += "\nRemaining:\t" + today.Remaining.ToString("T");//(@"hh\:mm");
             systrayIcon.ShowBalloonTip(10);
         }
 
@@ -188,10 +189,11 @@ namespace A9N.FlexTimeMonitor
         {
             if (t != null)
             {
-                String hours = ((int)t.TotalHours).ToString("00");
+                String sign = t < TimeSpan.Zero ? "-" : "";
+                String hours =   Math.Abs((int)t.TotalHours).ToString("00");
                 String minutes = Math.Abs(t.Minutes).ToString("00");
                 String seconds = Math.Abs(t.Seconds).ToString("00");
-                return String.Format("{0}:{1}:{2}", hours, minutes, seconds);
+                return String.Format("{0}{1}:{2}:{3}", sign, hours, minutes, seconds);
             }
             return "";
         }

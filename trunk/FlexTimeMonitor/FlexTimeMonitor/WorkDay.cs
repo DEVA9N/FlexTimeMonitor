@@ -73,7 +73,7 @@ namespace A9N.FlexTimeMonitor
         public DateTime EndHack { get { return End; } set { End = new DateTime(End.Year, End.Month, End.Day, value.Hour, value.Minute, value.Second); } }
 
         #endregion
-        
+
         /// <summary>
         /// The difference between Difference and the complete workday (including break period)
         /// </summary>
@@ -81,13 +81,10 @@ namespace A9N.FlexTimeMonitor
         {
             get
             {
-                // NOTE: this is a complicated implementation - but neccessary for the propper ToString (-hh:mm:ss)
-                // Until I find a propper way to display the correct format in the main window's datagrid I will stick with it...
-                TimeSpan overtime = Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-                return new TimeSpan(overtime.Hours, overtime.Minutes, overtime.Seconds);
+                // This will prevent output clutter ("T" will result in "-01:23:45:123245", "hh\:mm" in "01:23" ignoring the negative value)
+                TimeSpan result = Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
+                return new TimeSpan(result.Hours, result.Minutes, result.Seconds);
             }
-            // This is nice but won't work unless I get the StringFormat in xaml to display a negative time
-            //get { return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
         }
 
         /// <summary>
@@ -95,7 +92,12 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         public TimeSpan Elapsed
         {
-            get { return End - Start; }
+            get
+            {
+                // This will prevent output clutter ("T" will result in "-01:23:45:123245", "hh\:mm" in "01:23" ignoring the negative value)
+                TimeSpan result = End - Start;
+                return new TimeSpan(result.Hours, result.Minutes, result.Seconds);
+            }
         }
 
         /// <summary>
@@ -111,7 +113,7 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         public TimeSpan Remaining
         {
-            get { return TimeSpan.Zero - OverTime; }
+            get { return -OverTime; }
         }
 
         /// <summary>
