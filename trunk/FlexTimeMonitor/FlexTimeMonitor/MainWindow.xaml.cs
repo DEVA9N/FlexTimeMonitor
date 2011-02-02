@@ -108,11 +108,10 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
-            // There is an issue with the TimeSpan format
-            systrayIcon.BalloonTipText = "Start:\t\t" + today.Start.TimeOfDay.ToString("T");//(@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nEstimated:\t" + today.Estimated.TimeOfDay.ToString("T");//(@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nElapsed:\t" + today.Elapsed.ToString("T");// (@"hh\:mm");
-            systrayIcon.BalloonTipText += "\nRemaining:\t" + today.Remaining.ToString("T");//(@"hh\:mm");
+            systrayIcon.BalloonTipText = "Start:\t\t" + TimeSpanHelper.TimeSpanToString(today.Start.TimeOfDay);
+            systrayIcon.BalloonTipText += "\nEstimated:\t" + TimeSpanHelper.TimeSpanToString(today.Estimated);
+            systrayIcon.BalloonTipText += "\nElapsed:\t" + TimeSpanHelper.TimeSpanToString(today.Elapsed);
+            systrayIcon.BalloonTipText += "\nRemaining:\t" + TimeSpanHelper.TimeSpanToString(today.Remaining);
             systrayIcon.ShowBalloonTip(10);
         }
 
@@ -177,25 +176,6 @@ namespace A9N.FlexTimeMonitor
                 return System.Windows.Forms.Application.ProductVersion;
             }
             // Todo: Check if it a good idea to sync those numbers
-        }
-
-        /// <summary>
-        /// Converts the ToString result to 
-        /// 9:47 format. 
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        private String TimeSpanTotalToString(TimeSpan t)
-        {
-            if (t != null)
-            {
-                String sign = t < TimeSpan.Zero ? "-" : "";
-                String hours =   Math.Abs((int)t.TotalHours).ToString("00");
-                String minutes = Math.Abs(t.Minutes).ToString("00");
-                String seconds = Math.Abs(t.Seconds).ToString("00");
-                return String.Format("{0}{1}:{2}:{3}", sign, hours, minutes, seconds);
-            }
-            return "";
         }
 
         #endregion
@@ -266,9 +246,9 @@ namespace A9N.FlexTimeMonitor
 
             // Display results in status bar
             statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            statusBarOverallValue.Text = TimeSpanTotalToString(timeOverall);
-            statusBarIntendedValue.Text = TimeSpanTotalToString(timeIntended);
-            statusBarDifferenceValue.Text = TimeSpanTotalToString(timeOverall - timeIntended);
+            statusBarOverallValue.Text = TimeSpanHelper.TimeSpanToString(timeOverall);
+            statusBarIntendedValue.Text = TimeSpanHelper.TimeSpanToString(timeIntended);
+            statusBarDifferenceValue.Text = TimeSpanHelper.TimeSpanToString(timeOverall - timeIntended);
         }
 
         #endregion
@@ -303,7 +283,7 @@ namespace A9N.FlexTimeMonitor
             aboutText += "Copyright © 2009-2010 Andre Janßen" + newLine + newLine;
             aboutText += "Visit http://a9n.de for further information";
 
-             MessageBox.Show(aboutText, caption);
+            MessageBox.Show(aboutText, caption);
         }
 
         #endregion
