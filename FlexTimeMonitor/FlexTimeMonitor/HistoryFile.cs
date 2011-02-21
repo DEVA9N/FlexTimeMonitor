@@ -82,7 +82,14 @@ namespace A9N.FlexTimeMonitor
 
             try
             {
+                // Create a backup file by moving it. If the write fails the backup will 
+                String backupName = CreateBackup(fileName);
+
+                // Save the file
                 Write(fileName, history);
+
+                // After a successfull write the backup will be removed
+                RemoveBackup(backupName);
             }
             catch (Exception e)
             {
@@ -92,13 +99,43 @@ namespace A9N.FlexTimeMonitor
 
         /// <summary>
         /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
-        /// directory. The name will include the date and time of the backup.
+        /// directory. 
         /// </summary>
-        public void CreateBackup()
+        public String CreateBackup(String fileName)
         {
-            throw new NotImplementedException();
+            String backupName = fileName + "-" + DateTime.Now.ToString("yyyy-MM-dd");
+
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    File.Move(fileName, backupName);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Unable to create backup file " + backupName + "\n" + e);
+
+            }
+
+            return backupName;
         }
 
+        public void RemoveBackup(String fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Unable to remove backup file " + fileName + "\n" + e);
+            
+            }
+        }
 
         #region XML (de)serialization
 
