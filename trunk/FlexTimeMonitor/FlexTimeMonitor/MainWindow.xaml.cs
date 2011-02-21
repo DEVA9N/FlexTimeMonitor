@@ -199,10 +199,7 @@ namespace A9N.FlexTimeMonitor
             if (saveHistoryOnExit)
             {
                 // Set end time and save object
-                if (today != null)
-                {
-                    today.End = DateTime.Now;
-                }
+                today.End = DateTime.Now;
 
                 historyFile.Save(history);
             }
