@@ -83,13 +83,19 @@ namespace A9N.FlexTimeMonitor
         public DateTime StartHack { get { return Start; } set { Start = new DateTime(Start.Year, Start.Month, Start.Day, value.Hour, value.Minute, value.Second); } }
 
         /// <summary>
-        /// Temporarily used to access End.
+        /// Temporarily used to access End. End now always ends on the start day. 
+        /// This hack addresses a GUI issue. When editing a cell the GUI always
+        /// provides the current date for the entered time. There is no way to
+        /// set the date manually (may change in the future)
         /// Will prevent a unwanted date change. You can't just simply replace "End" 
         /// since there would be no nice way to set the date (well you could create
         /// another date property but that is even worse).
         /// </summary>
         [XmlIgnore]
-        public DateTime EndHack { get { return End; } set { End = new DateTime(End.Year, End.Month, End.Day, value.Hour, value.Minute, value.Second); } }
+        public DateTime EndHack { get { return End; } set { End = new DateTime(Start.Year, Start.Month, Start.Day, value.Hour, value.Minute, value.Second); } }
+
+        // This line will prevent unwanted date changes. With this version it is possible to end on another date than start.
+        //public DateTime EndHack { get { return End; } set { End = new DateTime(End.Year, End.Month, End.Day, value.Hour, value.Minute, value.Second); } }
 
         #endregion
 
