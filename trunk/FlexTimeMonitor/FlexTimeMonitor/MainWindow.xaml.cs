@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Properties;
@@ -27,55 +28,18 @@ namespace A9N.FlexTimeMonitor
         private const String ApplicationName = "Flex Time Monitor";
         private const String DefaultLogfileName = "flextimelog.xml";
 
-        private bool saveHistoryOnExit = false;
         private WorkDay today;
         private WorkHistory history;
         private HistoryFile historyFile;
+        private bool saveHistoryOnExit = true;
+
         private System.Windows.Forms.NotifyIcon systrayIcon;
+        private TimeSpan balloonOpenTime = TimeSpan.Zero;
+        private TimeSpan balloonTimeOut = new TimeSpan(0, 0, 3);
 
         public MainWindow()
         {
-            EnforceSingleInstance();
-
             InitializeComponent();
-
-            UpdateConfiguration();
-
-            historyFile = new HistoryFile(GetFileName());
-
-            // Will try to open an existing history file. If none is found it will create a new one.
-            // If reading or writing fails the user is informed and the application is shut down without writing data.
-            try
-            {
-                history = historyFile.Load();
-
-                // Get today from history - never get it somewhere else!
-                today = history.GetToday();
-
-                // This will make sure that the start is logged correctly even if the computer crashes
-                historyFile.Save(history);
-
-                dataGridWorkDays.ItemsSource = history;
-
-                // Set focus on last item
-                if (dataGridWorkDays.Items.Count > 0)
-                {
-                    dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
-                }
-
-                // This is last since it relys on today (after history.GetToday) and a working application
-                InitializeSystrayIcon();
-
-                // Application is running smoothly so data can be saved on exit
-                saveHistoryOnExit = true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Unable to access file");
-
-                // This will close the application but will also trigger the MainWindow's closing event!
-                Application.Current.Shutdown();
-            }
         }
 
         #region Systray icon
@@ -97,8 +61,8 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseClick(object sender, EventArgs e)
         {
-            Show();
-            WindowState = WindowState.Normal;
+            // The state change will trigger the state changed event and do everything else there
+            this.WindowState = WindowState.Normal;
         }
 
         /// <summary>
@@ -108,11 +72,18 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e"></param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
-            systrayIcon.BalloonTipText = "Start:\t\t" + TimeSpanHelper.TimeSpanToString(today.Start.TimeOfDay);
-            systrayIcon.BalloonTipText += "\nEstimated:\t" + TimeSpanHelper.TimeSpanToString(today.Estimated);
-            systrayIcon.BalloonTipText += "\nElapsed:\t" + TimeSpanHelper.TimeSpanToString(today.Elapsed);
-            systrayIcon.BalloonTipText += "\nRemaining:\t" + TimeSpanHelper.TimeSpanToString(today.Remaining);
-            systrayIcon.ShowBalloonTip(10);
+            // Check last balloon update to prevent it from flickering
+            if ((DateTime.Now.TimeOfDay - balloonOpenTime) > balloonTimeOut)
+            {
+                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.TimeSpanToString(today.Start.TimeOfDay));
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.TimeSpanToString(today.Estimated));
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.TimeSpanToString(today.Elapsed));
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.TimeSpanToString(today.Remaining));
+                systrayIcon.ShowBalloonTip(balloonTimeOut.Seconds, ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
+
+                // Remember last open
+                balloonOpenTime = DateTime.Now.TimeOfDay;
+            }
         }
 
         #endregion
@@ -120,38 +91,12 @@ namespace A9N.FlexTimeMonitor
         #region Helper methods
 
         /// <summary>
-        /// Multiple instance are useless and therefore forbidden.
-        /// </summary>
-        private void EnforceSingleInstance()
-        {
-            bool isFirstInstance;
-
-            System.Threading.Mutex firstInstanceMutex = new System.Threading.Mutex(true, ApplicationName, out isFirstInstance);
-
-            if (isFirstInstance == false)
-            {
-                saveHistoryOnExit = false;
-                MessageBox.Show("Flex Time Monitor is already running.", "Error");
-                Application.Current.Shutdown();
-            }
-        }
-
-        /// <summary>
-        /// Updates users' application configuration to be used in this version
-        /// Once this is done this Method does nothing
-        /// </summary>
-        private void UpdateConfiguration()
-        {
-            // TODO: enter code here
-        }
-
-        /// <summary>
         /// Get history file name
         /// </summary>
         /// <returns></returns>
         private String GetFileName()
         {
-            // There is no file name configured - create new default file name
+            // If there is no file name configured - create new default file name
             if (Settings.Default.LogfileName == String.Empty)
             {
                 String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
@@ -180,7 +125,73 @@ namespace A9N.FlexTimeMonitor
 
         #endregion
 
+        #region History Access
+
+        private void OpenHistory()
+        {
+
+            String historyPath = GetFileName();
+            historyFile = new HistoryFile(historyPath);
+
+            // Will try to open an existing history file. If none is found it will create a new one.
+            // If reading or writing fails the user is informed and the application is shut down without writing data.
+            try
+            {
+                history = historyFile.Load();
+
+                // Get today from history - never get it somewhere else!
+                today = history.GetToday();
+
+                // This will make sure that the start is logged correctly even if the computer crashes
+                historyFile.Save(history);
+
+                dataGridWorkDays.ItemsSource = history;
+
+                // Set focus on last item
+                if (dataGridWorkDays.Items.Count > 0)
+                {
+                    dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
+                }
+
+                // This is last since it relys on today (after history.GetToday) and a working application
+                InitializeSystrayIcon();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Unable to access file");
+
+                // This will close the application but will also trigger the MainWindow's closing event!
+                Application.Current.Shutdown();
+            }
+        }
+
+        private void SaveHistory()
+        {
+            // Set end time and save object
+            today.End = DateTime.Now;
+
+            historyFile.Save(history);
+        }
+
+        private void CloseHistory()
+        {
+            
+        }
+
+        #endregion
+
         #region Window Events
+
+        /// <summary>
+        /// This event is called directly when the window is loaded and should be used
+        /// to do post initialization stuff
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            OpenHistory();
+        }
 
         /// <summary>
         /// This event is called when the main window is closed. It doesn't matter if it is closed
@@ -194,19 +205,18 @@ namespace A9N.FlexTimeMonitor
             systrayIcon.Visible = false;
             systrayIcon.Dispose();
 
-            // If the history file data was invalid or some other problem occured it may be 
-            // neccessary to quit without saving - so that's the default.
             if (saveHistoryOnExit)
             {
-                // Set end time and save object
-                today.End = DateTime.Now;
-
-                historyFile.Save(history);
+                SaveHistory();
+            }
+            else
+            {
+                CloseHistory();
             }
         }
 
         /// <summary>
-        /// Minimize to tray
+        /// Handles Minimize to tray and Restore Window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -214,7 +224,13 @@ namespace A9N.FlexTimeMonitor
         {
             if (WindowState == WindowState.Minimized)
             {
-                Hide();
+                this.ShowInTaskbar = false;
+                this.systrayIcon.Visible = true;
+            }
+            if (WindowState == WindowState.Normal)
+            {
+                this.ShowInTaskbar = true;
+                this.systrayIcon.Visible = false;
             }
         }
 
@@ -277,13 +293,14 @@ namespace A9N.FlexTimeMonitor
             String aboutText = "";
             aboutText += ApplicationName + newLine + newLine;
             aboutText += GetVersion() + newLine + newLine;
-            aboutText += "Copyright © 2009-2010 Andre Janßen" + newLine + newLine;
+            aboutText += "Copyright © 2009-2012 Andre Janßen" + newLine + newLine;
             aboutText += "Visit http://a9n.de for further information";
 
             MessageBox.Show(aboutText, caption);
         }
 
         #endregion
+
 
     }
 }
