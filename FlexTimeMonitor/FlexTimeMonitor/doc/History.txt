@@ -1,4 +1,10 @@
-﻿Version 1.2.0.22
+﻿Version 1.2.0.24
+------------------
+-fixed bug that stopped the application from quitting after loading an invalid history file
+-fixed flickering balloon tip
+-fixed balloon text
+
+Version 1.2.0.22
 ------------------
 -added: creates a backup file before saving the history data to prevent data loss if the program is exited unexpectedly
 
