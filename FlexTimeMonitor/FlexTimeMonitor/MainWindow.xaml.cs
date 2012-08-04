@@ -40,6 +40,8 @@ namespace A9N.FlexTimeMonitor
         public MainWindow()
         {
             InitializeComponent();
+
+            InitializeSystrayIcon();
         }
 
         #region Systray icon
@@ -152,13 +154,23 @@ namespace A9N.FlexTimeMonitor
                 {
                     dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
                 }
-
-                // This is last since it relys on today (after history.GetToday) and a working application
-                InitializeSystrayIcon();
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Unable to access file");
+                String text = ApplicationName + " is unable to load the history file:\n";
+                text += GetFileName() + "\n";
+                text += "This surely should not happen but evidently it has!\n";
+                text += "\n";
+                text += "Now there are 3 options:\n";
+                text += "\t- delete the history file and lose all your data or\n";
+                text += "\t- manually fix the history file (see details below) or\n";
+                text += "\t- file a bug report and try to convince the author to fix that file for you\n";
+                text += "\n";
+                text += e.Message + "\n";
+                text += "\n";
+                text += "Press OK to quit the application.";
+ 
+                MessageBox.Show(text, "Unable load history file");
 
                 // This will close the application but will also trigger the MainWindow's closing event!
                 Application.Current.Shutdown();
@@ -168,14 +180,18 @@ namespace A9N.FlexTimeMonitor
         private void SaveHistory()
         {
             // Set end time and save object
-            today.End = DateTime.Now;
+            // Note that the history is not a valid object if it failed to load
+            if (history != null)
+            {
+                today.End = DateTime.Now;
 
-            historyFile.Save(history);
+                historyFile.Save(history);
+            }
         }
 
         private void CloseHistory()
         {
-            
+
         }
 
         #endregion

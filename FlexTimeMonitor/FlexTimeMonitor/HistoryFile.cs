@@ -38,14 +38,14 @@ namespace A9N.FlexTimeMonitor
             {
                 // It is still possible that the data is invalid and an exception is thrown.
                 // This is good though! The User of this method should decide what to do with a broken file.
-                try
-                {
+                //try
+                //{
                     return Read<WorkHistory>(Settings.Default.LogfileName);
-                }
-                catch (Exception)
-                {
-                    throw new System.IO.FileLoadException("Unable read data (" + fileName + "). Manually repair or erase file.");
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    throw new System.IO.FileLoadException("Unable read data (" + fileName + "). Manually repair or erase file.");
+                //}
             }
             else
             {
