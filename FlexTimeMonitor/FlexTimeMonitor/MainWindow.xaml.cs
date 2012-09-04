@@ -75,7 +75,7 @@ namespace A9N.FlexTimeMonitor
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
             // Check last balloon update to prevent it from flickering
-            if ((DateTime.Now.TimeOfDay - balloonOpenTime) > balloonTimeOut)
+            if (today != null && (DateTime.Now.TimeOfDay - balloonOpenTime) > balloonTimeOut)
             {
                 String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.TimeSpanToString(today.Start.TimeOfDay));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.TimeSpanToString(today.Estimated));
