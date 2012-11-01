@@ -20,7 +20,7 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Create new instance with defined file name
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="fileName">Name of the file.</param>
         public HistoryFile(String fileName)
         {
             this.fileName = fileName;
@@ -38,14 +38,7 @@ namespace A9N.FlexTimeMonitor
             {
                 // It is still possible that the data is invalid and an exception is thrown.
                 // This is good though! The User of this method should decide what to do with a broken file.
-                //try
-                //{
-                    return Read<WorkHistory>(Settings.Default.LogfileName);
-                //}
-                //catch (Exception e)
-                //{
-                //    throw new System.IO.FileLoadException("Unable read data (" + fileName + "). Manually repair or erase file.");
-                //}
+                return Read<WorkHistory>(Settings.Default.LogfileName);
             }
             else
             {
@@ -59,13 +52,14 @@ namespace A9N.FlexTimeMonitor
         /// Save history to file.
         /// Policy: Warn on load, solve on close.
         /// </summary>
+        /// <param name="history">The history.</param>
         public void Save(WorkHistory history)
         {
             try
             {
                 FileInfo info = new FileInfo(fileName);
 
-                // Make the file ready to be saved - this espacially involves the path which must be present
+                // Make the file ready to be saved - this especially involves the path which must be present
                 if (info.Exists == false)
                 {
                     // Make sure the parent directory exists
@@ -88,7 +82,7 @@ namespace A9N.FlexTimeMonitor
                 // Save the file
                 Write(fileName, history);
 
-                // After a successfull write the backup will be removed
+                // After a successful write the backup will be removed
                 RemoveBackup(backupName);
             }
             catch (Exception e)
@@ -99,8 +93,10 @@ namespace A9N.FlexTimeMonitor
 
         /// <summary>
         /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
-        /// directory. 
+        /// directory.
         /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>String.</returns>
         public String CreateBackup(String fileName)
         {
             String backupName = fileName + "-" + DateTime.Now.ToString("yyyy-MM-dd");
@@ -121,6 +117,10 @@ namespace A9N.FlexTimeMonitor
             return backupName;
         }
 
+        /// <summary>
+        /// Removes the backup.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         public void RemoveBackup(String fileName)
         {
             try
@@ -133,18 +133,17 @@ namespace A9N.FlexTimeMonitor
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Unable to remove backup file " + fileName + "\n" + e);
-            
+
             }
         }
 
         #region XML (de)serialization
-
         /// <summary>
         /// Read object of type T from file.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>``0.</returns>
         private T Read<T>(String fileName)
         {
             if (File.Exists(fileName))
@@ -161,8 +160,8 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Write object to file. No additional type info neccessary.
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="output"></param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="output">The output.</param>
         private void Write(String fileName, Object output)
         {
             StringBuilder builder = new StringBuilder();
@@ -176,7 +175,6 @@ namespace A9N.FlexTimeMonitor
                 outputDocument.Save(fileName);
             }
         }
-
         #endregion
     }
 }

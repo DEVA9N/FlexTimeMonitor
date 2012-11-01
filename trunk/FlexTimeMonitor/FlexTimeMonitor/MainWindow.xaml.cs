@@ -37,6 +37,9 @@ namespace A9N.FlexTimeMonitor
         private TimeSpan balloonOpenTime = TimeSpan.Zero;
         private TimeSpan balloonTimeOut = new TimeSpan(0, 0, 3);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow" /> class.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -45,7 +48,9 @@ namespace A9N.FlexTimeMonitor
         }
 
         #region Systray icon
-
+        /// <summary>
+        /// Initializes the systray icon.
+        /// </summary>
         private void InitializeSystrayIcon()
         {
             this.systrayIcon = new System.Windows.Forms.NotifyIcon();
@@ -59,8 +64,8 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Display from tray
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void systrayIcon_MouseClick(object sender, EventArgs e)
         {
             // The state change will trigger the state changed event and do everything else there
@@ -70,32 +75,30 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Display status
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void systrayIcon_MouseMove(object sender, EventArgs e)
         {
             // Check last balloon update to prevent it from flickering
             if (today != null && (DateTime.Now.TimeOfDay - balloonOpenTime) > balloonTimeOut)
             {
-                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.TimeSpanToString(today.Start.TimeOfDay));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.TimeSpanToString(today.Estimated));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.TimeSpanToString(today.Elapsed));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.TimeSpanToString(today.Remaining));
+                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start.TimeOfDay));
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.ToHhmmss(today.Estimated));
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.ToHhmmss(today.Elapsed));
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.ToHhmmss(today.Remaining));
                 systrayIcon.ShowBalloonTip(balloonTimeOut.Seconds, ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
 
                 // Remember last open
                 balloonOpenTime = DateTime.Now.TimeOfDay;
             }
         }
-
         #endregion
 
         #region Helper methods
-
         /// <summary>
         /// Get history file name
         /// </summary>
-        /// <returns></returns>
+        /// <returns>String.</returns>
         private String GetFileName()
         {
             // If there is no file name configured - create new default file name
@@ -124,9 +127,14 @@ namespace A9N.FlexTimeMonitor
             }
             // Todo: Check if it a good idea to sync those numbers
         }
-
         #endregion
 
+#if DEBUG
+        /// <summary>
+        /// Creates the sample history.
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="count">The count.</param>
         private void CreateSampleHistory(WorkHistory history, int count)
         {
             if (history == null)
@@ -146,9 +154,12 @@ namespace A9N.FlexTimeMonitor
                 history.Add(day);
             }
         }
+#endif
 
         #region History Access
-
+        /// <summary>
+        /// Opens the history.
+        /// </summary>
         private void OpenHistory()
         {
 
@@ -198,6 +209,9 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
+        /// <summary>
+        /// Saves the history.
+        /// </summary>
         private void SaveHistory()
         {
             // Set end time and save object
@@ -210,30 +224,31 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
+        /// <summary>
+        /// Closes the history.
+        /// </summary>
         private void CloseHistory()
         {
 
         }
-
         #endregion
 
         #region Window Events
-
         /// <summary>
         /// This event is called directly when the window is loaded and should be used
         /// to do post initialization stuff
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             OpenHistory();
 
 #if DEBUG
-            if (history.Count == 0)
-            {
-                CreateSampleHistory(history, 222);
-            }
+//            if (history != null && history.Count == 0)
+//            {
+//                CreateSampleHistory(history, 222);
+//            }
 #endif
         }
 
@@ -241,8 +256,8 @@ namespace A9N.FlexTimeMonitor
         /// This event is called when the main window is closed. It doesn't matter if it is closed
         /// by user or by exception. It will be called either way!
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // Remove systray icon
@@ -262,8 +277,8 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Handles Minimize to tray and Restore Window
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void Window_StateChanged(object sender, EventArgs e)
         {
             if (WindowState == WindowState.Minimized)
@@ -281,8 +296,8 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Display selection results
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
         private void dataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TimeSpan timeOverall = TimeSpan.Zero;
@@ -303,32 +318,50 @@ namespace A9N.FlexTimeMonitor
 
             // Display results in status bar
             statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            statusBarOverallValue.Text = TimeSpanHelper.TimeSpanToString(timeOverall);
-            statusBarIntendedValue.Text = TimeSpanHelper.TimeSpanToString(timeIntended);
-            statusBarDifferenceValue.Text = TimeSpanHelper.TimeSpanToString(timeOverall - timeIntended);
+            statusBarOverallValue.Text = TimeSpanHelper.ToHhmmss(timeOverall);
+            statusBarIntendedValue.Text = TimeSpanHelper.ToHhmmss(timeIntended);
+            statusBarDifferenceValue.Text = TimeSpanHelper.ToHhmmss(timeOverall - timeIntended);
         }
-
         #endregion
 
         #region Menu item events
-
+        /// <summary>
+        /// Handles the Click event of the MenuItemQuit control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemQuit_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Handles the Click event of the MenuItemQuitWithoutSave control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemQuitWithoutSave_Click(object sender, RoutedEventArgs e)
         {
             saveHistoryOnExit = false;
             Close();
         }
 
+        /// <summary>
+        /// Handles the 1 event of the MenuItemEditOptions_Click control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemEditOptions_Click_1(object sender, RoutedEventArgs e)
         {
             WindowOptions options = new WindowOptions();
             options.ShowDialog();
         }
 
+        /// <summary>
+        /// Handles the Click event of the MenuItemAbout control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
             String newLine = Environment.NewLine;
@@ -342,9 +375,7 @@ namespace A9N.FlexTimeMonitor
 
             MessageBox.Show(aboutText, caption);
         }
-
         #endregion
-
 
     }
 }

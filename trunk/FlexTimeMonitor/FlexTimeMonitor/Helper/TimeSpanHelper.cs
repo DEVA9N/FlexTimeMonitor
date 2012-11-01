@@ -6,6 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace A9N.FlexTimeMonitor
 {
+    /// <summary>
+    /// Class TimeSpanHelper
+    /// </summary>
     static class TimeSpanHelper
     {
         /// <summary>
@@ -13,15 +16,15 @@ namespace A9N.FlexTimeMonitor
         /// hh is 00-Int32.Maximum
         /// mm is 00-59
         /// ss is 00-59
-        /// This is a neccessary workaround for the formating issues of TimeSpan.
+        /// This is a necessary workaround for the formating issues of TimeSpan.
         /// TimeSpan.ToString() supports negative values but will also show milliseconds
         /// TimeSpan.ToString("T") does not support negative values
         /// TimeSpan.ToString(@"hh:mm:ss") does not support negative values
         /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="t">The t.</param>
+        /// <returns>String.</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public static String TimeSpanToString(TimeSpan t)
+        public static String ToHhmmss(TimeSpan t)
         {
             String sign = t < TimeSpan.Zero ? "-" : "";
             String hours = Math.Abs((int)t.TotalHours).ToString("00");
