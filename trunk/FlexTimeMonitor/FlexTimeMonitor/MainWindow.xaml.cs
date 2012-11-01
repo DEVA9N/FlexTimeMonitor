@@ -49,7 +49,7 @@ namespace A9N.FlexTimeMonitor
         private void InitializeSystrayIcon()
         {
             this.systrayIcon = new System.Windows.Forms.NotifyIcon();
-            this.systrayIcon.Icon = A9N.FlexTimeMonitor.Properties.Resources.Icon_16;
+            this.systrayIcon.Icon = A9N.FlexTimeMonitor.Properties.Resources.Stopwatch;
             this.systrayIcon.Text = ApplicationName;
             this.systrayIcon.Visible = true;
             this.systrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(systrayIcon_MouseMove);
@@ -127,6 +127,26 @@ namespace A9N.FlexTimeMonitor
 
         #endregion
 
+        private void CreateSampleHistory(WorkHistory history, int count)
+        {
+            if (history == null)
+            {
+                return;
+            }
+
+            history.Clear();
+
+            for (int i = 0; i < count; i++)
+            {
+                DateTime date = new DateTime(1970, 1, 1, 9, 0, 21).AddDays(i);
+
+                WorkDay day = new WorkDay();
+                day.Start = date;
+                day.End = date.AddHours(9);
+                history.Add(day);
+            }
+        }
+
         #region History Access
 
         private void OpenHistory()
@@ -152,6 +172,7 @@ namespace A9N.FlexTimeMonitor
                 // Set focus on last item
                 if (dataGridWorkDays.Items.Count > 0)
                 {
+                    dataGridWorkDays.UpdateLayout();
                     dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
                 }
             }
@@ -169,7 +190,7 @@ namespace A9N.FlexTimeMonitor
                 text += e.Message + "\n";
                 text += "\n";
                 text += "Press OK to quit the application.";
- 
+
                 MessageBox.Show(text, "Unable load history file");
 
                 // This will close the application but will also trigger the MainWindow's closing event!
@@ -207,6 +228,13 @@ namespace A9N.FlexTimeMonitor
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             OpenHistory();
+
+#if DEBUG
+            if (history.Count == 0)
+            {
+                CreateSampleHistory(history, 222);
+            }
+#endif
         }
 
         /// <summary>
