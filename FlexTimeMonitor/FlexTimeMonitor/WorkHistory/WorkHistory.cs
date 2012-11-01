@@ -15,7 +15,7 @@ namespace A9N.FlexTimeMonitor
         /// Gets the history entry of today. If none is found it
         /// will return a fresh new day.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>WorkDay.</returns>
         public WorkDay GetToday()
         {
             if (this.Count > 0)

@@ -18,6 +18,9 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class WindowOptions : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WindowOptions" /> class.
+        /// </summary>
         public WindowOptions()
         {
             InitializeComponent();
@@ -27,19 +30,11 @@ namespace A9N.FlexTimeMonitor
             //textBoxFile.Text = Properties.Settings.Default.LogfileName;
         }
 
-        private void buttonOk_Click(object sender, RoutedEventArgs e)
-        {
-            if (SaveValues())
-            {
-                Close();
-            }
-        }
-
-        private void buttonCancel_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
+        #region Private Methods
+        /// <summary>
+        /// Saves the values.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise</returns>
         private bool SaveValues()
         {
             SolidColorBrush validResultBrush = new SolidColorBrush(Colors.Black);
@@ -68,7 +63,37 @@ namespace A9N.FlexTimeMonitor
 
             return false;
         }
+        #endregion
 
+        #region Button Events
+        /// <summary>
+        /// Handles the Click event of the buttonOk control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
+        private void buttonOk_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveValues())
+            {
+                Close();
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the buttonCancel control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the buttonFile control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void buttonFile_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
@@ -82,6 +107,7 @@ namespace A9N.FlexTimeMonitor
                 }
             }
         }
+        #endregion
 
     }
 }
