@@ -25,17 +25,12 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const String ApplicationName = "Flex Time Monitor";
-        private const String DefaultLogfileName = "flextimelog.xml";
-
         private WorkDay today;
         private WorkHistory history;
         private HistoryFile historyFile;
         private bool saveHistoryOnExit = true;
-
         private System.Windows.Forms.NotifyIcon systrayIcon;
-        private TimeSpan balloonOpenTime = TimeSpan.Zero;
-        private TimeSpan balloonTimeOut = new TimeSpan(0, 0, 3);
+        private const int BalloonTimeOut = 3000;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -54,43 +49,43 @@ namespace A9N.FlexTimeMonitor
         private void InitializeSystrayIcon()
         {
             this.systrayIcon = new System.Windows.Forms.NotifyIcon();
-            this.systrayIcon.Icon = A9N.FlexTimeMonitor.Properties.Resources.Stopwatch;
-            this.systrayIcon.Text = ApplicationName;
+            this.systrayIcon.Icon = Properties.Resources.Stopwatch;
+            this.systrayIcon.Text = Properties.Resources.ApplicationName;
             this.systrayIcon.Visible = true;
-            this.systrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(systrayIcon_MouseMove);
-            this.systrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(systrayIcon_MouseClick);
+            this.systrayIcon.MouseClick += systrayIcon_MouseClick;
+            this.systrayIcon.MouseDoubleClick += systrayIcon_MouseDoubleClick;
         }
 
         /// <summary>
-        /// Display from tray
+        /// Handles the MouseClick event of the systrayIcon control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private void systrayIcon_MouseClick(object sender, EventArgs e)
-        {
-            // The state change will trigger the state changed event and do everything else there
-            this.WindowState = WindowState.Normal;
-        }
-
-        /// <summary>
-        /// Display status
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private void systrayIcon_MouseMove(object sender, EventArgs e)
+        /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
+        void systrayIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             // Check last balloon update to prevent it from flickering
-            if (today != null && (DateTime.Now.TimeOfDay - balloonOpenTime) > balloonTimeOut)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
             {
                 String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start.TimeOfDay));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.ToHhmmss(today.Estimated));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.ToHhmmss(today.Elapsed));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.ToHhmmss(today.Remaining));
-                systrayIcon.ShowBalloonTip(balloonTimeOut.Seconds, ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
-
-                // Remember last open
-                balloonOpenTime = DateTime.Now.TimeOfDay;
+                systrayIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
             }
+        }
+
+        /// <summary>
+        /// Handles the MouseDoubleClick event of the systrayIcon control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
+        void systrayIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            // Update the items so that the remaining time is correct
+            this.dataGridWorkDays.Items.Refresh();
+
+            // The state change will trigger the state changed event and do everything else there
+            this.WindowState = WindowState.Normal;
         }
         #endregion
 
@@ -104,9 +99,8 @@ namespace A9N.FlexTimeMonitor
             // If there is no file name configured - create new default file name
             if (Settings.Default.LogfileName == String.Empty)
             {
-                String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
-                String appName = ApplicationName + "\\";
-                Settings.Default.LogfileName = myDocuments + appName + DefaultLogfileName;
+                String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Settings.Default.LogfileName = String.Format("{0}\\{1}\\{2}", myDocuments, Properties.Resources.ApplicationName, Properties.Resources.FileName);
                 Settings.Default.Save();
             }
 
@@ -189,7 +183,7 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
-                String text = ApplicationName + " is unable to load the history file:\n";
+                String text = Properties.Resources.ApplicationName + " is unable to load the history file:\n";
                 text += GetFileName() + "\n";
                 text += "This surely should not happen but evidently it has!\n";
                 text += "\n";
@@ -245,10 +239,10 @@ namespace A9N.FlexTimeMonitor
             OpenHistory();
 
 #if DEBUG
-//            if (history != null && history.Count == 0)
-//            {
-//                CreateSampleHistory(history, 222);
-//            }
+            //            if (history != null && history.Count == 0)
+            //            {
+            //                CreateSampleHistory(history, 222);
+            //            }
 #endif
         }
 
@@ -260,10 +254,6 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Remove systray icon
-            systrayIcon.Visible = false;
-            systrayIcon.Dispose();
-
             if (saveHistoryOnExit)
             {
                 SaveHistory();
@@ -284,12 +274,10 @@ namespace A9N.FlexTimeMonitor
             if (WindowState == WindowState.Minimized)
             {
                 this.ShowInTaskbar = false;
-                this.systrayIcon.Visible = true;
             }
             if (WindowState == WindowState.Normal)
             {
                 this.ShowInTaskbar = true;
-                this.systrayIcon.Visible = false;
             }
         }
 
@@ -364,13 +352,12 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
-            String newLine = Environment.NewLine;
-            String caption = "About " + ApplicationName;
+            String caption = "About " + Properties.Resources.ApplicationName;
 
             String aboutText = "";
-            aboutText += ApplicationName + newLine + newLine;
-            aboutText += GetVersion() + newLine + newLine;
-            aboutText += "Copyright © 2009-2012 Andre Janßen" + newLine + newLine;
+            aboutText += Properties.Resources.ApplicationName + Environment.NewLine + Environment.NewLine;
+            aboutText += GetVersion() + Environment.NewLine + Environment.NewLine;
+            aboutText += "Copyright © 2009-2012 Andre Janßen" + Environment.NewLine + Environment.NewLine;
             aboutText += "Visit http://a9n.de for further information";
 
             MessageBox.Show(aboutText, caption);
