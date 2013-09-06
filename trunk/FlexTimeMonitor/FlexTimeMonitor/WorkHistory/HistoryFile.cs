@@ -158,7 +158,7 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
-        /// Write object to file. No additional type info neccessary.
+        /// Write object to file. No additional type info necessary.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="output">The output.</param>

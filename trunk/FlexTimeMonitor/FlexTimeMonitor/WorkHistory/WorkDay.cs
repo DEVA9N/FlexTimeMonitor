@@ -12,78 +12,61 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public class WorkDay
     {
-        private DateTime end;
-
         /// <summary>
         /// Creates Workday instance with start time now
         /// </summary>
         public WorkDay()
         {
-            Start = DateTime.Now;
-            End = DateTime.Now;
+            Data = new WorkDayData();
+
+            Data.Date = DateTime.Now;
+            Data.Start = DateTime.Now;
+            Data.End = DateTime.Now;
         }
+
+        /// <summary>
+        /// Gets or sets the data object that stores the workday data.
+        /// </summary>
+        /// <value>The data.</value>
+        public WorkDayData Data { get; set; }
+
+        /// <summary>
+        /// Sets the time of day.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <param name="time">The time.</param>
+        /// <returns>DateTime.</returns>
+        private DateTime SetTimeOfDay(DateTime date, TimeSpan time)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, time.Hours, time.Minutes, time.Seconds);
+        }
+
+        /// <summary>
+        /// Gets or sets the date of the workday
+        /// </summary>
+        /// <value>The date.</value>
+        [XmlIgnore]
+        public DateTime Date { get { return Data.Date; } set { Data.Date = value; } }
 
         /// <summary>
         /// Start time
         /// </summary>
         /// <value>The start.</value>
-        public DateTime Start { get; set; }
+        [XmlIgnore]
+        public TimeSpan Start { get { return Data.Start.TimeOfDay; } set { Data.Start = SetTimeOfDay(Data.Start, value); } }
 
         /// <summary>
         /// End time
         /// </summary>
         /// <value>The end.</value>
-        public DateTime End
-        {
-            get
-            {
-                Boolean isToday = this.Start.Date == DateTime.Now.Date;
-
-                if (isToday)
-                {
-                    end = DateTime.Now;
-                }
-
-                return end;
-            }
-            set
-            {
-                end = value;
-            }
-        }
-
-        #region Studpid input hacks
-        // Note: there is something like Dependency Property which may or may not be suitable to handle the input data. But I have no time to check that further.
-        // Non the less: there has to be a way to handle the input, maybe with a direct data access (like WCF: Message Handling).
-
-        /// <summary>
-        /// Temporarily used to access Start.
-        /// Will prevent a unwanted date change. You can't just simply replace "Start"
-        /// since there would be no nice way to set the date (well you could create
-        /// another date property but that is even worse).
-        /// </summary>
-        /// <value>The start hack.</value>
         [XmlIgnore]
-        public DateTime StartHack { get { return Start; } set { Start = new DateTime(Start.Year, Start.Month, Start.Day, value.Hour, value.Minute, value.Second); } }
-
-        /// <summary>
-        /// Temporarily used to access End. End now always ends on the start day.
-        /// This hack addresses a GUI issue. When editing a cell the GUI always
-        /// provides the current date for the entered time. There is no way to
-        /// set the date manually (may change in the future)
-        /// Will prevent a unwanted date change. You can't just simply replace "End"
-        /// since there would be no nice way to set the date (well you could create
-        /// another date property but that is even worse).
-        /// </summary>
-        /// <value>The end hack.</value>
-        [XmlIgnore]
-        public DateTime EndHack { get { return End; } set { End = new DateTime(Start.Year, Start.Month, Start.Day, value.Hour, value.Minute, value.Second); } }
-        #endregion
+        public TimeSpan End { get { return Data.End.TimeOfDay; } set { Data.End = SetTimeOfDay(Data.End, value); } }
 
         /// <summary>
         /// The difference between Difference and the complete workday (including break period)
         /// </summary>
         /// <value>The over time.</value>
+        [XmlIgnore]
         public TimeSpan OverTime
         {
             get { return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
@@ -94,12 +77,14 @@ namespace A9N.FlexTimeMonitor
         /// This property is used as a binding in the xaml code.
         /// </summary>
         /// <value>The over time string.</value>
+        [XmlIgnore]
         public String OverTimeString { get { return TimeSpanHelper.ToHhmmss(OverTime); } }
 
         /// <summary>
         /// Difference between start and now
         /// </summary>
         /// <value>The elapsed.</value>
+        [XmlIgnore]
         public TimeSpan Elapsed
         {
             get { return End - Start; }
@@ -109,15 +94,17 @@ namespace A9N.FlexTimeMonitor
         /// Estimated end time
         /// </summary>
         /// <value>The estimated.</value>
+        [XmlIgnore]
         public TimeSpan Estimated
         {
-            get { return (Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod)).TimeOfDay; }
+            get { return Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
         }
 
         /// <summary>
         /// Remaining time - opposite of OverTime (5min Remaining == -5min OverTime)
         /// </summary>
         /// <value>The remaining.</value>
+        [XmlIgnore]
         public TimeSpan Remaining
         {
             get { return -OverTime; }
@@ -127,6 +114,7 @@ namespace A9N.FlexTimeMonitor
         /// Additional note
         /// </summary>
         /// <value>The note.</value>
-        public String Note { get; set; }
+        [XmlIgnore]
+        public String Note { get { return Data.Note; } set { Data.Note = value; } }
     }
 }

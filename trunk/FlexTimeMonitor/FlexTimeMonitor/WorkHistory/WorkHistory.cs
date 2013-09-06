@@ -25,9 +25,9 @@ namespace A9N.FlexTimeMonitor
                 if (lastEntry != null)
                 {
                     // Check if last entry is from today
-                    if (lastEntry.Start.Date == DateTime.Now.Date)
+                    if (lastEntry.Date.Date == DateTime.Today)
                     {
-                        lastEntry.End = default(DateTime);
+                        lastEntry.End = DateTime.Now.TimeOfDay;
                         // This one is already in the list
                         return lastEntry;
                     }
