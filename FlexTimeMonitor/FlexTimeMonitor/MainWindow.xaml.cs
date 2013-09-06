@@ -120,33 +120,6 @@ namespace A9N.FlexTimeMonitor
         }
         #endregion
 
-#if DEBUG
-        /// <summary>
-        /// Creates the sample history.
-        /// </summary>
-        /// <param name="history">The history.</param>
-        /// <param name="count">The count.</param>
-        private void CreateSampleHistory(WorkHistory history, int count)
-        {
-            if (history == null)
-            {
-                return;
-            }
-
-            history.Clear();
-
-            for (int i = 0; i < count; i++)
-            {
-                DateTime date = new DateTime(1970, 1, 1, 9, 0, 21).AddDays(i);
-
-                WorkDay day = new WorkDay();
-                day.Start = date;
-                day.End = date.AddHours(9);
-                history.Add(day);
-            }
-        }
-#endif
-
         #region History Access
         /// <summary>
         /// Opens the history.
