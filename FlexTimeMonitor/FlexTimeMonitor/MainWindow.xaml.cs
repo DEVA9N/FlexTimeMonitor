@@ -66,7 +66,7 @@ namespace A9N.FlexTimeMonitor
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
             {
-                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start.TimeOfDay));
+                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.ToHhmmss(today.Estimated));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.ToHhmmss(today.Elapsed));
                 balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.ToHhmmss(today.Remaining));
@@ -209,7 +209,7 @@ namespace A9N.FlexTimeMonitor
             // Note that the history is not a valid object if it failed to load
             if (history != null)
             {
-                today.End = DateTime.Now;
+                today.End = DateTime.Now.TimeOfDay;
 
                 historyFile.Save(history);
             }
@@ -290,10 +290,13 @@ namespace A9N.FlexTimeMonitor
 
             try
             {
-                foreach (WorkDay w in dataGridWorkDays.SelectedItems)
+                foreach (Object item in dataGridWorkDays.SelectedItems)
                 {
-                    timeOverall += w.Elapsed - Settings.Default.BreakPeriod;
-                    timeIntended += Settings.Default.WorkPeriod;
+                    if (item is WorkDay)
+                    {
+                        timeOverall += ((WorkDay)item).Elapsed - Settings.Default.BreakPeriod;
+                        timeIntended += Settings.Default.WorkPeriod;
+                    }
                 }
             }
             catch (InvalidCastException x)
