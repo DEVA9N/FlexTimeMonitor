@@ -28,7 +28,7 @@ namespace A9N.FlexTimeMonitor
         private WorkDay today;
         private WorkHistory history;
         private HistoryFile historyFile;
-        private bool saveHistoryOnExit = true;
+        private bool autoSaveHistory = true;
         private System.Windows.Forms.NotifyIcon systrayIcon;
         private const int BalloonTimeOut = 3000;
 
@@ -81,9 +81,6 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         void systrayIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            // Update the items so that the remaining time is correct
-            this.dataGridWorkDays.Items.Refresh();
-
             // The state change will trigger the state changed event and do everything else there
             this.WindowState = WindowState.Normal;
         }
@@ -254,7 +251,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (saveHistoryOnExit)
+            if (autoSaveHistory)
             {
                 SaveHistory();
             }
@@ -310,6 +307,20 @@ namespace A9N.FlexTimeMonitor
             statusBarIntendedValue.Text = TimeSpanHelper.ToHhmmss(timeIntended);
             statusBarDifferenceValue.Text = TimeSpanHelper.ToHhmmss(timeOverall - timeIntended);
         }
+
+        /// <summary>
+        /// Handles the CurrentChanged event of the dataGridWorkDay item control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        void dataGridWorkDayItems_CurrentChanged(object sender, EventArgs e)
+        {
+            // Save the history as soon as the user finishes cell editing
+            if (autoSaveHistory)
+            {
+                SaveHistory();
+            }
+        }
         #endregion
 
         #region Menu item events
@@ -330,7 +341,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemQuitWithoutSave_Click(object sender, RoutedEventArgs e)
         {
-            saveHistoryOnExit = false;
+            autoSaveHistory = false;
             Close();
         }
 
