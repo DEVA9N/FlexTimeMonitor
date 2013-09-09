@@ -207,13 +207,6 @@ namespace A9N.FlexTimeMonitor
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             OpenHistory();
-
-#if DEBUG
-            //            if (history != null && history.Count == 0)
-            //            {
-            //                CreateSampleHistory(history, 222);
-            //            }
-#endif
         }
 
         /// <summary>
@@ -283,23 +276,20 @@ namespace A9N.FlexTimeMonitor
             statusBarIntendedValue.Text = TimeSpanHelper.ToHhmmss(timeIntended);
             statusBarDifferenceValue.Text = TimeSpanHelper.ToHhmmss(timeOverall - timeIntended);
         }
-
-        /// <summary>
-        /// Handles the CurrentChanged event of the dataGridWorkDay item control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        void dataGridWorkDayItems_CurrentChanged(object sender, EventArgs e)
-        {
-            // Save the history as soon as the user finishes cell editing
-            if (autoSaveHistory)
-            {
-                SaveHistory();
-            }
-        }
         #endregion
 
         #region Menu item events
+
+        /// <summary>
+        /// Handles the Click event of the MenuItemSave control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveHistory();
+        }
+
         /// <summary>
         /// Handles the Click event of the MenuItemQuit control.
         /// </summary>
@@ -333,6 +323,23 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
+        /// Handles the Click event of the MenuItemRefresh control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        private void MenuItemRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                dataGridWorkDays.Items.Refresh();
+            }
+            catch (InvalidOperationException x)
+            {
+                // Can occur when still editing a cell
+            }
+        }
+
+        /// <summary>
         /// Handles the Click event of the MenuItemAbout control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -344,7 +351,7 @@ namespace A9N.FlexTimeMonitor
             String aboutText = "";
             aboutText += Properties.Resources.ApplicationName + Environment.NewLine + Environment.NewLine;
             aboutText += GetVersion() + Environment.NewLine + Environment.NewLine;
-            aboutText += "Copyright © 2009-2012 Andre Janßen" + Environment.NewLine + Environment.NewLine;
+            aboutText += "Copyright © 2009-2013 Andre Janßen" + Environment.NewLine + Environment.NewLine;
             aboutText += "Visit http://a9n.de for further information";
 
             MessageBox.Show(aboutText, caption);

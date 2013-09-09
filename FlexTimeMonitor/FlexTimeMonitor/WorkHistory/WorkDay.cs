@@ -31,14 +31,22 @@ namespace A9N.FlexTimeMonitor
         public WorkDayData Data { get; set; }
 
         /// <summary>
-        /// Sets the time of day.
+        /// Converts the TimeSpan to a DateTime instance for the current workday.
         /// </summary>
-        /// <param name="date">The date.</param>
+        /// <remarks>
+        /// This methods is a workaround that solves the problems that TimeSpans that are entered in the grid view by
+        /// the user do not contain a proper date component. In order to store a DateTime that matches the current
+        /// date of the workday this method takes Date to create a valid DateTime object.
+        /// 
+        /// BTW: for DateTime objects that are entered in the grid view there is another issue. If only the time is 
+        /// entered the DateTime object will always use the date of today. It makes it impossible to alter old times
+        /// from the history without making the date invalid.
+        /// </remarks>
         /// <param name="time">The time.</param>
         /// <returns>DateTime.</returns>
-        private DateTime SetTimeOfDay(DateTime date, TimeSpan time)
+        private DateTime ConvertToDateTime(TimeSpan time)
         {
-            return new DateTime(date.Year, date.Month, date.Day, time.Hours, time.Minutes, time.Seconds);
+            return new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, time.Hours, time.Minutes, time.Seconds);
         }
 
         /// <summary>
@@ -46,21 +54,52 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The date.</value>
         [XmlIgnore]
-        public DateTime Date { get { return Data.Date; } set { Data.Date = value; } }
+        public DateTime Date
+        {
+            get
+            {
+                return Data.Date;
+            }
+            set
+            {
+                Data.Date = value;
+            }
+        }
 
         /// <summary>
         /// Start time
         /// </summary>
         /// <value>The start.</value>
         [XmlIgnore]
-        public TimeSpan Start { get { return Data.Start.TimeOfDay; } set { Data.Start = SetTimeOfDay(Data.Start, value); } }
+        public TimeSpan Start
+        {
+            get
+            {
+                return Data.Start.TimeOfDay;
+            }
+            set
+            {
+                Data.Start = ConvertToDateTime(value);
+            }
+        }
 
         /// <summary>
         /// End time
         /// </summary>
         /// <value>The end.</value>
         [XmlIgnore]
-        public TimeSpan End { get { return Data.End.TimeOfDay; } set { Data.End = SetTimeOfDay(Data.End, value); } }
+        public TimeSpan End
+        {
+            get
+            {
+                return Data.End.TimeOfDay;
+            }
+            set
+            {
+                Data.End = ConvertToDateTime(value);
+            }
+        }
+
 
         /// <summary>
         /// The difference between Difference and the complete workday (including break period)
@@ -69,7 +108,10 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public TimeSpan OverTime
         {
-            get { return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
+            get
+            {
+                return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
+            }
         }
 
         /// <summary>
@@ -78,16 +120,44 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The over time string.</value>
         [XmlIgnore]
-        public String OverTimeString { get { return TimeSpanHelper.ToHhmmss(OverTime); } }
+        public String OverTimeString
+        {
+            get
+            {
+                return TimeSpanHelper.ToHhmmss(OverTime);
+            }
+        }
 
         /// <summary>
-        /// Difference between start and now
+        /// Gets or sets the discrepancy. Discrepancy is a positive or negative time offset that is taken into account
+        /// when calculating the total workday time. For example a skipped lunch break can be set by +1h or a doctor's
+        /// appointment can be set by -1h.
+        /// </summary>
+        /// <value>The discrepancy.</value>
+        [XmlIgnore]
+        public TimeSpan Discrepancy
+        {
+            get
+            {
+                return Data.Discrepancy.TimeOfDay;
+            }
+            set
+            {
+                Data.Discrepancy = ConvertToDateTime(value);
+            }
+        }
+
+        /// <summary>
+        /// Difference between start and now also considering a possible discrepancy.
         /// </summary>
         /// <value>The elapsed.</value>
         [XmlIgnore]
         public TimeSpan Elapsed
         {
-            get { return End - Start; }
+            get
+            {
+                return End - Start + Discrepancy;
+            }
         }
 
         /// <summary>
@@ -97,7 +167,10 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public TimeSpan Estimated
         {
-            get { return Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod); }
+            get
+            {
+                return Start - Discrepancy + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
+            }
         }
 
         /// <summary>
@@ -107,7 +180,10 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public TimeSpan Remaining
         {
-            get { return -OverTime; }
+            get
+            {
+                return -OverTime;
+            }
         }
 
         /// <summary>
@@ -115,6 +191,16 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The note.</value>
         [XmlIgnore]
-        public String Note { get { return Data.Note; } set { Data.Note = value; } }
+        public String Note
+        {
+            get
+            {
+                return Data.Note;
+            }
+            set
+            {
+                Data.Note = value;
+            }
+        }
     }
 }
