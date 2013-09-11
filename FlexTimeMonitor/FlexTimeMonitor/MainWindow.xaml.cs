@@ -25,9 +25,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private WorkDay today;
-        private WorkHistory history;
-        private HistoryFile historyFile;
+        private WorkHistoryFile historyFile;
         private bool autoSaveHistory = true;
         private System.Windows.Forms.NotifyIcon systrayIcon;
         private const int BalloonTimeOut = 3000;
@@ -63,6 +61,14 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         void systrayIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            if (historyFile == null)
+            {
+                // Nothing todo here
+                return;
+            }
+
+            var today = historyFile.History.Today;
+
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
             {
@@ -83,40 +89,12 @@ namespace A9N.FlexTimeMonitor
         {
             // The state change will trigger the state changed event and do everything else there
             this.WindowState = WindowState.Normal;
-        }
-        #endregion
 
-        #region Helper methods
-        /// <summary>
-        /// Get history file name
-        /// </summary>
-        /// <returns>String.</returns>
-        private String GetFileName()
-        {
-            // If there is no file name configured - create new default file name
-            if (Settings.Default.LogfileName == String.Empty)
+            if (historyFile != null)
             {
-                String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                Settings.Default.LogfileName = String.Format("{0}\\{1}\\{2}", myDocuments, Properties.Resources.ApplicationName, Properties.Resources.FileName);
-                Settings.Default.Save();
+                // Update the today entry for the grid display
+                this.historyFile.History.Today.End = DateTime.Now.TimeOfDay;
             }
-
-            return Settings.Default.LogfileName;
-        }
-
-        private String GetVersion()
-        {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                // This version matches the published version and is only available in the published application
-                return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
-            }
-            else
-            {
-                // This return the AssemblyInfos' version which differs to the deployment version
-                return System.Windows.Forms.Application.ProductVersion;
-            }
-            // Todo: Check if it a good idea to sync those numbers
         }
         #endregion
 
@@ -126,23 +104,15 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         private void OpenHistory()
         {
-
-            String historyPath = GetFileName();
-            historyFile = new HistoryFile(historyPath);
+            historyFile = new WorkHistoryFile();
 
             // Will try to open an existing history file. If none is found it will create a new one.
             // If reading or writing fails the user is informed and the application is shut down without writing data.
             try
             {
-                history = historyFile.Load();
+                historyFile.Load();
 
-                // Get today from history - never get it somewhere else!
-                today = history.GetToday();
-
-                // This will make sure that the start is logged correctly even if the computer crashes
-                historyFile.Save(history);
-
-                dataGridWorkDays.ItemsSource = history;
+                dataGridWorkDays.ItemsSource = historyFile.History;
 
                 // Set focus on last item
                 if (dataGridWorkDays.Items.Count > 0)
@@ -153,23 +123,10 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
-                String text = Properties.Resources.ApplicationName + " is unable to load the history file:\n";
-                text += GetFileName() + "\n";
-                text += "This surely should not happen but evidently it has!\n";
-                text += "\n";
-                text += "Now there are 3 options:\n";
-                text += "\t- delete the history file and lose all your data or\n";
-                text += "\t- manually fix the history file (see details below) or\n";
-                text += "\t- file a bug report and try to convince the author to fix that file for you\n";
-                text += "\n";
-                text += e.Message + "\n";
-                text += "\n";
-                text += "Press OK to quit the application.";
+                var backupFileName = historyFile.CreateBackup();
+                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, backupFileName, e);
 
-                MessageBox.Show(text, "Unable load history file");
-
-                // This will close the application but will also trigger the MainWindow's closing event!
-                Application.Current.Shutdown();
+                MessageBox.Show(this, text, Properties.Resources.ApplicationName);
             }
         }
 
@@ -180,20 +137,17 @@ namespace A9N.FlexTimeMonitor
         {
             // Set end time and save object
             // Note that the history is not a valid object if it failed to load
-            if (history != null)
+            if (historyFile != null)
             {
-                today.End = DateTime.Now.TimeOfDay;
-
-                historyFile.Save(history);
+                try
+                {
+                    historyFile.Save();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
+                }
             }
-        }
-
-        /// <summary>
-        /// Closes the history.
-        /// </summary>
-        private void CloseHistory()
-        {
-
         }
         #endregion
 
@@ -221,10 +175,6 @@ namespace A9N.FlexTimeMonitor
             {
                 SaveHistory();
             }
-            else
-            {
-                CloseHistory();
-            }
         }
 
         /// <summary>
@@ -243,7 +193,9 @@ namespace A9N.FlexTimeMonitor
                 this.ShowInTaskbar = true;
             }
         }
+        #endregion
 
+        #region DataGrid Events
         /// <summary>
         /// Display selection results
         /// </summary>
@@ -279,7 +231,6 @@ namespace A9N.FlexTimeMonitor
         #endregion
 
         #region Menu item events
-
         /// <summary>
         /// Handles the Click event of the MenuItemSave control.
         /// </summary>
@@ -307,7 +258,9 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemQuitWithoutSave_Click(object sender, RoutedEventArgs e)
         {
+            // Disable autosave
             autoSaveHistory = false;
+
             Close();
         }
 
@@ -318,25 +271,9 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemEditOptions_Click_1(object sender, RoutedEventArgs e)
         {
-            WindowOptions options = new WindowOptions();
-            options.ShowDialog();
-        }
+            var options = new OptionsWindow();
 
-        /// <summary>
-        /// Handles the Click event of the MenuItemRefresh control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-        private void MenuItemRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                dataGridWorkDays.Items.Refresh();
-            }
-            catch (InvalidOperationException x)
-            {
-                // Can occur when still editing a cell
-            }
+            options.ShowDialog();
         }
 
         /// <summary>
@@ -346,15 +283,9 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
-            String caption = "About " + Properties.Resources.ApplicationName;
+            var about = new AboutWindow();
 
-            String aboutText = "";
-            aboutText += Properties.Resources.ApplicationName + Environment.NewLine + Environment.NewLine;
-            aboutText += GetVersion() + Environment.NewLine + Environment.NewLine;
-            aboutText += "Copyright © 2009-2013 Andre Janßen" + Environment.NewLine + Environment.NewLine;
-            aboutText += "Visit http://a9n.de for further information";
-
-            MessageBox.Show(aboutText, caption);
+            about.ShowDialog();
         }
         #endregion
 

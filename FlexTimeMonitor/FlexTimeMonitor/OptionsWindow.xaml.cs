@@ -16,12 +16,12 @@ namespace A9N.FlexTimeMonitor
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class WindowOptions : Window
+    public partial class OptionsWindow : Window
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowOptions" /> class.
         /// </summary>
-        public WindowOptions()
+        public OptionsWindow()
         {
             InitializeComponent();
 
@@ -87,25 +87,6 @@ namespace A9N.FlexTimeMonitor
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        /// <summary>
-        /// Handles the Click event of the buttonFile control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
-        private void buttonFile_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                if (System.IO.File.Exists(ofd.FileName))
-                {
-                    //textBoxFile.Text = ofd.FileName;
-                    Properties.Settings.Default.LogfileName = ofd.FileName;
-                }
-            }
         }
         #endregion
 

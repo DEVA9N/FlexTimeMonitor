@@ -4,14 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.Runtime.CompilerServices;
+using System.ComponentModel;
 
 namespace A9N.FlexTimeMonitor
 {
     /// <summary>
     /// Represents a work day
     /// </summary>
-    public class WorkDay
+    public sealed class WorkDay : INotifyPropertyChanged
     {
+        #region Fields
+        private int _weekNumber;
+
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion Fields
+
+        #region Constructor
         /// <summary>
         /// Creates Workday instance with start time now
         /// </summary>
@@ -23,12 +34,20 @@ namespace A9N.FlexTimeMonitor
             Data.Start = DateTime.Now;
             Data.End = DateTime.Now;
         }
+        #endregion
 
+        #region Methods
         /// <summary>
-        /// Gets or sets the data object that stores the workday data.
+        /// Notifies the property change.
         /// </summary>
-        /// <value>The data.</value>
-        public WorkDayData Data { get; set; }
+        /// <param name="propertyName">Name of the property.</param>
+        private void NotifyPropertyChanged(String propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
 
         /// <summary>
         /// Converts the TimeSpan to a DateTime instance for the current workday.
@@ -48,6 +67,15 @@ namespace A9N.FlexTimeMonitor
         {
             return new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, time.Hours, time.Minutes, time.Seconds);
         }
+        #endregion
+
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the data object that stores the workday data.
+        /// </summary>
+        /// <value>The data.</value>
+        public WorkDayData Data { get; set; }
 
         /// <summary>
         /// Gets or sets the date of the workday
@@ -63,6 +91,28 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.Date = value;
+              
+                NotifyPropertyChanged("Date");
+            }
+        }
+
+        /// <summary>
+        /// Gets the week number.
+        /// </summary>
+        /// <value>The week number.</value>
+        [XmlIgnore]
+        public int WeekOfYear
+        {
+            get
+            {
+                if (_weekNumber == 0)
+                {
+                    var info = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+
+                    _weekNumber = info.Calendar.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                }
+
+                return _weekNumber;
             }
         }
 
@@ -80,6 +130,8 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.Start = ConvertToDateTime(value);
+              
+                NotifyPropertyChanged("Start");
             }
         }
 
@@ -97,6 +149,8 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.End = ConvertToDateTime(value);
+
+                NotifyPropertyChanged("End");
             }
         }
 
@@ -111,20 +165,6 @@ namespace A9N.FlexTimeMonitor
             get
             {
                 return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-            }
-        }
-
-        /// <summary>
-        /// This is a workaround for the missing capability of TimeSpan formating to handle negative values.
-        /// This property is used as a binding in the xaml code.
-        /// </summary>
-        /// <value>The over time string.</value>
-        [XmlIgnore]
-        public String OverTimeString
-        {
-            get
-            {
-                return TimeSpanHelper.ToHhmmss(OverTime);
             }
         }
 
@@ -144,6 +184,8 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.Discrepancy = ConvertToDateTime(value);
+
+                NotifyPropertyChanged("Discrepancy");
             }
         }
 
@@ -200,7 +242,82 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.Note = value;
+
+                NotifyPropertyChanged("Note");
             }
         }
+
+        #region Datagrid Helper
+        /*
+         * Instead of using enhanced WPF patterns to achieve certain benefits I took the fast approach and am using some
+         * helper properties instead. These helper methods are used in the datagrid for trigger and display purposes.
+         * 
+         */
+        
+        /// <summary>
+        /// Gets a value indicating whether this instance is odd week.
+        /// </summary>
+        /// <remarks>
+        /// This value is used to highlight the odd weeks in the datagrid.
+        /// </remarks>
+        /// <value><c>true</c> if this instance is odd week; otherwise, <c>false</c>.</value>
+        [XmlIgnore]
+        public bool IsOddWeek
+        {
+            get
+            {
+                if (WeekOfYear > 0)
+                {
+                    return WeekOfYear % 2 > 0;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is today.
+        /// </summary>
+        /// <remarks>
+        /// This value is used to highlight today in the datagrid.
+        /// </remarks>
+        /// <value><c>true</c> if this instance is today; otherwise, <c>false</c>.</value>
+        [XmlIgnore]
+        public bool IsToday
+        {
+            get
+            {
+                return Date.Date == DateTime.Now.Date;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has discrepancy which is either Discrepancy != Zero or negative OverTim.
+        /// </summary>
+        /// <value><c>true</c> if this instance has discrepancy; otherwise, <c>false</c>.</value>
+        [XmlIgnore]
+        public bool HasDiscrepancy
+        {
+            get
+            {
+                return (Discrepancy != TimeSpan.Zero || OverTime < TimeSpan.Zero) && !IsToday;
+            }
+        }
+
+        /// <summary>
+        /// This is a workaround for the missing capability of TimeSpan formating to handle negative values.
+        /// This property is used as a binding in the xaml code.
+        /// </summary>
+        /// <value>The over time string.</value>
+        [XmlIgnore]
+        public String OverTimeString
+        {
+            get
+            {
+                return TimeSpanHelper.ToHhmmss(OverTime);
+            }
+        }
+        #endregion
+        #endregion
     }
 }
