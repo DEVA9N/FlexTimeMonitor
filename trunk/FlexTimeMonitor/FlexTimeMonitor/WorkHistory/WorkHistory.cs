@@ -11,33 +11,59 @@ namespace A9N.FlexTimeMonitor
 {
     public class WorkHistory : ObservableCollection<WorkDay>
     {
-        /// <summary>
-        /// Gets the history entry of today. If none is found it
-        /// will return a fresh new day.
-        /// </summary>
-        /// <returns>WorkDay.</returns>
-        public WorkDay GetToday()
-        {
-            if (this.Count > 0)
-            {
-                WorkDay lastEntry = this.Last();
+        private WorkDay _today;
 
-                if (lastEntry != null)
+        /// <summary>
+        /// Gets today.
+        /// </summary>
+        private WorkDay GetToday()
+        {
+            if (_today == null)
+            {
+                var allTodays = from day in this
+                                where day.Date.Date == DateTime.Now.Date
+                                select day;
+
+                if (allTodays.Count() > 0)
                 {
-                    // Check if last entry is from today
-                    if (lastEntry.Date.Date == DateTime.Today)
-                    {
-                        lastEntry.End = DateTime.Now.TimeOfDay;
-                        // This one is already in the list
-                        return lastEntry;
-                    }
+                    return allTodays.Last();
                 }
             }
+            return _today;
+        }
 
-            // If a new day or no history or so...
-            WorkDay aNewDay = new WorkDay();
-            this.Add(aNewDay);
-            return aNewDay;
+        /// <summary>
+        /// Gets the today.
+        /// </summary>
+        /// <value>The today.</value>
+        public WorkDay Today
+        {
+            get
+            {
+                if (_today == null)
+                {
+                    _today = GetToday();
+                }
+
+                // Can still be null
+                return _today;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    var existing = GetToday();
+
+                    if (existing != null)
+                    {
+                        throw new InvalidOperationException("An object from today already exists");
+                    }
+
+                    _today = value;
+
+                    this.Add(_today);
+                }
+            }
         }
     }
 }

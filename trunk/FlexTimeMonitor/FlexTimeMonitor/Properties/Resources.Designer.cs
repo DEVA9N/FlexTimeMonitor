@@ -70,11 +70,26 @@ namespace A9N.FlexTimeMonitor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to flextimelog.xml.
+        ///   Looks up a localized string similar to History.xml.
         /// </summary>
         internal static string FileName {
             get {
                 return ResourceManager.GetString("FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load the history file. Starting a new FlexTime History. 
+        ///
+        ///You can find a backup of the previous history file in:
+        ///{0}
+        ///
+        ///Exception:
+        ///{1}.
+        /// </summary>
+        internal static string Status_ErrorLoadingHistory {
+            get {
+                return ResourceManager.GetString("Status_ErrorLoadingHistory", resourceCulture);
             }
         }
         

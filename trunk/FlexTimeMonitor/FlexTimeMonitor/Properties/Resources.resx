@@ -121,7 +121,16 @@
     <value>Flex Time Monitor</value>
   </data>
   <data name="FileName" xml:space="preserve">
-    <value>flextimelog.xml</value>
+    <value>History.xml</value>
+  </data>
+  <data name="Status_ErrorLoadingHistory" xml:space="preserve">
+    <value>Unable to load the history file. Starting a new FlexTime History. 
+
+You can find a backup of the previous history file in:
+{0}
+
+Exception:
+{1}</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Stopwatch" type="System.Resources.ResXFileRef, System.Windows.Forms">

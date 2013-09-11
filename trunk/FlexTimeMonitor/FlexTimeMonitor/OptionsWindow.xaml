@@ -1,4 +1,4 @@
-﻿<Window x:Class="A9N.FlexTimeMonitor.WindowOptions"
+﻿<Window x:Class="A9N.FlexTimeMonitor.OptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Options" Height="176" Width="291" MinWidth="280" MinHeight="180">
