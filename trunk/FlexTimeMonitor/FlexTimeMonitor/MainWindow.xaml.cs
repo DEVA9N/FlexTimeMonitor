@@ -90,10 +90,13 @@ namespace A9N.FlexTimeMonitor
             // The state change will trigger the state changed event and do everything else there
             this.WindowState = WindowState.Normal;
 
-            if (historyFile != null)
+            try
             {
-                // Update the today entry for the grid display
-                this.historyFile.History.Today.End = DateTime.Now.TimeOfDay;
+                this.dataGridWorkDays.Items.Refresh();
+            }
+            catch (InvalidOperationException)
+            {
+                // This exception occurs if the cell of an edited item has not been left before putting this app to tray.
             }
         }
         #endregion
