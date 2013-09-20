@@ -144,6 +144,10 @@ namespace A9N.FlexTimeMonitor
         {
             get
             {
+                if (IsToday)
+                {
+                    return DateTime.Now.TimeOfDay;
+                }
                 return Data.End.TimeOfDay;
             }
             set

@@ -147,12 +147,6 @@ namespace A9N.FlexTimeMonitor
                 }
             }
 
-            // Set the end before saving
-            if (History.Today != null)
-            {
-                this.History.Today.End = DateTime.Now.TimeOfDay;
-            }
-
             // Create a backup file by moving it. If the write fails the backup will 
             String backupName = CreateBackup();
 
