@@ -1,4 +1,12 @@
-﻿Version 1.2.0.28
+﻿Version 1.2.031
+------------------
+-fixed auto save of todays end time
+
+Version 1.2.0.29
+------------------
+-fixed wrong calculation for Remaining time shown in the notification balloon tip
+
+Version 1.2.0.28
 ------------------
 ////////////////////////////////////////////////////////////////////
 ///															     ///
