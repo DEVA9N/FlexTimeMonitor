@@ -1,13 +1,17 @@
-﻿Version 1.2.031
-------------------
+﻿Version 1.2.0.31
+--------------------------------------------------------------------------------
+-fixed application icon that did not appear in the taskbar
+
+Version 1.2.0.31
+--------------------------------------------------------------------------------
 -fixed auto save of todays end time
 
 Version 1.2.0.29
-------------------
+--------------------------------------------------------------------------------
 -fixed wrong calculation for Remaining time shown in the notification balloon tip
 
 Version 1.2.0.28
-------------------
+--------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////
 ///															     ///
 ///     !!  ATTENTION MAJOR DATA STRUCTURE CHANGE !!             ///
@@ -40,24 +44,24 @@ Version 1.2.0.28
 -fixed: datagrid items are updated before showing the window
 
 Version 1.2.0.24
-------------------
+--------------------------------------------------------------------------------
 -fixed bug that stopped the application from quitting after loading an invalid history file
 -fixed flickering balloon tip
 -fixed balloon text
 
 Version 1.2.0.22
-------------------
+--------------------------------------------------------------------------------
 -added: creates a backup file before saving the history data to prevent data loss if the program is exited unexpectedly
 
 Version 1.2.0.21
-------------------
+--------------------------------------------------------------------------------
 -fixed: Remaining (positive until estimated end, negative afterwards)
 -fixed: Overtime is the opposite of remaining time (negative until estimated end, positive afterwards) 
 -fixed: time formating now set to HH:MM:SS for all instances
 -fixed: Overall was calculated incorrectly. It was possible to get positive Overall although the intended time was not met (maybe check your record).
 
 Version 1.2.0.20
-------------------
+--------------------------------------------------------------------------------
 -fixed: cell time format (24:00)
 -fixed: cell edit with correct date
 -fixed: bug which erased the history after a new version was installed
@@ -65,7 +69,7 @@ Version 1.2.0.20
 -added: better visual styless
 
 Version 1.1.x
-------------------
+--------------------------------------------------------------------------------
 -completely rewritten for .NET 4.0 and WPF
 -added: menu
 -added: options dialog
