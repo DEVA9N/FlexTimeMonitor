@@ -2,60 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:p="clr-namespace:A9N.FlexTimeMonitor.Properties"
-        Title="Flex Time Monitor" Height="600" Width="800" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="300" Icon="Icons/Stopwatch.ico" Loaded="Window_Loaded">
-    <Window.Resources>
-        <LinearGradientBrush x:Key="MenuBarBrush" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White" Offset="0" />
-            <GradientStop Color="White" Offset="1" />
-            <GradientStop Color="#FFC9C9C9" Offset="0.074" />
-            <GradientStop Color="#FFD6D6D6" Offset="0.934" />
-            <GradientStop Color="#FFF3F3F3" Offset="0.508" />
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="MenuBarBrushLight" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="White" Offset="1" />
-            <GradientStop Color="White" Offset="0" />
-            <GradientStop Color="White" Offset="0.525" />
-            <GradientStop Color="#FFE1E1E1" Offset="0.066" />
-            <GradientStop Color="#FFE1E1E1" Offset="0.902" />
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="GridOddWeekBrush" StartPoint="0.5,0" EndPoint="0.5, 1" >
-            <GradientStop Color="#D7F0FF" Offset="0"/>
-            <GradientStop Color="#BCDFFF" Offset="0.5"/>
-            <GradientStop Color="#D7F0FF" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="GridOddWeekMondayBrush" StartPoint="0.5,0" EndPoint="0.5, 1">
-            <GradientStop Color="#A1DCFF" Offset="0"/>
-            <GradientStop Color="#76BDFF" Offset="0.5"/>
-            <GradientStop Color="#A1DCFF" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="GridEvenWeekBrush" StartPoint="0.5,0" EndPoint="0.5, 1">
-            <GradientStop Color="#FFFFFF" Offset="0"/>
-            <GradientStop Color="#EEEEEE" Offset="0.5"/>
-            <GradientStop Color="#FFFFFF" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="GridEvenWeekMondayBrush" StartPoint="0.5,0" EndPoint="0.5, 1">
-            <GradientStop Color="#EEEEEE" Offset="0"/>
-            <GradientStop Color="#DDDDDD" Offset="0.5"/>
-            <GradientStop Color="#EEEEEE" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="GridTodayBrush" StartPoint="0.5,0" EndPoint="0.5, 1">
-            <GradientStop Color="#D5FFDD" Offset="0"/>
-            <GradientStop Color="#82FF99" Offset="0.5"/>
-            <GradientStop Color="#D5FFDD" Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="GridDiscrepanyBrush" StartPoint="0.5,0" EndPoint="0.5,1">
-            <GradientStop Color="#FF5050" Offset="0"/>
-            <GradientStop Color="#D60101" Offset="0.5"/>
-            <GradientStop Color="#FF5050" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Resources>
+        Title="Flex Time Monitor" Height="768" Width="1279" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="300" Icon="Icons/Stopwatch.ico" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*" />
             <ColumnDefinition Width="25*" />
             <ColumnDefinition Width="58*"/>
         </Grid.ColumnDefinitions>
-        <StatusBar Name="statusBar1" Width="Auto" Height="23" DataContext="{Binding}" VerticalAlignment="Bottom" Background="{StaticResource MenuBarBrushLight}" Grid.ColumnSpan="3">
+        <StatusBar Name="statusBar1" Width="Auto" Height="23" DataContext="{Binding}" VerticalAlignment="Bottom" Grid.ColumnSpan="3" BorderBrush="#FFBBBBBB" BorderThickness="0,1,0,0">
             <TextBlock>Days</TextBlock>
             <TextBlock Name="statusBarDayCountValue" Width="60"></TextBlock>
             <Separator/>
@@ -72,7 +26,7 @@
                   Name="dataGridWorkDays" 
                   ItemsSource="{Binding}" 
                   GridLinesVisibility="All" 
-                  Margin="0,23,0,21" 
+                  Margin="0,25,0,23" 
                   SelectionChanged="dataGridWorkDays_SelectionChanged" 
                   IsReadOnly="False" Grid.ColumnSpan="3" >
             <DataGrid.Columns>
@@ -138,56 +92,30 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
-                        <!-- START Odd week trigger-->
-                        <!-- Highlight week -->
+                        <!-- Highlight Odd week -->
                         <DataTrigger Binding="{Binding IsOddWeek}" Value="true">
-                            <Setter Property="Background" Value="{StaticResource GridOddWeekBrush}"/>
-                            <!--<Setter Property="Background" Value="#EDF9FF" />-->
+                            <Setter Property="Background" Value="#B3E7FF" />
                         </DataTrigger>
-                        <!-- Highlight monday -->
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsOddWeek}" Value="true" />
-                                <Condition Binding="{Binding Date.DayOfWeek}" Value="Monday"/>
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Background"  Value="{StaticResource GridOddWeekMondayBrush}" />
-                            <!--<Setter Property="Background" Value="#D3EDFF" />-->
-                        </MultiDataTrigger>
-                        <!-- END Odd week trigger-->
 
-                        <!-- START Even week trigger-->
-                        <!-- Highlight week -->
+                        <!-- Highlight Even week -->
                         <DataTrigger Binding="{Binding IsOddWeek}" Value="false">
-                            <Setter Property="Background" Value="{StaticResource GridEvenWeekBrush}" />
-                            <!--<Setter Property="Background" Value="White" />-->
+                            <Setter Property="Background" Value="White" />
                         </DataTrigger>
-                        <!-- Highlight monday -->
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Date.DayOfWeek}" Value="Monday"/>
-                                <Condition Binding="{Binding IsOddWeek}" Value="false" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" Value="{StaticResource GridEvenWeekMondayBrush}" />
-                            <!--<Setter Property="Background" Value="#EEEEEE" />-->
-                        </MultiDataTrigger>
-                        <!-- END Even week trigger-->
-
+                        
                         <!-- Highlight today -->
                         <DataTrigger Binding="{Binding IsToday}" Value="true">
-                            <Setter Property="Background" Value="{StaticResource GridTodayBrush}" />
-                            <!--<Setter Property="Background" Value="PaleGreen" />-->
+                            <Setter Property="Background" Value="PaleGreen" />
                         </DataTrigger>
 
                         <!-- Highlight discrepancy -->
                         <DataTrigger Binding="{Binding HasDiscrepancy}" Value="true">
-                            <Setter Property="Foreground" Value="{StaticResource GridDiscrepanyBrush}" />
-                            <!--<Setter Property="Foreground" Value="Red" />-->
+                            <Setter Property="Foreground" Value="Red" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
         </DataGrid>
-        <Menu Width="Auto" Height="25" Name="mainMenu" VerticalAlignment="Top" Grid.ColumnSpan="3">
+        <Menu Width="Auto" Height="25" Name="mainMenu" VerticalAlignment="Top" Grid.ColumnSpan="3" Background="#FFF1EDED" BorderBrush="#FFBBBBBB" BorderThickness="0,0,0,1">
             <MenuItem Header="File" Name="menuItemFile">
                 <MenuItem Header="Save" Name="MenuItemSave" Click="MenuItemSave_Click" />
                 <Separator HorizontalAlignment="Left" Width="183"/>
