@@ -28,7 +28,8 @@
                   GridLinesVisibility="All" 
                   Margin="0,25,0,23" 
                   SelectionChanged="dataGridWorkDays_SelectionChanged" 
-                  IsReadOnly="False" Grid.ColumnSpan="3" >
+                  IsReadOnly="False" Grid.ColumnSpan="3" 
+                   CanUserAddRows="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Week"  Binding="{Binding WeekOfYear}" IsReadOnly="True" MinWidth="20">
                     <DataGridTextColumn.HeaderStyle>
