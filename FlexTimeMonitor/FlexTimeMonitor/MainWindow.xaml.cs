@@ -110,7 +110,7 @@ namespace A9N.FlexTimeMonitor
             historyFile = new WorkHistoryFile();
 
             // Will try to open an existing history file. If none is found it will create a new one.
-            // If reading or writing fails the user is informed and the application is shut down without writing data.
+            // If reading or writing fails the user is informed.
             try
             {
                 historyFile.Load();
@@ -139,11 +139,14 @@ namespace A9N.FlexTimeMonitor
         private void SaveHistory()
         {
             // Set end time and save object
-            // Note that the history is not a valid object if it failed to load
+            // Note that the history is first available after the window has been loaded once
             if (historyFile != null)
             {
                 try
                 {
+                    // Commit edits of opened cells that have not yet been commited (by leaving the cell or pressing "enter").
+                    this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
+
                     historyFile.Save();
                 }
                 catch (Exception e)
