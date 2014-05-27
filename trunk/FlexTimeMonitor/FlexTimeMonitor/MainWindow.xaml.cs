@@ -194,7 +194,7 @@ namespace A9N.FlexTimeMonitor
             {
                 this.ShowInTaskbar = false;
             }
-            if (WindowState == WindowState.Normal)
+            if (WindowState != WindowState.Minimized)
             {
                 this.ShowInTaskbar = true;
             }
