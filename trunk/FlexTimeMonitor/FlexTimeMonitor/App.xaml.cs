@@ -83,6 +83,14 @@ namespace FlexTimeMonitor
             EnforceSingleInstance();
         }
 
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+        {
+            base.OnSessionEnding(e);
+
+            var flexTimeWindow = this.MainWindow as A9N.FlexTimeMonitor.MainWindow;
+            flexTimeWindow.SuppressSaveDialog = true;
+            flexTimeWindow.SaveHistory();
+        }
 
         /// <summary>
         /// Enforce single instance app

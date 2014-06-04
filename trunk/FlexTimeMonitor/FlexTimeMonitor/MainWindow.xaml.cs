@@ -26,9 +26,14 @@ namespace A9N.FlexTimeMonitor
     public partial class MainWindow : Window
     {
         private WorkHistoryFile historyFile;
-        private bool autoSaveHistory = true;
         private System.Windows.Forms.NotifyIcon systrayIcon;
         private const int BalloonTimeOut = 3000;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to suppress save dialog when the program is closing.
+        /// </summary>
+        /// <value><c>true</c> if [suppress save dialog]; otherwise, <c>false</c>.</value>
+        internal bool SuppressSaveDialog { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -136,7 +141,7 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Saves the history.
         /// </summary>
-        private void SaveHistory()
+        internal void SaveHistory()
         {
             // Set end time and save object
             // Note that the history is first available after the window has been loaded once
@@ -170,20 +175,6 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
-        /// This event is called when the main window is closed. It doesn't matter if it is closed
-        /// by user or by exception. It will be called either way!
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (autoSaveHistory)
-            {
-                SaveHistory();
-            }
-        }
-
-        /// <summary>
         /// Handles Minimize to tray and Restore Window
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -198,6 +189,39 @@ namespace A9N.FlexTimeMonitor
             {
                 this.ShowInTaskbar = true;
             }
+        }
+
+        /// <summary>
+        /// Handles the Closing event of the Window control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (SuppressSaveDialog)
+            {
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show(Properties.Resources.Message_Save_Text, Properties.Resources.Message_Save_Title, MessageBoxButton.YesNoCancel);
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    SaveHistory();
+                    e.Cancel = false;
+                    break;
+                case MessageBoxResult.No:
+                    e.Cancel = false;
+                    break;
+                case MessageBoxResult.Cancel:
+                    e.Cancel = true;
+                    break;
+                default:
+                    e.Cancel = false;
+                    break;
+            }
+
         }
         #endregion
 
@@ -254,19 +278,6 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void MenuItemQuit_Click(object sender, RoutedEventArgs e)
         {
-            Close();
-        }
-
-        /// <summary>
-        /// Handles the Click event of the MenuItemQuitWithoutSave control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
-        private void MenuItemQuitWithoutSave_Click(object sender, RoutedEventArgs e)
-        {
-            // Disable autosave
-            autoSaveHistory = false;
-
             Close();
         }
 

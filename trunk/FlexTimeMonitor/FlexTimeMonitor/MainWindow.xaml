@@ -121,7 +121,6 @@
                 <MenuItem Header="Save" Name="MenuItemSave" Click="MenuItemSave_Click" />
                 <Separator HorizontalAlignment="Left" Width="183"/>
                 <MenuItem Header="Quit" Name="MenuItemQuit" Click="MenuItemQuit_Click" />
-                <MenuItem Header="Quit without save" Name="MenuItemQuitWithoutSave" Click="MenuItemQuitWithoutSave_Click" />
             </MenuItem>
             <MenuItem Header="Options" Name="menuItemOptions">
                 <MenuItem Header="Edit" Click="MenuItemEditOptions_Click_1" Name="menuItemEditOptions" />
