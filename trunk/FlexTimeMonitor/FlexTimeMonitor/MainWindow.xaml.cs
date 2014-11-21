@@ -176,6 +176,21 @@ namespace A9N.FlexTimeMonitor
         }
         #endregion
 
+        /// <summary>
+        /// Updates the settings.
+        /// </summary>
+        private static void UpdateSettings()
+        {
+            if (Properties.Settings.Default.UpdateSettings)
+            {
+                Properties.Settings.Default.Upgrade();
+                // Custom user variable that triggers the update process (true by default)
+                Properties.Settings.Default.UpdateSettings = false;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+
         #region Window Events
 
         /// Handles the PowerModeChanged event of the SystemEvents control.
@@ -206,6 +221,8 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            UpdateSettings();
+
             OpenHistory();
         }
 
