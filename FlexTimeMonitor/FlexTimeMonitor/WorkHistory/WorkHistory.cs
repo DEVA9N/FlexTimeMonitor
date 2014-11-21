@@ -43,6 +43,14 @@ namespace A9N.FlexTimeMonitor
                 if (_today == null)
                 {
                     _today = GetToday();
+
+                    // Well it might look like this is a good place to automatically create a new day if can't be found.
+                    // But it is not! If the value is not null the programmer has no need to create a new instance and
+                    // that means that the Start property will be set when this property is first accessed - which is
+                    // likely when the End should be assigned - making Start and End happen at the same time.
+                    // 
+                    // Keeping this property null enforces the creation of a new WorkDay at the very start of the program,
+                    // which automatically leads to proper data.
                 }
 
                 // Can still be null
