@@ -88,7 +88,7 @@ namespace FlexTimeMonitor
             base.OnSessionEnding(e);
 
             var flexTimeWindow = this.MainWindow as A9N.FlexTimeMonitor.MainWindow;
-            flexTimeWindow.SuppressSaveDialog = true;
+            flexTimeWindow.ShowSaveDialog = false;
             flexTimeWindow.SaveHistory();
         }
 

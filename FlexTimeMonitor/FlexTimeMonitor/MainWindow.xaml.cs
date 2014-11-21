@@ -30,10 +30,10 @@ namespace A9N.FlexTimeMonitor
         private const int BalloonTimeOut = 3000;
 
         /// <summary>
-        /// Gets or sets a value indicating whether to suppress save dialog when the program is closing.
+        /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
         /// </summary>
-        /// <value><c>true</c> if [suppress save dialog]; otherwise, <c>false</c>.</value>
-        internal bool SuppressSaveDialog { get; set; }
+        /// <value><c>true</c> if the save dialog should be shown; otherwise, <c>false</c>.</value>
+        internal bool ShowSaveDialog { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow" /> class.
@@ -42,7 +42,11 @@ namespace A9N.FlexTimeMonitor
         {
             InitializeComponent();
 
+            this.ShowSaveDialog = true;
+
             InitializeSystrayIcon();
+
+            Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
         }
 
         #region Systray icon
@@ -112,7 +116,12 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         private void OpenHistory()
         {
-            historyFile = new WorkHistoryFile();
+            // The application decides whether it can save or not by checking if the historyFile is null. This should
+            // prevent the application from overwriting an existing file with new (not properly loaded) data.
+            if (historyFile == null)
+            {
+                historyFile = new WorkHistoryFile();
+            }
 
             // Will try to open an existing history file. If none is found it will create a new one.
             // If reading or writing fails the user is informed.
@@ -149,20 +158,46 @@ namespace A9N.FlexTimeMonitor
             {
                 try
                 {
-                    // Commit edits of opened cells that have not yet been commited (by leaving the cell or pressing "enter").
+                    // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
                     this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
 
                     historyFile.Save();
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
+                    // When the user is saving the file via menu it is ok to display the error message
+                    if (ShowSaveDialog)
+                    {
+                        // TODO: try to write log file, present log file on next application start
+                        MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
+                    }
                 }
             }
         }
         #endregion
 
         #region Window Events
+
+        /// Handles the PowerModeChanged event of the SystemEvents control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="Microsoft.Win32.PowerModeChangedEventArgs"/> instance containing the event data.</param>
+        void SystemEvents_PowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e)
+        {
+            if (historyFile != null)
+            {
+                switch (e.Mode)
+                {
+                    case Microsoft.Win32.PowerModes.Resume:
+                        this.OpenHistory();
+                        break;
+                    case Microsoft.Win32.PowerModes.Suspend:
+                        this.SaveHistory();
+                        break;
+                }
+            }
+        }
+
         /// <summary>
         /// This event is called directly when the window is loaded and should be used
         /// to do post initialization stuff
@@ -198,30 +233,27 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (SuppressSaveDialog)
+            if (ShowSaveDialog)
             {
-                return;
+                MessageBoxResult result = MessageBox.Show(Properties.Resources.Message_Save_Text, Properties.Resources.Message_Save_Title, MessageBoxButton.YesNoCancel);
+
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        SaveHistory();
+                        e.Cancel = false;
+                        break;
+                    case MessageBoxResult.No:
+                        e.Cancel = false;
+                        break;
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    default:
+                        e.Cancel = false;
+                        break;
+                }
             }
-
-            MessageBoxResult result = MessageBox.Show(Properties.Resources.Message_Save_Text, Properties.Resources.Message_Save_Title, MessageBoxButton.YesNoCancel);
-
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    SaveHistory();
-                    e.Cancel = false;
-                    break;
-                case MessageBoxResult.No:
-                    e.Cancel = false;
-                    break;
-                case MessageBoxResult.Cancel:
-                    e.Cancel = true;
-                    break;
-                default:
-                    e.Cancel = false;
-                    break;
-            }
-
         }
         #endregion
 
