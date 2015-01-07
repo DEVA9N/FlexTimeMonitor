@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
 
-namespace FlexTimeMonitor
+namespace A9N.FlexTimeMonitor
 {
     /// <summary>
     /// Interaction logic for App.xaml

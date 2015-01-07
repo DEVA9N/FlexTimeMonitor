@@ -74,7 +74,26 @@
     <StartupObject>FlexTimeMonitor.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Stopwatch.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -99,24 +118,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\LabelValueControl.xaml.cs">
+      <DependentUpon>LabelValueControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WorkDayGrid.cs" />
+    <Compile Include="Controls\HistoryTree\TreeItems\DayTreeItem.cs" />
+    <Compile Include="Controls\HistoryTree\TreeItems\MonthTreeItem.cs" />
+    <Compile Include="Controls\HistoryTree\TreeItems\YearTreeItem.cs" />
+    <Compile Include="Controls\HistoryTree\TreeItems\IHistoryTreeItem.cs" />
+    <Compile Include="Controls\HistoryTree\SelectedItemChangedEventArgs.cs" />
+    <Compile Include="Controls\DetailViewControls\IDetailView.cs" />
+    <Compile Include="Controls\Project.cs" />
+    <Compile Include="Controls\ProjectList.xaml.cs">
+      <DependentUpon>ProjectList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DetailViewControls\DayOverview.xaml.cs">
-      <DependentUpon>DayOverview.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\DetailViewControls\MonthOverview.xaml.cs">
       <DependentUpon>MonthOverview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\DetailViewControls\WeekOverview.xaml.cs">
-      <DependentUpon>WeekOverview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DetailViewControls\YearOverview.xaml.cs">
       <DependentUpon>YearOverview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\TimeSpanHelper.cs" />
-    <Compile Include="Controls\HitoryTreeControl.xaml.cs">
-      <DependentUpon>HitoryTreeControl.xaml</DependentUpon>
+    <Compile Include="Controls\HistoryTree\HistoryTreeControl.xaml.cs">
+      <DependentUpon>HistoryTreeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WorkDayPropertiesWindow.xaml.cs">
+      <DependentUpon>WorkDayPropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkHistory\WorkDayData.cs" />
     <Compile Include="WorkHistory\WorkHistory.cs" />
@@ -125,11 +160,15 @@
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkHistory\WorkDay.cs" />
-    <Page Include="Windows\AboutWindow.xaml">
+    <Page Include="Controls\LabelValueControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DetailViewControls\DayOverview.xaml">
+    <Page Include="Controls\ProjectList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,19 +176,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DetailViewControls\WeekOverview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\DetailViewControls\YearOverview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\HitoryTreeControl.xaml">
+    <Page Include="Controls\HistoryTree\HistoryTreeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\MainWindow.xaml">
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -157,10 +192,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\MainWindow.xaml.cs">
+    <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\WorkDayPropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,11 +208,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -227,10 +261,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\Stopwatch.ico" />
+    <Resource Include="doc\license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Stopwatch.ico" />
+    <None Include="Resources\appbar.clock.dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\appbar.clock.light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

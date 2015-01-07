@@ -61,6 +61,26 @@ namespace A9N.FlexTimeMonitor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap appbar_clock_dark {
+            get {
+                object obj = ResourceManager.GetObject("appbar_clock_dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap appbar_clock_light {
+            get {
+                object obj = ResourceManager.GetObject("appbar_clock_light", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flex Time Monitor.
         /// </summary>
         internal static string ApplicationName {
@@ -108,16 +128,6 @@ namespace A9N.FlexTimeMonitor.Properties {
         internal static string Status_ErrorLoadingHistory {
             get {
                 return ResourceManager.GetString("Status_ErrorLoadingHistory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Stopwatch {
-            get {
-                object obj = ResourceManager.GetObject("Stopwatch", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

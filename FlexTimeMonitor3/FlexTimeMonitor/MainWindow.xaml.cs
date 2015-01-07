@@ -17,6 +17,9 @@ using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Properties;
+using A9N.FlexTimeMonitor.Controls;
+using A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems;
+using A9N.FlexTimeMonitor.Controls.DetailViewControls;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -46,7 +49,15 @@ namespace A9N.FlexTimeMonitor
 
             InitializeSystrayIcon();
 
+            InitializeTree();
+
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
+        }
+
+        private void InitializeTree()
+        {
+            this.historyTreeView.SelectedItemChanged += HistoryTreeView_SelectedItemChanged;
         }
 
         #region Systray icon
@@ -56,7 +67,7 @@ namespace A9N.FlexTimeMonitor
         private void InitializeSystrayIcon()
         {
             this.systrayIcon = new System.Windows.Forms.NotifyIcon();
-            this.systrayIcon.Icon = Properties.Resources.Stopwatch;
+            //this.systrayIcon.Icon = GetApplicationIcon();
             this.systrayIcon.Text = Properties.Resources.ApplicationName;
             this.systrayIcon.Visible = true;
             this.systrayIcon.MouseClick += systrayIcon_MouseClick;
@@ -101,7 +112,7 @@ namespace A9N.FlexTimeMonitor
 
             try
             {
-                this.dataGridWorkDays.Items.Refresh();
+                //this.datkaGridWorkDays.Items.Refresh();
             }
             catch (InvalidOperationException)
             {
@@ -129,14 +140,7 @@ namespace A9N.FlexTimeMonitor
             {
                 historyFile.Load();
 
-                dataGridWorkDays.ItemsSource = historyFile.History;
-
-                // Set focus on last item
-                if (dataGridWorkDays.Items.Count > 0)
-                {
-                    dataGridWorkDays.UpdateLayout();
-                    dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
-                }
+                this.historyTreeView.Items = historyFile.History;
             }
             catch (Exception e)
             {
@@ -159,7 +163,7 @@ namespace A9N.FlexTimeMonitor
                 try
                 {
                     // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
-                    this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
+                    //this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
 
                     historyFile.Save();
                 }
@@ -190,9 +194,36 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
+        /// <summary>
+        /// Handles the SelectedItemChanged event of the SystemEvents control.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
+        void HistoryTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.detailPanel.Children.Clear();
+
+            if (e.NewValue is YearTreeItem)
+            {
+                var detailView = new YearOverview();
+                detailView.History = ((YearTreeItem)e.NewValue).History;
+
+                this.detailPanel.Children.Add(detailView);
+
+            }
+            else if (e.NewValue is MonthTreeItem)
+            {
+                var detailView = new MonthOverview();
+                detailView.History = ((MonthTreeItem)e.NewValue).Days;
+
+                this.detailPanel.Children.Add(detailView);
+            }
+        }
+
 
         #region Window Events
 
+        /// <summary>
         /// Handles the PowerModeChanged event of the SystemEvents control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -271,41 +302,6 @@ namespace A9N.FlexTimeMonitor
                         break;
                 }
             }
-        }
-        #endregion
-
-        #region DataGrid Events
-        /// <summary>
-        /// Display selection results
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
-        private void dataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TimeSpan timeOverall = TimeSpan.Zero;
-            TimeSpan timeIntended = TimeSpan.Zero;
-
-            try
-            {
-                foreach (Object item in dataGridWorkDays.SelectedItems)
-                {
-                    if (item is WorkDay)
-                    {
-                        timeOverall += ((WorkDay)item).Elapsed - Settings.Default.BreakPeriod;
-                        timeIntended += Settings.Default.WorkPeriod;
-                    }
-                }
-            }
-            catch (InvalidCastException x)
-            {
-                System.Diagnostics.Debug.WriteLine("Unsupported new-line-select in datagridview" + x);
-            }
-
-            // Display results in status bar
-            statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            statusBarOverallValue.Text = TimeSpanHelper.ToHhmmss(timeOverall);
-            statusBarIntendedValue.Text = TimeSpanHelper.ToHhmmss(timeIntended);
-            statusBarDifferenceValue.Text = TimeSpanHelper.ToHhmmss(timeOverall - timeIntended);
         }
         #endregion
 
