@@ -20,6 +20,7 @@ using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.Controls;
 using A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems;
 using A9N.FlexTimeMonitor.Controls.DetailViewControls;
+using System.Collections;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -28,9 +29,10 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private WorkHistoryFile historyFile;
         private System.Windows.Forms.NotifyIcon systrayIcon;
         private const int BalloonTimeOut = 3000;
+
+        public WorkHistory History { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
@@ -45,14 +47,13 @@ namespace A9N.FlexTimeMonitor
         {
             InitializeComponent();
 
+            this.History = new WorkHistory();
+
             this.ShowSaveDialog = true;
 
             InitializeSystrayIcon();
 
             InitializeTree();
-
-            Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
-
         }
 
         private void InitializeTree()
@@ -81,13 +82,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         void systrayIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (historyFile == null)
-            {
-                // Nothing todo here
-                return;
-            }
-
-            var today = historyFile.History.Today;
+            var today = History.Today;
 
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
@@ -127,25 +122,13 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         private void OpenHistory()
         {
-            // The application decides whether it can save or not by checking if the historyFile is null. This should
-            // prevent the application from overwriting an existing file with new (not properly loaded) data.
-            if (historyFile == null)
-            {
-                historyFile = new WorkHistoryFile();
-            }
-
-            // Will try to open an existing history file. If none is found it will create a new one.
-            // If reading or writing fails the user is informed.
             try
             {
-                historyFile.Load();
-
-                this.historyTreeView.Items = historyFile.History;
+                this.History.Load();
             }
             catch (Exception e)
             {
-                var backupFileName = historyFile.CreateBackup();
-                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, backupFileName, e);
+                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, e);
 
                 MessageBox.Show(this, text, Properties.Resources.ApplicationName);
             }
@@ -156,25 +139,20 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         internal void SaveHistory()
         {
-            // Set end time and save object
-            // Note that the history is first available after the window has been loaded once
-            if (historyFile != null)
+            try
             {
-                try
-                {
-                    // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
-                    //this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
+                // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
+                //this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
 
-                    historyFile.Save();
-                }
-                catch (Exception e)
+                this.History.Save();
+            }
+            catch (Exception e)
+            {
+                // When the user is saving the file via menu it is ok to display the error message
+                if (ShowSaveDialog)
                 {
-                    // When the user is saving the file via menu it is ok to display the error message
-                    if (ShowSaveDialog)
-                    {
-                        // TODO: try to write log file, present log file on next application start
-                        MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
-                    }
+                    // TODO: try to write log file, present log file on next application start
+                    MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
                 }
             }
         }
@@ -230,17 +208,14 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="Microsoft.Win32.PowerModeChangedEventArgs"/> instance containing the event data.</param>
         void SystemEvents_PowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e)
         {
-            if (historyFile != null)
+            switch (e.Mode)
             {
-                switch (e.Mode)
-                {
-                    case Microsoft.Win32.PowerModes.Resume:
-                        this.OpenHistory();
-                        break;
-                    case Microsoft.Win32.PowerModes.Suspend:
-                        this.SaveHistory();
-                        break;
-                }
+                case Microsoft.Win32.PowerModes.Resume:
+                    this.OpenHistory();
+                    break;
+                case Microsoft.Win32.PowerModes.Suspend:
+                    this.SaveHistory();
+                    break;
             }
         }
 
@@ -255,6 +230,9 @@ namespace A9N.FlexTimeMonitor
             UpdateSettings();
 
             OpenHistory();
+
+            // The power mode changes will to save / load the file
+            Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
         }
 
         /// <summary>
