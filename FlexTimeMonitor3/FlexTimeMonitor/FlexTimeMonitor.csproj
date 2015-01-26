@@ -132,6 +132,7 @@
     <Compile Include="Controls\ProjectList.xaml.cs">
       <DependentUpon>ProjectList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -155,7 +156,6 @@
     </Compile>
     <Compile Include="WorkHistory\WorkDayData.cs" />
     <Compile Include="WorkHistory\WorkHistory.cs" />
-    <Compile Include="WorkHistory\WorkHistoryFile.cs" />
     <Compile Include="Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>

@@ -137,10 +137,7 @@
     <value>Closing Flex Time Monitor</value>
   </data>
   <data name="Status_ErrorLoadingHistory" xml:space="preserve">
-    <value>Unable to load the history file. Starting a new FlexTime History. 
-
-You can find a backup of the previous history file in:
-{0}
+    <value>Unable to load the history file. The file appears to be corrupted (see details below). Flex Time Monitor will be closed without saving.
 
 Exception:
 {1}</value>
