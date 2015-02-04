@@ -159,16 +159,23 @@ namespace A9N.FlexTimeMonitor
         #endregion
 
         /// <summary>
-        /// Updates the settings.
+        ///  Upgrade settings from the previous installation
         /// </summary>
-        private static void UpdateSettings()
+        private static void UpgradeSettings()
         {
-            if (Properties.Settings.Default.UpdateSettings)
+            try
             {
-                Properties.Settings.Default.Upgrade();
-                // Custom user variable that triggers the update process (true by default)
-                Properties.Settings.Default.UpdateSettings = false;
-                Properties.Settings.Default.Save();
+                if (Settings.Default.UpdateSettings)
+                {
+                    Settings.Default.Upgrade();
+                    // Custom user variable that triggers the update process (true by default)
+                    Settings.Default.UpdateSettings = false;
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Log error
             }
         }
 
@@ -227,7 +234,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateSettings();
+            UpgradeSettings();
 
             OpenHistory();
 
