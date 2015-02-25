@@ -62,7 +62,7 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="output">The output.</param>
-        private void Write(String fileName, Object output)
+        private static void Write(String fileName, Object output)
         {
             StringBuilder builder = new StringBuilder();
             using (XmlWriter writer = XmlWriter.Create(builder))
@@ -82,11 +82,11 @@ namespace A9N.FlexTimeMonitor
         /// Get the default history file name for the current user.
         /// </summary>
         /// <returns>String.</returns>
-        public static String GetDefaultFileName()
+        private static String GetDefaultFileName()
         {
             String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            return System.IO.Path.Combine(myDocuments, Properties.Resources.ApplicationName, Properties.Resources.FileName);
+            return Path.Combine(myDocuments, Resources.ApplicationName, Resources.FileName);
         }
         #endregion
 
@@ -132,52 +132,76 @@ namespace A9N.FlexTimeMonitor
         /// Save history to file.
         /// Policy: Warn on load, solve on close.
         /// </summary>
-        /// <param name="history">The history.</param>
         public void Save()
         {
-            FileInfo info = new FileInfo(_fileName);
+            Save(this.History, _fileName);
+        }
+
+        private static void Save(WorkHistory history, String fileName)
+        {
+            FileInfo info = new FileInfo(fileName);
 
             // Make the file ready to be saved - this especially involves the path which must be present
             if (info.Exists == false)
             {
                 // Make sure the parent directory exists
-                if (info.Directory.Exists == false)
+                if (info.Directory != null && info.Directory.Exists == false)
                 {
                     info.Directory.Create();
                 }
             }
 
             // Set the end of today
-            this.History.Today.End = DateTime.Now.TimeOfDay;
+            history.Today.End = DateTime.Now.TimeOfDay;
 
             // Create a backup file by moving it. If the write fails the backup will 
-            String backupName = CreateBackup();
+            String backupName = CreateBackup(fileName);
 
             // Save the file
-            Write(_fileName, this.History);
+            Write(fileName, history);
 
             // After a successful write the backup will be removed
             RemoveBackup(backupName);
         }
         #endregion
 
+
+
         #region Backup
+
+        /// <summary>
+        /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
+        /// directory.
+        /// </summary>
+        /// <returns>String.</returns>
+        /// <exception cref="System.InvalidOperationException">Unable to detect backup path.</exception>
+        public String CreateBackup()
+        {
+            return CreateBackup(_fileName);
+        }
+
         /// <summary>
         /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
         /// directory.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns>String.</returns>
-        public String CreateBackup()
+        /// <exception cref="System.InvalidOperationException">Unable to detect backup path.</exception>
+        private static String CreateBackup(String fileName)
         {
-            if (File.Exists(_fileName))
+            if (File.Exists(fileName))
             {
-                var backupFileName = DateTime.Now.ToString("yyyyMMdd-HHmmss-") + System.IO.Path.GetFileName(_fileName);
-                var backupPath = Path.GetDirectoryName(_fileName);
+                var backupFileName = DateTime.Now.ToString("yyyyMMdd-HHmmss-") + Path.GetFileName(fileName);
+                var backupPath = Path.GetDirectoryName(fileName);
+
+                if (backupPath == null)
+                {
+                    throw new InvalidOperationException("Unable to detect backup path.");
+                }
 
                 var backupFullFileName = Path.Combine(backupPath, backupFileName);
 
-                File.Copy(_fileName, backupFullFileName);
+                File.Move(fileName, backupFullFileName);
 
                 return backupFullFileName;
             }
@@ -189,7 +213,7 @@ namespace A9N.FlexTimeMonitor
         /// Removes the backup.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public void RemoveBackup(String fileName)
+        private static void RemoveBackup(String fileName)
         {
             if (File.Exists(fileName))
             {
