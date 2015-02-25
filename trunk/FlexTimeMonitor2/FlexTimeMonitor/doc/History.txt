@@ -1,5 +1,9 @@
 ﻿Version 1.2.0.46
 --------------------------------------------------------------------------------
+-fixed:		Application Icon
+
+Version 1.2.0.46
+--------------------------------------------------------------------------------
 -added:		AutoStart option that starts the FlexTimeMonitor via a registry run entry instead of the Autostart reference in the start menu
 
 Version 1.2.0.45
