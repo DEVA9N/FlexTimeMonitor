@@ -1,4 +1,36 @@
-﻿Version 1.2.0.31
+﻿Version 1.2.0.45
+--------------------------------------------------------------------------------
+-modified saving the history to rename the original file and then create a new one to fix the 0x0 issue
+-fixed: MainWindow references
+
+Version 1.2.0.42
+--------------------------------------------------------------------------------
+- added: acquires the settings of previous installed instances
+- added support for power saving
+
+- saving history when the session ends to hopefully fix the rare issue where the history is not saved
+- added "Save History" dialog that appears when the user closes the application
+- removed "Quit without Save" menu item
+-fixed issue where the window was still visible when minimized
+
+Version 1.2.0.38
+--------------------------------------------------------------------------------
+- commits cell changes before saving the history
+- disabled add row because it creates another instance for the current date
+
+Version 1.2.0.37
+--------------------------------------------------------------------------------
+-plain look, removed the fancy coloring
+
+Version 1.2.0.36
+--------------------------------------------------------------------------------
+-fixed application icon that did not appear in the taskbar
+
+Version 1.2.0.32
+--------------------------------------------------------------------------------
+-fixed auto save of todays end time
+
+Version 1.2.0.31
 --------------------------------------------------------------------------------
 -fixed application icon that did not appear in the taskbar
 
