@@ -323,7 +323,7 @@ namespace A9N.FlexTimeMonitor.Windows
         private void MenuItemEditOptions_Click_1(object sender, RoutedEventArgs e)
         {
             var options = new OptionsWindow();
-
+            options.Owner = this;
             options.ShowDialog();
         }
 
@@ -335,6 +335,7 @@ namespace A9N.FlexTimeMonitor.Windows
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
             var about = new AboutWindow();
+            about.Owner = this;
 
             about.ShowDialog();
         }
