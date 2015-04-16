@@ -125,6 +125,8 @@ namespace A9N.FlexTimeMonitor
             try
             {
                 this.History.Load();
+
+                historyTreeView.Items = this.History;
             }
             catch (Exception e)
             {
