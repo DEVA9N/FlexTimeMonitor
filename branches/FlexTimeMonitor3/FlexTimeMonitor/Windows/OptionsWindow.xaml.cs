@@ -10,7 +10,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using A9N.FlexTimeMonitor.Helper;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -19,20 +18,16 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class OptionsWindow : Window
     {
-        private RegistrySettings settings;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsWindow"/> class.
+        /// Initializes a new instance of the <see cref="WindowOptions" /> class.
         /// </summary>
         public OptionsWindow()
         {
             InitializeComponent();
 
-            settings = new RegistrySettings();
-
-            checkBoxAutoStart.IsChecked = settings.AutoStart;
             textBoxWorkPeriod.Text = Properties.Settings.Default.WorkPeriod.ToString();
             textBoxBreakPeriod.Text = Properties.Settings.Default.BreakPeriod.ToString();
+            //textBoxFile.Text = Properties.Settings.Default.LogfileName;
         }
 
         #region Private Methods
@@ -49,9 +44,11 @@ namespace A9N.FlexTimeMonitor
 
             bool parseWorkSuccess = TimeSpan.TryParse(textBoxWorkPeriod.Text, out resultWork);
             bool parseBreakSuccess = TimeSpan.TryParse(textBoxBreakPeriod.Text, out resultBreak);
+            //bool parsePathSuccess = System.IO.File.Exists(textBoxFile.Text);
 
             textBoxWorkPeriod.Foreground = parseWorkSuccess ? validResultBrush : invalidResultBrush;
             textBoxBreakPeriod.Foreground = parseBreakSuccess ? validResultBrush : invalidResultBrush;
+            //textBoxFile.Foreground = parsePathSuccess ? validResultBrush : invalidResultBrush;
 
             bool allValuesValid = parseWorkSuccess && parseBreakSuccess;// && parsePathSuccess;
 
@@ -59,6 +56,7 @@ namespace A9N.FlexTimeMonitor
             {
                 Properties.Settings.Default.WorkPeriod = resultWork;
                 Properties.Settings.Default.BreakPeriod = resultBreak;
+                //Properties.Settings.Default.LogfileName = textBoxFile.Text;
                 Properties.Settings.Default.Save();
                 return true;
             }
@@ -75,8 +73,6 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void buttonOk_Click(object sender, RoutedEventArgs e)
         {
-            settings.AutoStart = checkBoxAutoStart.IsChecked ?? false;
-
             if (SaveValues())
             {
                 Close();

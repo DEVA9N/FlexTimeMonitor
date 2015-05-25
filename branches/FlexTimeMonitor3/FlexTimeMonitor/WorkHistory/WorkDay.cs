@@ -67,8 +67,12 @@ namespace A9N.FlexTimeMonitor
         {
             return new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, time.Hours, time.Minutes, time.Seconds);
         }
-        #endregion
 
+        public override string ToString()
+        {
+            return this.Date.ToString();
+        }
+        #endregion
 
         #region Properties
         /// <summary>

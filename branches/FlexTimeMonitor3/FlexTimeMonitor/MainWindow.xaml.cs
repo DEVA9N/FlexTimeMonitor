@@ -1,18 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Deployment.Application;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Properties;
+using A9N.FlexTimeMonitor.Controls;
+using A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems;
+using A9N.FlexTimeMonitor.Controls.DetailViewControls;
+using System.Collections;
 
-namespace A9N.FlexTimeMonitor.Windows
+namespace A9N.FlexTimeMonitor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private WorkHistoryFile historyFile;
         private System.Windows.Forms.NotifyIcon systrayIcon;
         private const int BalloonTimeOut = 3000;
+
+        public WorkHistory History { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
@@ -27,11 +47,18 @@ namespace A9N.FlexTimeMonitor.Windows
         {
             InitializeComponent();
 
+            this.History = new WorkHistory();
+
             this.ShowSaveDialog = true;
 
             InitializeSystrayIcon();
 
-            Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+            InitializeTree();
+        }
+
+        private void InitializeTree()
+        {
+            this.historyTreeView.SelectedItemChanged += HistoryTreeView_SelectedItemChanged;
         }
 
         #region Systray icon
@@ -41,7 +68,7 @@ namespace A9N.FlexTimeMonitor.Windows
         private void InitializeSystrayIcon()
         {
             this.systrayIcon = new System.Windows.Forms.NotifyIcon();
-            this.systrayIcon.Icon = Properties.Resources.Stopwatch;
+            //this.systrayIcon.Icon = GetApplicationIcon();
             this.systrayIcon.Text = Properties.Resources.ApplicationName;
             this.systrayIcon.Visible = true;
             this.systrayIcon.MouseClick += systrayIcon_MouseClick;
@@ -55,13 +82,7 @@ namespace A9N.FlexTimeMonitor.Windows
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         void systrayIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (historyFile == null)
-            {
-                // Nothing todo here
-                return;
-            }
-
-            var today = historyFile.History.Today;
+            var today = History.Today;
 
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
@@ -86,7 +107,7 @@ namespace A9N.FlexTimeMonitor.Windows
 
             try
             {
-                this.dataGridWorkDays.Items.Refresh();
+                //this.datkaGridWorkDays.Items.Refresh();
             }
             catch (InvalidOperationException)
             {
@@ -101,32 +122,15 @@ namespace A9N.FlexTimeMonitor.Windows
         /// </summary>
         private void OpenHistory()
         {
-            // The application decides whether it can save or not by checking if the historyFile is null. This should
-            // prevent the application from overwriting an existing file with new (not properly loaded) data.
-            if (historyFile == null)
-            {
-                historyFile = new WorkHistoryFile();
-            }
-
-            // Will try to open an existing history file. If none is found it will create a new one.
-            // If reading or writing fails the user is informed.
             try
             {
-                historyFile.Load();
+                this.History.Load();
 
-                dataGridWorkDays.ItemsSource = historyFile.History;
-
-                // Set focus on last item
-                if (dataGridWorkDays.Items.Count > 0)
-                {
-                    dataGridWorkDays.UpdateLayout();
-                    dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
-                }
+                historyTreeView.Items = this.History;
             }
             catch (Exception e)
             {
-                var backupFileName = historyFile.CreateBackup();
-                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, backupFileName, e);
+                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, e);
 
                 MessageBox.Show(this, text, Properties.Resources.ApplicationName);
             }
@@ -137,64 +141,90 @@ namespace A9N.FlexTimeMonitor.Windows
         /// </summary>
         internal void SaveHistory()
         {
-            // Set end time and save object
-            // Note that the history is first available after the window has been loaded once
-            if (historyFile != null)
+            try
             {
-                try
-                {
-                    // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
-                    this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
+                // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
+                //this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
 
-                    historyFile.Save();
-                }
-                catch (Exception e)
+                this.History.Save();
+            }
+            catch (Exception e)
+            {
+                // When the user is saving the file via menu it is ok to display the error message
+                if (ShowSaveDialog)
                 {
-                    // When the user is saving the file via menu it is ok to display the error message
-                    if (ShowSaveDialog)
-                    {
-                        // TODO: try to write log file, present log file on next application start
-                        MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
-                    }
+                    // TODO: try to write log file, present log file on next application start
+                    MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
                 }
             }
         }
         #endregion
 
         /// <summary>
-        /// Updates the settings.
+        ///  Upgrade settings from the previous installation
         /// </summary>
-        private static void UpdateSettings()
+        private static void UpgradeSettings()
         {
-            if (Properties.Settings.Default.UpdateSettings)
+            try
             {
-                Properties.Settings.Default.Upgrade();
-                // Custom user variable that triggers the update process (true by default)
-                Properties.Settings.Default.UpdateSettings = false;
-                Properties.Settings.Default.Save();
+                if (Settings.Default.UpdateSettings)
+                {
+                    Settings.Default.Upgrade();
+                    // Custom user variable that triggers the update process (true by default)
+                    Settings.Default.UpdateSettings = false;
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Log error
+            }
+        }
+
+        /// <summary>
+        /// Handles the SelectedItemChanged event of the SystemEvents control.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
+        void HistoryTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.detailPanel.Children.Clear();
+
+            if (e.NewValue is YearTreeItem)
+            {
+                var detailView = new YearOverview();
+                detailView.History = ((YearTreeItem)e.NewValue).History;
+
+                this.detailPanel.Children.Add(detailView);
+
+            }
+            else if (e.NewValue is MonthTreeItem)
+            {
+                var detailView = new MonthOverview();
+                detailView.History = ((MonthTreeItem)e.NewValue).Days;
+
+                this.detailPanel.Children.Add(detailView);
             }
         }
 
 
         #region Window Events
 
+        /// <summary>
         /// Handles the PowerModeChanged event of the SystemEvents control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="Microsoft.Win32.PowerModeChangedEventArgs"/> instance containing the event data.</param>
         void SystemEvents_PowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e)
         {
-            if (historyFile != null)
+            switch (e.Mode)
             {
-                switch (e.Mode)
-                {
-                    case Microsoft.Win32.PowerModes.Resume:
-                        this.OpenHistory();
-                        break;
-                    case Microsoft.Win32.PowerModes.Suspend:
-                        this.SaveHistory();
-                        break;
-                }
+                case Microsoft.Win32.PowerModes.Resume:
+                    this.OpenHistory();
+                    break;
+                case Microsoft.Win32.PowerModes.Suspend:
+                    this.SaveHistory();
+                    break;
             }
         }
 
@@ -206,9 +236,12 @@ namespace A9N.FlexTimeMonitor.Windows
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateSettings();
+            UpgradeSettings();
 
             OpenHistory();
+
+            // The power mode changes will to save / load the file
+            Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
         }
 
         /// <summary>
@@ -259,41 +292,6 @@ namespace A9N.FlexTimeMonitor.Windows
         }
         #endregion
 
-        #region DataGrid Events
-        /// <summary>
-        /// Display selection results
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
-        private void dataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TimeSpan timeOverall = TimeSpan.Zero;
-            TimeSpan timeIntended = TimeSpan.Zero;
-
-            try
-            {
-                foreach (Object item in dataGridWorkDays.SelectedItems)
-                {
-                    if (item is WorkDay)
-                    {
-                        timeOverall += ((WorkDay)item).Elapsed - Settings.Default.BreakPeriod;
-                        timeIntended += Settings.Default.WorkPeriod;
-                    }
-                }
-            }
-            catch (InvalidCastException x)
-            {
-                System.Diagnostics.Debug.WriteLine("Unsupported new-line-select in datagridview" + x);
-            }
-
-            // Display results in status bar
-            statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            statusBarOverallValue.Text = TimeSpanHelper.ToHhmmss(timeOverall);
-            statusBarIntendedValue.Text = TimeSpanHelper.ToHhmmss(timeIntended);
-            statusBarDifferenceValue.Text = TimeSpanHelper.ToHhmmss(timeOverall - timeIntended);
-        }
-        #endregion
-
         #region Menu item events
         /// <summary>
         /// Handles the Click event of the MenuItemSave control.
@@ -323,7 +321,7 @@ namespace A9N.FlexTimeMonitor.Windows
         private void MenuItemEditOptions_Click_1(object sender, RoutedEventArgs e)
         {
             var options = new OptionsWindow();
-            options.Owner = this;
+
             options.ShowDialog();
         }
 
@@ -335,7 +333,6 @@ namespace A9N.FlexTimeMonitor.Windows
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
             var about = new AboutWindow();
-            about.Owner = this;
 
             about.ShowDialog();
         }
