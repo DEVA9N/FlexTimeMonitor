@@ -5,7 +5,7 @@ using System.Text;
 
 namespace A9N.FlexTimeMonitor.Controls
 {
-    public class Project
+    public class ProjectViewModel
     {
         public String Name { get; set; }
 

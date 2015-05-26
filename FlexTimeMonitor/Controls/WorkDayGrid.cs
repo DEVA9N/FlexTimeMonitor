@@ -20,10 +20,10 @@ namespace A9N.FlexTimeMonitor.Controls
         {
             base.OnDragEnter(e);
 
-            if (!e.Data.GetDataPresent(ProjectList.DropType))
-            {
-                e.Effects = DragDropEffects.None;
-            }
+            //if (!e.Data.GetDataPresent(ProjectList.DropType))
+            //{
+            //    e.Effects = DragDropEffects.None;
+            //}
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -45,21 +45,21 @@ namespace A9N.FlexTimeMonitor.Controls
         {
             base.OnDrop(e);
 
-            if (e.Data.GetDataPresent(ProjectList.DropType))
-            {
-                var pos = Mouse.GetPosition(this);
+            //if (e.Data.GetDataPresent(ProjectList.DropType))
+            //{
+            //    var pos = Mouse.GetPosition(this);
 
-                var element = (UIElement)e.Source;
+            //    var element = (UIElement)e.Source;
 
-                int c = Grid.GetColumn(element);
-                int r = Grid.GetRow(element);
+            //    int c = Grid.GetColumn(element);
+            //    int r = Grid.GetRow(element);
 
-                if (r != 0)
-                {
+            //    if (r != 0)
+            //    {
 
-                }
+            //    }
 
-            }
+            //}
         }
 
     }

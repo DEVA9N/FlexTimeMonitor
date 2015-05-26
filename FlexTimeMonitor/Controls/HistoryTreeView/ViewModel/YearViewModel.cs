@@ -22,11 +22,13 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
                 throw new ArgumentException("days must not be empty");
             }
 
+            this.Days = days;
             this.Date = days.First().Date;
-
-            this.AddRange(days.ToArray());
+            this.Name = this.Date.Year.ToString();
 
             this.Months = GetMonths(days);
+
+            this.IsExpanded = DateTime.Now.Year == this.Date.Year;
         }
 
         private static IEnumerable<MonthViewModel> GetMonths(IEnumerable<WorkDay> days)
@@ -40,12 +42,12 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
 
         private DateTime Date { get; set; }
 
-        public IEnumerable<MonthViewModel> Months { get; set; }
+        public IEnumerable<WorkDay> Days { get; private set; }
 
-        public String Name { get { return this.Date.Year.ToString(); } }
+        public IEnumerable<MonthViewModel> Months { get; private set; }
+
+        public String Name { get; private set; }
 
         public bool IsExpanded { get; set; }
-
-        public bool IsSelected { get; set; }
     }
 }

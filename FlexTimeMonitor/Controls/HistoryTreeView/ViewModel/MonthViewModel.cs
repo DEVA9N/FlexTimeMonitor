@@ -21,13 +21,20 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
                 throw new ArgumentException("days must not be empty");
             }
 
+            this.Days = days;
             this.Date = days.First().Date;
+            this.Name = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(this.Date.Month);
 
-            this.AddRange(days.ToArray());
+            this.IsSelected = DateTime.Now.Year == this.Date.Year && DateTime.Now.Month == this.Date.Month;
         }
 
         private DateTime Date { get; set; }
 
-        public String Name { get { return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(this.Date.Month); } }
+        public IEnumerable<WorkDay> Days { get; private set; }
+
+        public String Name { get; private set; }
+
+        public bool IsSelected { get; set; }
+
     }
 }
