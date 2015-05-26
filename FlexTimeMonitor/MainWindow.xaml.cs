@@ -58,7 +58,7 @@ namespace A9N.FlexTimeMonitor
 
         private void InitializeTree()
         {
-            this.historyTreeView.SelectedItemChanged += HistoryTreeView_SelectedItemChanged;
+            //this.historyTreeView.SelectedItemChanged += HistoryTreeView_SelectedItemChanged;
         }
 
         #region Systray icon
@@ -126,7 +126,7 @@ namespace A9N.FlexTimeMonitor
             {
                 this.History.Load();
 
-                historyTreeView.Items = this.History;
+                historyTree.DataContext = new HistoryTreeViewModel(this.History);
             }
             catch (Exception e)
             {
@@ -190,21 +190,21 @@ namespace A9N.FlexTimeMonitor
         {
             this.detailPanel.Children.Clear();
 
-            if (e.NewValue is YearTreeItem)
-            {
-                var detailView = new YearOverview();
-                detailView.History = ((YearTreeItem)e.NewValue).History;
+            //if (e.NewValue is YearViewModel)
+            //{
+            //    var detailView = new YearOverview();
+            //    detailView.History = ((YearViewModel)e.NewValue).History;
 
-                this.detailPanel.Children.Add(detailView);
+            //    this.detailPanel.Children.Add(detailView);
 
-            }
-            else if (e.NewValue is MonthTreeItem)
-            {
-                var detailView = new MonthOverview();
-                detailView.History = ((MonthTreeItem)e.NewValue).Days;
+            //}
+            //else if (e.NewValue is MonthViewModel)
+            //{
+            //    var detailView = new MonthOverview();
+            //    detailView.History = ((MonthViewModel)e.NewValue).Days;
 
-                this.detailPanel.Children.Add(detailView);
-            }
+            //    this.detailPanel.Children.Add(detailView);
+            //}
         }
 
 

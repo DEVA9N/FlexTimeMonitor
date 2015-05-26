@@ -118,14 +118,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\HistoryTree\TreeItems\HistoryTreeViewModel.cs" />
     <Compile Include="Controls\LabelValueControl.xaml.cs">
       <DependentUpon>LabelValueControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\WorkDayGrid.cs" />
-    <Compile Include="Controls\HistoryTree\TreeItems\DayTreeItem.cs" />
-    <Compile Include="Controls\HistoryTree\TreeItems\MonthTreeItem.cs" />
-    <Compile Include="Controls\HistoryTree\TreeItems\YearTreeItem.cs" />
-    <Compile Include="Controls\HistoryTree\TreeItems\IHistoryTreeItem.cs" />
+    <Compile Include="Controls\HistoryTree\TreeItems\MonthViewModel.cs" />
+    <Compile Include="Controls\HistoryTree\TreeItems\YearViewModel.cs" />
     <Compile Include="Controls\HistoryTree\SelectedItemChangedEventArgs.cs" />
     <Compile Include="Controls\DetailViewControls\IDetailView.cs" />
     <Compile Include="Controls\Project.cs" />
@@ -148,9 +147,6 @@
       <DependentUpon>YearOverview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\TimeSpanHelper.cs" />
-    <Compile Include="Controls\HistoryTree\HistoryTreeControl.xaml.cs">
-      <DependentUpon>HistoryTreeControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\WorkDayPropertiesWindow.xaml.cs">
       <DependentUpon>WorkDayPropertiesWindow.xaml</DependentUpon>
     </Compile>
@@ -177,10 +173,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DetailViewControls\YearOverview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\HistoryTree\HistoryTreeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
