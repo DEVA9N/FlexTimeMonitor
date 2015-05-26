@@ -19,8 +19,8 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
                 throw new ArgumentException("days must not be empty");
             }
 
-            //this.AddRange(days.ToArray());
-
+            this.Days = days;
+            this.Name = "History Tree";
             this.Years = GetYears(days);
         }
 
@@ -33,7 +33,9 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
             return result;
         }
 
-        public String Name { get { return "bla";  } }
+        public IEnumerable<WorkDay> Days { get; set; }
+
+        public String Name { get; private set; }
 
         public IEnumerable<YearViewModel> Years { get; private set; }
     }

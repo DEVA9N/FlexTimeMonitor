@@ -118,19 +118,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\HistoryTree\TreeItems\HistoryTreeViewModel.cs" />
+    <Compile Include="Controls\HistoryTreeView\HistoryTreeControl.xaml.cs">
+      <DependentUpon>HistoryTreeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\HistoryTreeView\ViewModel\HistoryTreeViewModel.cs" />
     <Compile Include="Controls\LabelValueControl.xaml.cs">
       <DependentUpon>LabelValueControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WorkDayGrid.cs" />
-    <Compile Include="Controls\HistoryTree\TreeItems\MonthViewModel.cs" />
-    <Compile Include="Controls\HistoryTree\TreeItems\YearViewModel.cs" />
-    <Compile Include="Controls\HistoryTree\SelectedItemChangedEventArgs.cs" />
-    <Compile Include="Controls\DetailViewControls\IDetailView.cs" />
-    <Compile Include="Controls\Project.cs" />
-    <Compile Include="Controls\ProjectList.xaml.cs">
-      <DependentUpon>ProjectList.xaml</DependentUpon>
+    <Compile Include="Controls\ProjectListView\ProjectListControl.xaml.cs">
+      <DependentUpon>ProjectListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WorkDayGrid.cs" />
+    <Compile Include="Controls\HistoryTreeView\ViewModel\MonthViewModel.cs" />
+    <Compile Include="Controls\HistoryTreeView\ViewModel\YearViewModel.cs" />
+    <Compile Include="Controls\HistoryTreeView\SelectedItemChangedEventArgs.cs" />
+    <Compile Include="Controls\DetailViewControls\IDetailView.cs" />
+    <Compile Include="Controls\ProjectListView\ViewModel\ProjectViewModel.cs" />
     <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -156,13 +159,17 @@
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkHistory\WorkDay.cs" />
+    <Page Include="Controls\HistoryTreeView\HistoryTreeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LabelValueControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProjectList.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Controls\ProjectListView\ProjectListControl.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>

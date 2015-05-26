@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="A9N.FlexTimeMonitor.Controls.ProjectList"
+﻿<UserControl x:Class="A9N.FlexTimeMonitor.Controls.ProjectListView.ProjectListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,6 +13,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
     </Grid>
 </UserControl>

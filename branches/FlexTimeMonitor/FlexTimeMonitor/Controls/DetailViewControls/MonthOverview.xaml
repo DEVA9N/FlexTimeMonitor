@@ -15,10 +15,10 @@
 			IsReadOnly="False" 
 			CanUserAddRows="False" AllowDrop="True" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Week"  Binding="{Binding WeekOfYear}" IsReadOnly="True" MinWidth="20">
+                <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat=\{0:dd.MM.\}}" MinWidth="80">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="ToolTip" Value="Week number." />
+                            <Setter Property="ToolTip" Value="Date of the workday." />
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
@@ -29,13 +29,7 @@
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}}" MinWidth="80">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="ToolTip" Value="Date of the workday." />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
+           
                 <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat=hh\\:mm\\:ss}" IsReadOnly="False" MinWidth="80" >
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -47,13 +41,6 @@
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="ToolTip" Value="End time." />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Discrepancy"  Binding="{Binding Discrepancy}" IsReadOnly="false" MinWidth="80" >
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="ToolTip" Value="Discrepancy is a positive or negative time offset that is taken into account when calculating the total workday time. For example a skipped lunch break can be set by +1h or a doctor's appointment can be set by -1h." />
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
