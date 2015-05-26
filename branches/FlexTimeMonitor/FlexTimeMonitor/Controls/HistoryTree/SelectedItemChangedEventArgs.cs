@@ -22,13 +22,13 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree
         /// Gets the selected item.
         /// </summary>
         /// <value>The selected item.</value>
-        public IHistoryTreeItem SelectedItem { get; private set; }
+        public Object SelectedItem { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectedItemChangedEventArgs"/> class.
         /// </summary>
         /// <param name="selectedItem">The selected item.</param>
-        public SelectedItemChangedEventArgs(IHistoryTreeItem selectedItem)
+        public SelectedItemChangedEventArgs(Object selectedItem)
         {
             this.SelectedItem = selectedItem;
         }
