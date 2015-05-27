@@ -21,6 +21,7 @@ using A9N.FlexTimeMonitor.Controls;
 using A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems;
 using A9N.FlexTimeMonitor.Controls.DetailViewControls;
 using System.Collections;
+using A9N.FlexTimeMonitor.Data.WorkTasks;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -82,17 +83,17 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         void systrayIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            var today = History.Today;
+            //var today = History.Today;
 
-            // Check last balloon update to prevent it from flickering
-            if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
-            {
-                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.ToHhmmss(today.Estimated));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.ToHhmmss(today.Elapsed));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.ToHhmmss(today.Remaining));
-                systrayIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
-            }
+            //// Check last balloon update to prevent it from flickering
+            //if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
+            //{
+            //    String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start));
+            //    balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.ToHhmmss(today.Estimated));
+            //    balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.ToHhmmss(today.Elapsed));
+            //    balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.ToHhmmss(today.Remaining));
+            //    systrayIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
+            //}
         }
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace A9N.FlexTimeMonitor
         /// <summary>
         /// Opens the history.
         /// </summary>
-        private void OpenHistory()
+        private void LoadHistory()
         {
             try
             {
@@ -159,6 +160,12 @@ namespace A9N.FlexTimeMonitor
             }
         }
         #endregion
+
+        private void LoadTasks()
+        {
+            this.taskList.DataContext = new TaskListViewModel( new TaskCollection());
+        }
+
 
         /// <summary>
         ///  Upgrade settings from the previous installation
@@ -220,7 +227,7 @@ namespace A9N.FlexTimeMonitor
             switch (e.Mode)
             {
                 case Microsoft.Win32.PowerModes.Resume:
-                    this.OpenHistory();
+                    this.LoadHistory();
                     break;
                 case Microsoft.Win32.PowerModes.Suspend:
                     this.SaveHistory();
@@ -238,7 +245,9 @@ namespace A9N.FlexTimeMonitor
         {
             UpgradeSettings();
 
-            OpenHistory();
+            LoadHistory();
+
+            LoadTasks();
 
             // The power mode changes will to save / load the file
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;

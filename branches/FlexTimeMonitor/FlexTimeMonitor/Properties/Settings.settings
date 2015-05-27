@@ -11,5 +11,11 @@
     <Setting Name="UpdateSettings" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="HistoryFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">History3.xml</Value>
+    </Setting>
+    <Setting Name="TasksFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tasks.xml</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

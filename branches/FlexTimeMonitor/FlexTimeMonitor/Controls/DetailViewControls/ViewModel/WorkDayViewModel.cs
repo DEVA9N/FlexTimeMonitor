@@ -11,7 +11,7 @@ namespace A9N.FlexTimeMonitor
     /// <summary>
     /// Represents a work day
     /// </summary>
-    public sealed class WorkDay : INotifyPropertyChanged
+    public sealed class WorkDayViewModel : INotifyPropertyChanged
     {
         #region Fields
         private int _weekNumber;
@@ -24,15 +24,12 @@ namespace A9N.FlexTimeMonitor
 
         #region Constructor
         /// <summary>
-        /// Creates Workday instance with start time now
+        /// Creates WorkDayViewModel instance with start time now
         /// </summary>
-        public WorkDay()
+        public WorkDayViewModel(WorkDay day)
         {
-            Data = new WorkDayData();
+            Data = day;
 
-            Data.Date = DateTime.Now;
-            Data.Start = DateTime.Now;
-            Data.End = DateTime.Now;
         }
         #endregion
 
@@ -79,7 +76,7 @@ namespace A9N.FlexTimeMonitor
         /// Gets or sets the data object that stores the workday data.
         /// </summary>
         /// <value>The data.</value>
-        public WorkDayData Data { get; set; }
+        public WorkDay Data { get; set; }
 
         /// <summary>
         /// Gets or sets the date of the workday
@@ -95,7 +92,7 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.Date = value;
-              
+
                 NotifyPropertyChanged("Date");
             }
         }
@@ -134,7 +131,7 @@ namespace A9N.FlexTimeMonitor
             set
             {
                 Data.Start = ConvertToDateTime(value);
-              
+
                 NotifyPropertyChanged("Start");
             }
         }
@@ -177,27 +174,6 @@ namespace A9N.FlexTimeMonitor
         }
 
         /// <summary>
-        /// Gets or sets the discrepancy. Discrepancy is a positive or negative time offset that is taken into account
-        /// when calculating the total workday time. For example a skipped lunch break can be set by +1h or a doctor's
-        /// appointment can be set by -1h.
-        /// </summary>
-        /// <value>The discrepancy.</value>
-        [XmlIgnore]
-        public TimeSpan Discrepancy
-        {
-            get
-            {
-                return Data.Discrepancy.TimeOfDay;
-            }
-            set
-            {
-                Data.Discrepancy = ConvertToDateTime(value);
-
-                NotifyPropertyChanged("Discrepancy");
-            }
-        }
-
-        /// <summary>
         /// Difference between start and now also considering a possible discrepancy.
         /// </summary>
         /// <value>The elapsed.</value>
@@ -206,7 +182,7 @@ namespace A9N.FlexTimeMonitor
         {
             get
             {
-                return End - Start + Discrepancy;
+                return End - Start;
             }
         }
 
@@ -219,7 +195,7 @@ namespace A9N.FlexTimeMonitor
         {
             get
             {
-                return Start - Discrepancy + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
+                return Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
             }
         }
 
@@ -261,7 +237,7 @@ namespace A9N.FlexTimeMonitor
          * helper properties instead. These helper methods are used in the datagrid for trigger and display purposes.
          * 
          */
-        
+
         /// <summary>
         /// Gets a value indicating whether this instance is odd week.
         /// </summary>
@@ -296,19 +272,6 @@ namespace A9N.FlexTimeMonitor
             get
             {
                 return Date.Date == DateTime.Now.Date;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has discrepancy which is either Discrepancy != Zero or negative OverTim.
-        /// </summary>
-        /// <value><c>true</c> if this instance has discrepancy; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
-        public bool HasDiscrepancy
-        {
-            get
-            {
-                return (Discrepancy != TimeSpan.Zero || OverTime < TimeSpan.Zero) && !IsToday;
             }
         }
 

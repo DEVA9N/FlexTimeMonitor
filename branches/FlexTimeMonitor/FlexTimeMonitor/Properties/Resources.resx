@@ -127,9 +127,6 @@
   <data name="ApplicationName" xml:space="preserve">
     <value>Flex Time Monitor</value>
   </data>
-  <data name="FileName" xml:space="preserve">
-    <value>History.xml</value>
-  </data>
   <data name="Message_Save_Text" xml:space="preserve">
     <value>Do you want to save the history?</value>
   </data>

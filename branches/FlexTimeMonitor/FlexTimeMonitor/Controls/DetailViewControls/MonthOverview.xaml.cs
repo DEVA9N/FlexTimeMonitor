@@ -17,7 +17,7 @@ namespace A9N.FlexTimeMonitor.Controls.DetailViewControls
     /// <summary>
     /// Interaction logic for MonthOverview.xaml
     /// </summary>
-    public partial class MonthOverview : UserControl, IDetailView
+    public partial class MonthOverview : UserControl
     {
         public IEnumerable<WorkDay> History
         {
