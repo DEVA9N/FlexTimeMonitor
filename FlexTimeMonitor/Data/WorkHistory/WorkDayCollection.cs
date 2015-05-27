@@ -26,7 +26,7 @@ namespace A9N.FlexTimeMonitor
         {
             String myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-            return System.IO.Path.Combine(myDocuments, Properties.Resources.ApplicationName, Properties.Resources.FileName);
+            return System.IO.Path.Combine(myDocuments, Properties.Resources.ApplicationName, Settings.Default.HistoryFileName);
         }
         #endregion
 
@@ -125,7 +125,7 @@ namespace A9N.FlexTimeMonitor
             //var tempFullFileName = Path.Combine(parent, tempName);
 
             // Set the end of today
-            this.Today.End = DateTime.Now.TimeOfDay;
+            this.Today.End = DateTime.Now;
 
             // Save the file to a temporary file first
             // This is supposed to make the saving more secure

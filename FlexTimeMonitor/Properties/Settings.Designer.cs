@@ -58,5 +58,26 @@ namespace A9N.FlexTimeMonitor.Properties {
                 this["UpdateSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("History3.xml")]
+        public string HistoryFileName {
+            get {
+                return ((string)(this["HistoryFileName"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tasks.xml")]
+        public string TasksFileName {
+            get {
+                return ((string)(this["TasksFileName"]));
+            }
+            set {
+                this["TasksFileName"] = value;
+            }
+        }
     }
 }

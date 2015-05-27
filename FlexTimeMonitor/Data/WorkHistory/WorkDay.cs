@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using A9N.FlexTimeMonitor.Data.Tasks;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -9,8 +10,15 @@ namespace A9N.FlexTimeMonitor
     /// Class WorkDayData is a serializable class that contains all the workday related data. WorkDayData separates the
     /// data from the view logic.
     /// </summary>
-    public class WorkDayData
+    public class WorkDay
     {
+        public WorkDay()
+        {
+            this.Date = DateTime.Now;
+            this.Start = DateTime.Now;
+            this.End = DateTime.Now;
+        }
+
         /// <summary>
         /// Gets or sets the date of the WorkDay. This date will determine the date of the workday regardless its Start
         /// or End date.
@@ -39,17 +47,15 @@ namespace A9N.FlexTimeMonitor
         public DateTime End { get; set; }
 
         /// <summary>
-        /// Gets or sets the discrepancy. Discrepancy is a positive or negative time offset that is taken into account
-        /// when calculating the total workday time. For example a skipped lunch break can be set by +1h or a doctor's
-        /// appointment can be set by -1h.
-        /// </summary>
-        /// <value>The discrepancy.</value>
-        public DateTime Discrepancy { get; set; }
-
-        /// <summary>
         /// Gets or sets the note. The note can be used to store information about the workday.
         /// </summary>
         /// <value>The note.</value>
         public String Note { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of tasks for that workday.
+        /// </summary>
+        /// <value>The tasks.</value>
+        public List<Task> Tasks { get; set; }
     }
 }

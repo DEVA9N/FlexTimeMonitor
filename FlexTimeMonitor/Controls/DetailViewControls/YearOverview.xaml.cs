@@ -17,7 +17,7 @@ namespace A9N.FlexTimeMonitor.Controls.DetailViewControls
     /// <summary>
     /// Interaction logic for YearOverview.xaml
     /// </summary>
-    public partial class YearOverview : UserControl, IDetailView
+    public partial class YearOverview : UserControl
     {
         private List<WorkDay> _items;
 
