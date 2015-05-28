@@ -7,9 +7,9 @@ using A9N.FlexTimeMonitor.Data.Tasks;
 
 namespace A9N.FlexTimeMonitor.Data.WorkTasks
 {
-    public class TaskCollection : ObservableCollection<Task>
+    public class TaskList : List<Task>
     {
-        public TaskCollection()
+        public TaskList()
         {
             this.Add(new Task() { Project = new Project() { Description = "Test project", Employer = "A9N", Name = "Test" } });
 

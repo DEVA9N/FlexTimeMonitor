@@ -15,20 +15,21 @@
 			IsReadOnly="False" 
 			CanUserAddRows="False" AllowDrop="True" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat=\{0:dd.MM.\}}" MinWidth="80">
-                    <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="ToolTip" Value="Date of the workday." />
-                        </Style>
-                    </DataGridTextColumn.HeaderStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Day"  Binding="{Binding Date.DayOfWeek}" IsReadOnly="True" MinWidth="80">
+                <DataGridTextColumn Header="Day"  Binding="{Binding ShortDayOfWeek}" IsReadOnly="True" MinWidth="20">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="ToolTip" Value="Day of week." />
                         </Style>
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat=\{0:dd\}}" MinWidth="20">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="ToolTip" Value="Date of the workday." />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+             
            
                 <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat=hh\\:mm\\:ss}" IsReadOnly="False" MinWidth="80" >
                     <DataGridTextColumn.HeaderStyle>

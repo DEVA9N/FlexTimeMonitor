@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -94,6 +95,18 @@ namespace A9N.FlexTimeMonitor
                 Data.Date = value;
 
                 NotifyPropertyChanged("Date");
+            }
+        }
+
+        /// <summary>
+        /// Gets the short day of week.
+        /// </summary>
+        /// <value>The short day of week.</value>
+        public String ShortDayOfWeek
+        {
+            get
+            {
+                return System.Globalization.DateTimeFormatInfo.InvariantInfo.GetShortestDayName(this.Date.DayOfWeek);
             }
         }
 

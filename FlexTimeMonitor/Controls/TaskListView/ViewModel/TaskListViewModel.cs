@@ -9,11 +9,11 @@ namespace A9N.FlexTimeMonitor.Controls
 {
     public class TaskListViewModel
     {
-        public TaskListViewModel(TaskCollection tasks)
+        public TaskListViewModel(IList<Task> tasks)
         {
             this.Tasks = tasks;
         }
 
-        public IEnumerable<Task> Tasks { get; private set; }
+        public IList<Task> Tasks { get; private set; }
     }
 }
