@@ -163,7 +163,7 @@ namespace A9N.FlexTimeMonitor
 
         private void LoadTasks()
         {
-            this.taskList.DataContext = new TaskListViewModel( new TaskCollection());
+            this.taskList.DataContext = new TaskListViewModel( new TaskList());
         }
 
 
@@ -203,7 +203,6 @@ namespace A9N.FlexTimeMonitor
                 detailView.History = ((YearViewModel)e.NewValue).Days;
 
                 this.detailPanel.Children.Add(detailView);
-
             }
             else if (e.NewValue is MonthViewModel)
             {

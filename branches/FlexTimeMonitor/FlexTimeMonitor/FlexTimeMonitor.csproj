@@ -136,7 +136,7 @@
     <Compile Include="Controls\TaskListView\ViewModel\TaskListViewModel.cs" />
     <Compile Include="Data\WorkPackage\Project.cs" />
     <Compile Include="Data\WorkPackage\SubProject.cs" />
-    <Compile Include="Data\WorkPackage\TaskCollection.cs" />
+    <Compile Include="Data\WorkPackage\TaskList.cs" />
     <Compile Include="Data\WorkPackage\Task.cs" />
     <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -158,7 +158,7 @@
       <DependentUpon>WorkDayPropertiesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\WorkHistory\WorkDay.cs" />
-    <Compile Include="Data\WorkHistory\WorkDayCollection.cs" />
+    <Compile Include="Data\WorkHistory\WorkDayList.cs" />
     <Compile Include="Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>

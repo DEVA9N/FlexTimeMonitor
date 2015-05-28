@@ -22,16 +22,16 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
                 throw new ArgumentException("days must not be empty");
             }
 
-            this.Days = days;
+            this.Days = new ObservableCollection<WorkDayViewModel>(from day in days select new WorkDayViewModel(day));
             this.Date = days.First().Date;
             this.Name = this.Date.Year.ToString();
 
-            this.Months = GetMonths(days);
+            this.Months = GetMonths(this.Days);
 
             this.IsExpanded = DateTime.Now.Year == this.Date.Year;
         }
 
-        private static IEnumerable<MonthViewModel> GetMonths(IEnumerable<WorkDay> days)
+        private static IEnumerable<MonthViewModel> GetMonths(IEnumerable<WorkDayViewModel> days)
         {
             var result = (from day in days
                           group day by day.Date.Month into monthGroup
@@ -42,7 +42,7 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
 
         private DateTime Date { get; set; }
 
-        public IEnumerable<WorkDay> Days { get; private set; }
+        public ObservableCollection<WorkDayViewModel> Days { get; private set; }
 
         public IEnumerable<MonthViewModel> Months { get; private set; }
 

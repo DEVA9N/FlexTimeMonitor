@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
 {
     class MonthViewModel : List<WorkDay>
     {
-        public MonthViewModel(IEnumerable<WorkDay> days)
+        public MonthViewModel(IEnumerable<WorkDayViewModel> days)
         {
             if (days == null)
             {
@@ -21,7 +22,7 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
                 throw new ArgumentException("days must not be empty");
             }
 
-            this.Days = days;
+            this.Days = new ObservableCollection<WorkDayViewModel>(days);
             this.Date = days.First().Date;
             this.Name = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(this.Date.Month);
 
@@ -30,7 +31,7 @@ namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
 
         private DateTime Date { get; set; }
 
-        public IEnumerable<WorkDay> Days { get; private set; }
+        public ObservableCollection<WorkDayViewModel> Days { get; private set; }
 
         public String Name { get; private set; }
 

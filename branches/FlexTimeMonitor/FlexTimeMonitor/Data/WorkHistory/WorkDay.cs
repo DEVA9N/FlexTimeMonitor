@@ -7,8 +7,7 @@ using A9N.FlexTimeMonitor.Data.Tasks;
 namespace A9N.FlexTimeMonitor
 {
     /// <summary>
-    /// Class WorkDayData is a serializable class that contains all the workday related data. WorkDayData separates the
-    /// data from the view logic.
+    /// Class WorkDayData is a serializable class that contains all the workday related data.
     /// </summary>
     public class WorkDay
     {

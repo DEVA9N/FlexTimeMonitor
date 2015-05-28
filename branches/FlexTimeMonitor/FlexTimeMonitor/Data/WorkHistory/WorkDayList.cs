@@ -11,9 +11,9 @@ using A9N.FlexTimeMonitor.Properties;
 namespace A9N.FlexTimeMonitor
 {
     /// <summary>
-    /// Class WorkHistory.
+    /// Class WorkHistory is a serializable list of WorkDay objects.
     /// </summary>
-    public class WorkHistory : ObservableCollection<WorkDay>
+    public class WorkHistory : List<WorkDay>
     {
         private WorkDay _today;
 
@@ -147,11 +147,11 @@ namespace A9N.FlexTimeMonitor
         {
             if (_today == null)
             {
-                var allTodays = from day in this
+                var allTodays = (from day in this
                                 where day.Date.Date == DateTime.Now.Date
-                                select day;
+                                select day).ToList();
 
-                if (allTodays.Count() > 0)
+                if (allTodays.Any())
                 {
                     return allTodays.Last();
                 }

@@ -19,9 +19,9 @@ namespace A9N.FlexTimeMonitor.Controls.DetailViewControls
     /// </summary>
     public partial class YearOverview : UserControl
     {
-        private List<WorkDay> _items;
+        private List<WorkDayViewModel> _items;
 
-        public IEnumerable<WorkDay> History
+        public IEnumerable<WorkDayViewModel> History
         {
             get { return _items; }
             set

@@ -19,9 +19,9 @@ namespace A9N.FlexTimeMonitor.Controls.DetailViewControls
     /// </summary>
     public partial class MonthOverview : UserControl
     {
-        public IEnumerable<WorkDay> History
+        public IEnumerable<WorkDayViewModel> History
         {
-            get { return this.dataGridWorkDays.ItemsSource as IEnumerable<WorkDay>; }
+            get { return this.dataGridWorkDays.ItemsSource as IEnumerable<WorkDayViewModel>; }
             set { this.dataGridWorkDays.ItemsSource = value; }
         }
 
