@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:p="clr-namespace:A9N.FlexTimeMonitor.Properties"
         xmlns:local="clr-namespace:A9N.FlexTimeMonitor" xmlns:Controls="clr-namespace:A9N.FlexTimeMonitor.Controls" xmlns:HistoryTree="clr-namespace:A9N.FlexTimeMonitor.Controls.HistoryTree" xmlns:ProjectListView="clr-namespace:A9N.FlexTimeMonitor.Controls.ProjectListView" x:Class="A9N.FlexTimeMonitor.MainWindow"
-        Title="Flex Time Monitor" Height="768" Width="1279" Closing="Window_Closing" StateChanged="Window_StateChanged" MinWidth="400" MinHeight="300" Loaded="Window_Loaded">
+        Title="Flex Time Monitor" Height="768" Width="1279" Closing="Window_Closing" MinWidth="400" MinHeight="300" Loaded="Window_Loaded">
     <Grid Background="#FF293956">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="275*" />

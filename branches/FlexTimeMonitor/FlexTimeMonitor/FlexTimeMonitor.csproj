@@ -129,6 +129,7 @@
     <Compile Include="Controls\TaskListView\TaskListControl.xaml.cs">
       <DependentUpon>TaskListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TaskListView\ViewModel\TaskViewModel.cs" />
     <Compile Include="Controls\WorkDayGrid.cs" />
     <Compile Include="Controls\HistoryTreeView\ViewModel\MonthViewModel.cs" />
     <Compile Include="Controls\HistoryTreeView\ViewModel\YearViewModel.cs" />
