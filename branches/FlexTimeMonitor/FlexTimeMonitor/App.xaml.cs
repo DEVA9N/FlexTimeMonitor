@@ -89,7 +89,7 @@ namespace A9N.FlexTimeMonitor
 
             var flexTimeWindow = this.MainWindow as A9N.FlexTimeMonitor.MainWindow;
             flexTimeWindow.ShowSaveDialog = false;
-            flexTimeWindow.SaveHistory();
+            flexTimeWindow.Data.Save();
         }
 
         /// <summary>

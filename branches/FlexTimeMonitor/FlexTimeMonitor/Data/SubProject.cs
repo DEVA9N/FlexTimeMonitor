@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace A9N.FlexTimeMonitor.Data.Tasks
+namespace A9N.FlexTimeMonitor.Data
 {
     public class SubProject
     {

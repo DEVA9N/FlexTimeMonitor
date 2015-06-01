@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Serialization;
@@ -21,7 +20,7 @@ using A9N.FlexTimeMonitor.Controls;
 using A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems;
 using A9N.FlexTimeMonitor.Controls.DetailViewControls;
 using System.Collections;
-using A9N.FlexTimeMonitor.Data.WorkTasks;
+using A9N.FlexTimeMonitor.Helper;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -30,8 +29,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly WorkHistory history;
-        private readonly TaskList tasks;
+        internal FTMData Data { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
@@ -46,8 +44,9 @@ namespace A9N.FlexTimeMonitor
         {
             InitializeComponent();
 
-            this.history = new WorkHistory();
-            this.tasks = new TaskList();
+            String myDocuments = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Properties.Resources.ApplicationName);
+
+            this.Data = new FTMData(myDocuments);
 
             this.ShowSaveDialog = true;
 
@@ -59,16 +58,14 @@ namespace A9N.FlexTimeMonitor
             this.historyTree.SelectedItemChanged += HistoryTree_SelectedItemChanged;
         }
 
-        /// <summary>
-        /// Opens the history.
-        /// </summary>
-        private void LoadHistory()
+        private void LoadData()
         {
             try
             {
-                this.history.Load();
+                this.Data.Load();
 
-                this.historyTree.DataContext = new HistoryTreeViewModel(this.history);
+                this.historyTree.DataContext = new HistoryTreeViewModel(this.Data.WorkDays);
+                this.taskList.DataContext = new TaskListViewModel(this.Data.Tasks);
             }
             catch (Exception e)
             {
@@ -78,17 +75,14 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        /// <summary>
-        /// Saves the history.
-        /// </summary>
-        internal void SaveHistory()
+        private void SaveData()
         {
             try
             {
                 // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
                 //this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
 
-                this.history.Save();
+                this.Data.Save();
             }
             catch (Exception e)
             {
@@ -99,16 +93,6 @@ namespace A9N.FlexTimeMonitor
                     MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
                 }
             }
-        }
-
-        private void LoadTasks()
-        {
-            this.taskList.DataContext = new TaskListViewModel(this.tasks);
-        }
-
-        private void SaveTasks()
-        {
-
         }
 
         /// <summary>
@@ -131,6 +115,7 @@ namespace A9N.FlexTimeMonitor
                 // TODO: Log error
             }
         }
+
         #region Window Events
 
         /// <summary>
@@ -143,12 +128,10 @@ namespace A9N.FlexTimeMonitor
             switch (e.Mode)
             {
                 case Microsoft.Win32.PowerModes.Resume:
-                    this.LoadHistory();
-                    this.LoadTasks();
+                    LoadData();
                     break;
                 case Microsoft.Win32.PowerModes.Suspend:
-                    this.SaveHistory();
-                    this.SaveTasks();
+                    SaveData();
                     break;
             }
         }
@@ -163,9 +146,7 @@ namespace A9N.FlexTimeMonitor
         {
             UpgradeSettings();
 
-            LoadHistory();
-
-            LoadTasks();
+            LoadData();
 
             // The power mode changes will to save / load the file
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
@@ -185,8 +166,7 @@ namespace A9N.FlexTimeMonitor
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        SaveHistory();
-                        SaveTasks();
+                        SaveData();
                         e.Cancel = false;
                         break;
                     case MessageBoxResult.No:
@@ -236,7 +216,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void MenuItemSave_Click(object sender, RoutedEventArgs e)
         {
-            SaveHistory();
+            SaveData();
         }
 
         /// <summary>
