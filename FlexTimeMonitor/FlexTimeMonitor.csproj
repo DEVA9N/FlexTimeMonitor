@@ -123,22 +123,17 @@
       <DependentUpon>HistoryTreeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\HistoryTreeView\ViewModel\HistoryTreeViewModel.cs" />
-    <Compile Include="Controls\LabelValueControl.xaml.cs">
-      <DependentUpon>LabelValueControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\TaskListView\TaskListControl.xaml.cs">
       <DependentUpon>TaskListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TaskListView\ViewModel\TaskViewModel.cs" />
-    <Compile Include="Controls\WorkDayGrid.cs" />
     <Compile Include="Controls\HistoryTreeView\ViewModel\MonthViewModel.cs" />
     <Compile Include="Controls\HistoryTreeView\ViewModel\YearViewModel.cs" />
-    <Compile Include="Controls\HistoryTreeView\SelectedItemChangedEventArgs.cs" />
     <Compile Include="Controls\TaskListView\ViewModel\TaskListViewModel.cs" />
-    <Compile Include="Data\WorkPackage\Project.cs" />
-    <Compile Include="Data\WorkPackage\SubProject.cs" />
-    <Compile Include="Data\WorkPackage\TaskList.cs" />
-    <Compile Include="Data\WorkPackage\Task.cs" />
+    <Compile Include="Data\Project.cs" />
+    <Compile Include="Data\SubProject.cs" />
+    <Compile Include="Data\Task.cs" />
+    <Compile Include="FTMData.cs" />
     <Compile Include="Helper\XmlHelper.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -154,20 +149,11 @@
     <Compile Include="Controls\DetailViewControls\YearOverview.xaml.cs">
       <DependentUpon>YearOverview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helper\TimeSpanHelper.cs" />
-    <Compile Include="Windows\WorkDayPropertiesWindow.xaml.cs">
-      <DependentUpon>WorkDayPropertiesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\WorkHistory\WorkDay.cs" />
-    <Compile Include="Data\WorkHistory\WorkDayList.cs" />
+    <Compile Include="Data\WorkDay.cs" />
     <Compile Include="Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\HistoryTreeView\HistoryTreeControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\LabelValueControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,10 +185,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\WorkDayPropertiesWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Windows\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

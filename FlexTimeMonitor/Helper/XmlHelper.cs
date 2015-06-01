@@ -11,7 +11,7 @@ namespace A9N.FlexTimeMonitor.Helper
     /// <summary>
     /// Class XmlHelper.
     /// </summary>
-    internal static class XmlHelper
+    internal static class DataSerializer
     {
         #region XML (de)serialization
         /// <summary>
@@ -22,13 +22,10 @@ namespace A9N.FlexTimeMonitor.Helper
         /// <returns>``0.</returns>
         internal static T Read<T>(String fileName)
         {
-            if (File.Exists(fileName))
+            using (XmlReader reader = XmlReader.Create(fileName))
             {
-                using (XmlReader reader = XmlReader.Create(fileName))
-                {
-                    XmlSerializer x = new XmlSerializer(typeof(T));
-                    return (T)x.Deserialize(reader);
-                }
+                XmlSerializer x = new XmlSerializer(typeof(T));
+                return (T)x.Deserialize(reader);
             }
 
             return default(T);

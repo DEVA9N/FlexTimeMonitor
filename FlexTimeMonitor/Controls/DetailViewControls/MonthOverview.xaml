@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Controls:WorkDayGrid
+        <DataGrid
             AutoGenerateColumns="False" 
 			x:Name="dataGridWorkDays" 
 			ItemsSource="{Binding}" 
@@ -88,6 +88,6 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
-        </Controls:WorkDayGrid>
+        </DataGrid>
     </Grid>
 </UserControl>

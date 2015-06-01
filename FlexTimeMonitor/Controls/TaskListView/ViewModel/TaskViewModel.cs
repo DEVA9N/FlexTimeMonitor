@@ -1,5 +1,5 @@
 ﻿using System;
-using A9N.FlexTimeMonitor.Data.Tasks;
+using A9N.FlexTimeMonitor.Data;
 
 namespace A9N.FlexTimeMonitor.Controls
 {

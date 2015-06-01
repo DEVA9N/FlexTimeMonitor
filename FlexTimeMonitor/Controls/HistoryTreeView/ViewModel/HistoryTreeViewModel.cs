@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using A9N.FlexTimeMonitor.Data;
 
 namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
 {

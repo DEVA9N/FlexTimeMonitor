@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
+using A9N.FlexTimeMonitor.Data;
 
 namespace A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems
 {
