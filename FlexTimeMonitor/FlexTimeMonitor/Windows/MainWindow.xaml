@@ -117,7 +117,7 @@
                         </DataTrigger>
 
                         <!-- Highlight discrepancy -->
-                        <DataTrigger Binding="{Binding HasDiscrepancy}" Value="true">
+                        <DataTrigger Binding="{Binding HasNegativeOvertime}" Value="true">
                             <Setter Property="Foreground" Value="Red" />
                         </DataTrigger>
                     </Style.Triggers>

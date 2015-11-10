@@ -300,11 +300,11 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value><c>true</c> if this instance has discrepancy; otherwise, <c>false</c>.</value>
         [XmlIgnore]
-        public bool HasDiscrepancy
+        public bool HasNegativeOvertime
         {
             get
             {
-                return (Discrepancy != TimeSpan.Zero || OverTime < TimeSpan.Zero) && !IsToday;
+                return (OverTime < TimeSpan.Zero) && !IsToday;
             }
         }
 

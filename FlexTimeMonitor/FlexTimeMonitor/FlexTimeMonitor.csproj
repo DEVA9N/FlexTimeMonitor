@@ -103,22 +103,7 @@
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DetailViewControls\DayOverview.xaml.cs">
-      <DependentUpon>DayOverview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\DetailViewControls\MonthOverview.xaml.cs">
-      <DependentUpon>MonthOverview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\DetailViewControls\WeekOverview.xaml.cs">
-      <DependentUpon>WeekOverview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\DetailViewControls\YearOverview.xaml.cs">
-      <DependentUpon>YearOverview.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Helper\TimeSpanHelper.cs" />
-    <Compile Include="Controls\HitoryTreeControl.xaml.cs">
-      <DependentUpon>HitoryTreeControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WorkHistory\WorkDayData.cs" />
     <Compile Include="WorkHistory\WorkHistory.cs" />
     <Compile Include="WorkHistory\WorkHistoryFile.cs" />
@@ -127,26 +112,6 @@
     </Compile>
     <Compile Include="WorkHistory\WorkDay.cs" />
     <Page Include="Windows\AboutWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\DetailViewControls\DayOverview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\DetailViewControls\MonthOverview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\DetailViewControls\WeekOverview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\DetailViewControls\YearOverview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\HitoryTreeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
