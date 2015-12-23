@@ -318,7 +318,7 @@ namespace A9N.FlexTimeMonitor
         {
             get
             {
-                return TimeSpanHelper.ToHhmmss(OverTime);
+                return TimeSpanExtension.ToHhmmss(OverTime);
             }
         }
         #endregion

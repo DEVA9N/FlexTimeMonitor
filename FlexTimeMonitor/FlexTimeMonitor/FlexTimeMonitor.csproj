@@ -31,7 +31,7 @@
     <ErrorReportUrl>http://a9n.de</ErrorReportUrl>
     <ProductName>FlexTimeMonitor</ProductName>
     <PublisherName>A9N</PublisherName>
-    <ApplicationRevision>49</ApplicationRevision>
+    <ApplicationRevision>51</ApplicationRevision>
     <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -103,7 +103,7 @@
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helper\TimeSpanHelper.cs" />
+    <Compile Include="Helper\TimeSpanExtension.cs" />
     <Compile Include="WorkHistory\WorkDayData.cs" />
     <Compile Include="WorkHistory\WorkHistory.cs" />
     <Compile Include="WorkHistory\WorkHistoryFile.cs" />

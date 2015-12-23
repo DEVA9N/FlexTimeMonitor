@@ -66,10 +66,10 @@ namespace A9N.FlexTimeMonitor.Windows
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
             {
-                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", TimeSpanHelper.ToHhmmss(today.Start));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", TimeSpanHelper.ToHhmmss(today.Estimated));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", TimeSpanHelper.ToHhmmss(today.Elapsed));
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", TimeSpanHelper.ToHhmmss(today.Remaining));
+                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", today.Start.ToHhmmss());
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", today.Estimated.ToHhmmss());
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", today.Elapsed.ToHhmmss());
+                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", today.Remaining.ToHhmmss());
                 systrayIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
             }
         }
@@ -177,7 +177,7 @@ namespace A9N.FlexTimeMonitor.Windows
 
 
         #region Window Events
-
+        /// <summary>
         /// Handles the PowerModeChanged event of the SystemEvents control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -288,9 +288,9 @@ namespace A9N.FlexTimeMonitor.Windows
 
             // Display results in status bar
             statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            statusBarOverallValue.Text = TimeSpanHelper.ToHhmmss(timeOverall);
-            statusBarIntendedValue.Text = TimeSpanHelper.ToHhmmss(timeIntended);
-            statusBarDifferenceValue.Text = TimeSpanHelper.ToHhmmss(timeOverall - timeIntended);
+            statusBarOverallValue.Text = TimeSpanExtension.ToHhmmss(timeOverall);
+            statusBarIntendedValue.Text = TimeSpanExtension.ToHhmmss(timeIntended);
+            statusBarDifferenceValue.Text = TimeSpanExtension.ToHhmmss(timeOverall - timeIntended);
         }
         #endregion
 
