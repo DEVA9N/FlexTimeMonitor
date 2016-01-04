@@ -9,7 +9,7 @@
         StateChanged="Window_StateChanged" 
         MinWidth="400" 
         MinHeight="300" 
-        Icon="../Icons/Stopwatch.ico" 
+        Icon="../Resources/1451943285_performance-clock-speed.ico" 
         Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>

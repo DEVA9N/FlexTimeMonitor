@@ -58,3 +58,6 @@ and work period.
 If your work period starts on one day and ends on another (e.g. start at 20:00, 
 end at 04:00) Flex Time Monitor is unable to keep a proper history.
 
+5. Application Icon
+-------------------------------------------------------------------------------- 
+The application icon has been created by Cristian Bogdan Rosu http://www.bogdanrosu.com/

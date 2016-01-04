@@ -41,7 +41,7 @@ namespace A9N.FlexTimeMonitor.Windows
         private void InitializeSystrayIcon()
         {
             this.systrayIcon = new System.Windows.Forms.NotifyIcon();
-            this.systrayIcon.Icon = Properties.Resources.Stopwatch;
+            this.systrayIcon.Icon = Properties.Resources.ApplicationIconLight;
             this.systrayIcon.Text = Properties.Resources.ApplicationName;
             this.systrayIcon.Visible = true;
             this.systrayIcon.MouseClick += systrayIcon_MouseClick;
