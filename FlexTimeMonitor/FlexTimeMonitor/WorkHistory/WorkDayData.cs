@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -16,6 +17,7 @@ namespace A9N.FlexTimeMonitor
         /// or End date.
         /// </summary>
         /// <value>The date.</value>
+        [XmlElement("Date")]
         public DateTime Date { get; set; }
 
         /// <summary>
@@ -26,6 +28,7 @@ namespace A9N.FlexTimeMonitor
         /// instead of TimeSpan is that DateTime is serializable.
         /// </remarks>
         /// <value>The start.</value>
+        [XmlElement("Start")]
         public DateTime Start { get; set; }
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace A9N.FlexTimeMonitor
         /// instead of TimeSpan is that DateTime is serializable.
         /// </remarks>
         /// <value>The end.</value>
+        [XmlElement("End")]
         public DateTime End { get; set; }
 
         /// <summary>
@@ -44,12 +48,14 @@ namespace A9N.FlexTimeMonitor
         /// appointment can be set by -1h.
         /// </summary>
         /// <value>The discrepancy.</value>
+        [XmlElement("Discrepancy")]
         public DateTime Discrepancy { get; set; }
 
         /// <summary>
         /// Gets or sets the note. The note can be used to store information about the workday.
         /// </summary>
         /// <value>The note.</value>
+        [XmlElement("Note")]
         public String Note { get; set; }
     }
 }
