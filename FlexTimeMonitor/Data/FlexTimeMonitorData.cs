@@ -61,11 +61,7 @@ namespace A9N.FlexTimeMonitor.Data
             }
             catch (FileNotFoundException)
             {
-                var result = new List<WorkDay>();
-
-                result.Add(new WorkDay());
-
-                return result;
+                return new List<WorkDay> { new WorkDay() };
             }
         }
 
@@ -80,9 +76,7 @@ namespace A9N.FlexTimeMonitor.Data
             }
             catch (FileNotFoundException)
             {
-                var result = new List<Task>();
-
-                return result;
+                return new List<Task>();
             }
         }
 
