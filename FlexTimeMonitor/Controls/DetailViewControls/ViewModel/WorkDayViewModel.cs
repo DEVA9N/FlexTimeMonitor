@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.Globalization;
 using A9N.FlexTimeMonitor.Data;
@@ -15,37 +14,28 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public sealed class WorkDayViewModel : INotifyPropertyChanged
     {
-        #region Fields
         private int _weekNumber;
 
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
-        #endregion Fields
 
-        #region Constructor
         /// <summary>
         /// Creates WorkDayViewModel instance with start time now
         /// </summary>
         public WorkDayViewModel(WorkDay day)
         {
             Data = day;
-
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Notifies the property change.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         private void NotifyPropertyChanged(String propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -85,16 +75,14 @@ namespace A9N.FlexTimeMonitor
             String hours = Math.Abs((int)t.TotalHours).ToString("00");
             String minutes = Math.Abs(t.Minutes).ToString("00");
             String seconds = Math.Abs(t.Seconds).ToString("00");
-            return String.Format("{0}{1}:{2}:{3}", sign, hours, minutes, seconds);
+            return $"{sign}{hours}:{minutes}:{seconds}";
         }
 
         public override string ToString()
         {
-            return this.Date.ToString();
+            return this.Date.ToString(CultureInfo.InvariantCulture);
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets or sets the data object that stores the workday data.
         /// </summary>
@@ -124,13 +112,7 @@ namespace A9N.FlexTimeMonitor
         /// Gets the short day of week.
         /// </summary>
         /// <value>The short day of week.</value>
-        public String ShortDayOfWeek
-        {
-            get
-            {
-                return System.Globalization.DateTimeFormatInfo.InvariantInfo.GetShortestDayName(this.Date.DayOfWeek);
-            }
-        }
+        public String ShortDayOfWeek => DateTimeFormatInfo.InvariantInfo.GetShortestDayName(this.Date.DayOfWeek);
 
         /// <summary>
         /// Gets the week number.
@@ -143,9 +125,13 @@ namespace A9N.FlexTimeMonitor
             {
                 if (_weekNumber == 0)
                 {
-                    var info = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+                    var info = DateTimeFormatInfo.CurrentInfo;
 
-                    _weekNumber = info.Calendar.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                    if (info != null)
+                    {
+                        _weekNumber = info.Calendar.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay,
+                            DayOfWeek.Monday);
+                    }
                 }
 
                 return _weekNumber;
@@ -200,52 +186,28 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The over time.</value>
         [XmlIgnore]
-        public TimeSpan OverTime
-        {
-            get
-            {
-                return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-            }
-        }
+        public TimeSpan OverTime => Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Difference between start and now also considering a possible discrepancy.
         /// </summary>
         /// <value>The elapsed.</value>
         [XmlIgnore]
-        public TimeSpan Elapsed
-        {
-            get
-            {
-                return End - Start;
-            }
-        }
+        public TimeSpan Elapsed => End - Start;
 
         /// <summary>
         /// Estimated end time
         /// </summary>
         /// <value>The estimated.</value>
         [XmlIgnore]
-        public TimeSpan Estimated
-        {
-            get
-            {
-                return Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-            }
-        }
+        public TimeSpan Estimated => Start + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Remaining time - opposite of OverTime (5min Remaining == -5min OverTime)
         /// </summary>
         /// <value>The remaining.</value>
         [XmlIgnore]
-        public TimeSpan Remaining
-        {
-            get
-            {
-                return -OverTime;
-            }
-        }
+        public TimeSpan Remaining => -OverTime;
 
         /// <summary>
         /// Additional note
@@ -266,7 +228,6 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        #region Datagrid Helper
         /*
          * Instead of using enhanced WPF patterns to achieve certain benefits I took the fast approach and am using some
          * helper properties instead. These helper methods are used in the datagrid for trigger and display purposes.
@@ -302,13 +263,7 @@ namespace A9N.FlexTimeMonitor
         /// </remarks>
         /// <value><c>true</c> if this instance is today; otherwise, <c>false</c>.</value>
         [XmlIgnore]
-        public bool IsToday
-        {
-            get
-            {
-                return Date.Date == DateTime.Now.Date;
-            }
-        }
+        public bool IsToday => Date.Date == DateTime.Now.Date;
 
         /// <summary>
         /// This is a workaround for the missing capability of TimeSpan formating to handle negative values.
@@ -316,14 +271,6 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The over time string.</value>
         [XmlIgnore]
-        public String OverTimeString
-        {
-            get
-            {
-                return ToHhmmss(OverTime);
-            }
-        }
-        #endregion
-        #endregion
+        public String OverTimeString => ToHhmmss(OverTime);
     }
 }

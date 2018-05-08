@@ -29,7 +29,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal FTMData Data { get; private set; }
+        internal FlexTimeMontitorData Data { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
@@ -46,7 +46,7 @@ namespace A9N.FlexTimeMonitor
 
             String myDocuments = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Properties.Resources.ApplicationName);
 
-            this.Data = new FTMData(myDocuments);
+            this.Data = new FlexTimeMontitorData(myDocuments);
 
             this.ShowSaveDialog = true;
 
@@ -116,8 +116,6 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        #region Window Events
-
         /// <summary>
         /// Handles the PowerModeChanged event of the SystemEvents control.
         /// </summary>
@@ -181,7 +179,6 @@ namespace A9N.FlexTimeMonitor
                 }
             }
         }
-        #endregion
 
         /// <summary>
         /// Handles the SelectedItemChanged event of the SystemEvents control.
@@ -208,7 +205,6 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        #region Menu item events
         /// <summary>
         /// Handles the Click event of the MenuItemSave control.
         /// </summary>
@@ -252,7 +248,5 @@ namespace A9N.FlexTimeMonitor
 
             about.ShowDialog();
         }
-        #endregion
-
     }
 }

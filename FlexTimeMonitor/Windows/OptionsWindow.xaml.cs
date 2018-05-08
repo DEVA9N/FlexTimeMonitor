@@ -30,7 +30,6 @@ namespace A9N.FlexTimeMonitor
             //textBoxFile.Text = Properties.Settings.Default.LogfileName;
         }
 
-        #region Private Methods
         /// <summary>
         /// Saves the values.
         /// </summary>
@@ -63,9 +62,7 @@ namespace A9N.FlexTimeMonitor
 
             return false;
         }
-        #endregion
 
-        #region Button Events
         /// <summary>
         /// Handles the Click event of the buttonOk control.
         /// </summary>
@@ -88,7 +85,5 @@ namespace A9N.FlexTimeMonitor
         {
             Close();
         }
-        #endregion
-
     }
 }

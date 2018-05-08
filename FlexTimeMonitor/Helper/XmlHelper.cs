@@ -13,7 +13,6 @@ namespace A9N.FlexTimeMonitor.Helper
     /// </summary>
     internal static class DataSerializer
     {
-        #region XML (de)serialization
         /// <summary>
         /// Read object of type T from file.
         /// </summary>
@@ -49,6 +48,5 @@ namespace A9N.FlexTimeMonitor.Helper
                 outputDocument.Save(fileName);
             }
         }
-        #endregion
     }
 }
