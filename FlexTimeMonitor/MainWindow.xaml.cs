@@ -5,22 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Threading;
-using System.Xml;
-using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.Controls;
 using A9N.FlexTimeMonitor.Controls.HistoryTree.TreeItems;
 using A9N.FlexTimeMonitor.Controls.DetailViewControls;
-using System.Collections;
-using A9N.FlexTimeMonitor.Helper;
+using A9N.FlexTimeMonitor.Data;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -29,7 +18,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal FlexTimeMontitorData Data { get; private set; }
+        internal FlexTimeMonitorData Data { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
@@ -46,7 +35,7 @@ namespace A9N.FlexTimeMonitor
 
             String myDocuments = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Properties.Resources.ApplicationName);
 
-            this.Data = new FlexTimeMontitorData(myDocuments);
+            this.Data = new FlexTimeMonitorData(myDocuments);
 
             this.ShowSaveDialog = true;
 

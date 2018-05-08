@@ -3,34 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using A9N.FlexTimeMonitor.Data;
-using A9N.FlexTimeMonitor.Helper;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Properties;
 
-namespace A9N.FlexTimeMonitor
+namespace A9N.FlexTimeMonitor.Data
 {
-    class FlexTimeMontitorData
+    class FlexTimeMonitorData
     {
-        private String historyFileName;
-        private String taskListFileName;
+        private readonly String historyFileName;
+        private readonly String taskListFileName;
 
         public List<WorkDay> WorkDays { get; private set; }
         public List<Task> Tasks { get; private set; }
 
-        public FlexTimeMontitorData(String dataPath)
+        public FlexTimeMonitorData(String dataPath)
         {
             if (String.IsNullOrEmpty(dataPath))
             {
-                throw new ArgumentException("dataPath");
+                throw new ArgumentException(nameof(dataPath));
             }
 
             this.historyFileName = Path.Combine(dataPath, Settings.Default.HistoryFileName);
             this.taskListFileName = Path.Combine(dataPath, Settings.Default.TasksFileName);
         }
 
-        /// <summary>
-        /// Loads this instance.
-        /// </summary>
         public void Load()
         {
             this.WorkDays = LoadWorkDays(historyFileName);
@@ -38,21 +36,18 @@ namespace A9N.FlexTimeMonitor
             this.Tasks = LoadTasks(taskListFileName);
         }
 
-        /// <summary>
-        /// Saves this instance.
-        /// </summary>
         public void Save()
         {
-            DataSerializer.Write(historyFileName, this.WorkDays);
+            WriteFile(historyFileName, this.WorkDays);
 
-            DataSerializer.Write(taskListFileName, this.Tasks);
+            WriteFile(taskListFileName, this.Tasks);
         }
 
         private static List<WorkDay> LoadWorkDays(String fileName)
         {
             try
             {
-                var result = DataSerializer.Read<List<WorkDay>>(fileName);
+                var result = ReadFile<List<WorkDay>>(fileName);
 
                 var today = result.Find(day => day.Date.Date == DateTime.Now.Date);
 
@@ -78,7 +73,7 @@ namespace A9N.FlexTimeMonitor
         {
             try
             {
-                var result = DataSerializer.Read<List<Task>>(fileName);
+                var result = ReadFile<List<Task>>(fileName);
 
                 return result;
 
@@ -88,6 +83,29 @@ namespace A9N.FlexTimeMonitor
                 var result = new List<Task>();
 
                 return result;
+            }
+        }
+
+        private static T ReadFile<T>(String fileName)
+        {
+            using (var reader = XmlReader.Create(fileName))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                return (T)serializer.Deserialize(reader);
+            }
+        }
+
+        private static void WriteFile(String fileName, Object output)
+        {
+            var builder = new StringBuilder();
+            using (var writer = XmlWriter.Create(builder))
+            {
+                var serializer = new XmlSerializer(output.GetType());
+                serializer.Serialize(writer, output);
+
+                var outputDocument = new XmlDocument();
+                outputDocument.LoadXml(builder.ToString());
+                outputDocument.Save(fileName);
             }
         }
     }
