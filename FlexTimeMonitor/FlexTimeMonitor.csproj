@@ -203,7 +203,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Copy to Autostart - FlexTimeMonitor.lnk">
+    <None Include="doc\Copy to Autostart - FlexTimeMonitor.lnk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
