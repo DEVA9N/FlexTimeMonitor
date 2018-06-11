@@ -9,8 +9,8 @@
         StateChanged="Window_StateChanged" 
         MinWidth="400" 
         MinHeight="300" 
-        Icon="../Resources/1451943285_performance-clock-speed.ico" 
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" 
+        Icon="/FlexTimeMonitor;component/Resources/performance-clock-speed.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*" />

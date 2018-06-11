@@ -119,10 +119,10 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ApplicationIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1451943285_performance-clock-speed.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\resources\performance-clock-speed.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ApplicationIconLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\1451943285_performance-clock-speed_light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\performance-clock-speed-light.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ApplicationName" xml:space="preserve">
     <value>Flex Time Monitor</value>
@@ -139,11 +139,8 @@
   <data name="Status_ErrorLoadingHistory" xml:space="preserve">
     <value>Unable to load the history file. Starting a new FlexTime History. 
 
-You can find a backup of the previous history file in:
-{0}
-
 Exception:
-{1}</value>
+{0}</value>
   </data>
   <data name="ToolTip_Date" xml:space="preserve">
     <value />

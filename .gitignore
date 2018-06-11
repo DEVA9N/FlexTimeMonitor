@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/FlexTimeMonitor/.vs/FlexTimeMonitor
+/FlexTimeMonitor/bin/Debug
+/FlexTimeMonitor/FlexTimeMonitor/bin/Debug
+/FlexTimeMonitor/FlexTimeMonitor/obj/x86/Debug
+/FlexTimeMonitor/FlexTimeMonitor/publish
+/FlexTimeMonitor/obj

@@ -15,29 +15,16 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     class WorkHistoryFile
     {
-        private String _fileName;
+        private readonly String _fileName;
 
-        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkHistoryFile"/> class.
         /// </summary>
         public WorkHistoryFile()
-            : this(GetDefaultFileName())
         {
-
+            _fileName = GetDefaultFileName();
         }
 
-        /// <summary>
-        /// Create new instance with defined file name
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        public WorkHistoryFile(String fileName)
-        {
-            this._fileName = fileName;
-        }
-        #endregion
-
-        #region XML (de)serialization
         /// <summary>
         /// Read object of type T from file.
         /// </summary>
@@ -75,9 +62,7 @@ namespace A9N.FlexTimeMonitor
                 outputDocument.Save(fileName);
             }
         }
-        #endregion
 
-        #region Helper methods
         /// <summary>
         /// Get the default history file name for the current user.
         /// </summary>
@@ -88,9 +73,7 @@ namespace A9N.FlexTimeMonitor
 
             return Path.Combine(myDocuments, Resources.ApplicationName, Resources.FileName);
         }
-        #endregion
 
-        #region Load / Save
         /// <summary>
         /// Will provide a WorkHistory file from file. If there is problem while loading it will
         /// Policy: Warn on load, solve on close.
@@ -154,73 +137,9 @@ namespace A9N.FlexTimeMonitor
             // Set the end of today
             history.Today.End = DateTime.Now.TimeOfDay;
 
-            // Create a backup file by moving it. If the write fails the backup will 
-            String backupName = CreateBackup(fileName);
-
             // Save the file
             Write(fileName, history);
-
-            // After a successful write the backup will be removed
-            RemoveBackup(backupName);
         }
-        #endregion
-
-
-
-        #region Backup
-
-        /// <summary>
-        /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
-        /// directory.
-        /// </summary>
-        /// <returns>String.</returns>
-        /// <exception cref="System.InvalidOperationException">Unable to detect backup path.</exception>
-        public String CreateBackup()
-        {
-            return CreateBackup(_fileName);
-        }
-
-        /// <summary>
-        /// Creates a backup of the current history file. The file is located in the FlexTimeMonitor's
-        /// directory.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>String.</returns>
-        /// <exception cref="System.InvalidOperationException">Unable to detect backup path.</exception>
-        private static String CreateBackup(String fileName)
-        {
-            if (File.Exists(fileName))
-            {
-                var backupFileName = DateTime.Now.ToString("yyyyMMdd-HHmmss-") + Path.GetFileName(fileName);
-                var backupPath = Path.GetDirectoryName(fileName);
-
-                if (backupPath == null)
-                {
-                    throw new InvalidOperationException("Unable to detect backup path.");
-                }
-
-                var backupFullFileName = Path.Combine(backupPath, backupFileName);
-
-                File.Move(fileName, backupFullFileName);
-
-                return backupFullFileName;
-            }
-
-            return String.Empty;
-        }
-
-        /// <summary>
-        /// Removes the backup.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        private static void RemoveBackup(String fileName)
-        {
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
-        }
-        #endregion
 
         /// <summary>
         /// Gets the history.

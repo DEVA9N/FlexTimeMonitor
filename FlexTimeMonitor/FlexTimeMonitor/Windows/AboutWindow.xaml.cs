@@ -19,7 +19,6 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class AboutWindow : Window
     {
-        #region Constructor
         public AboutWindow()
         {
             InitializeComponent();
@@ -37,9 +36,7 @@ namespace A9N.FlexTimeMonitor
             this.richTextBox.Document = doc;
 
         }
-        #endregion
 
-        #region Private Methods
         private String GetApplicationVersion()
         {
             if (ApplicationDeployment.IsNetworkDeployed)
@@ -54,6 +51,5 @@ namespace A9N.FlexTimeMonitor
             }
             // Todo: Check if it a good idea to sync those numbers
         }
-        #endregion
     }
 }

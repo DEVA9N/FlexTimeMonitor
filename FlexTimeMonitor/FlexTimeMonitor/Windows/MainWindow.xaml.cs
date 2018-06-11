@@ -34,7 +34,6 @@ namespace A9N.FlexTimeMonitor.Windows
             Microsoft.Win32.SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
         }
 
-        #region Systray icon
         /// <summary>
         /// Initializes the systray icon.
         /// </summary>
@@ -93,9 +92,7 @@ namespace A9N.FlexTimeMonitor.Windows
                 // This exception occurs if the cell of an edited item has not been left before putting this app to tray.
             }
         }
-        #endregion
 
-        #region History Access
         /// <summary>
         /// Opens the history.
         /// </summary>
@@ -125,8 +122,7 @@ namespace A9N.FlexTimeMonitor.Windows
             }
             catch (Exception e)
             {
-                var backupFileName = historyFile.CreateBackup();
-                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, backupFileName, e);
+                var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, e);
 
                 MessageBox.Show(this, text, Properties.Resources.ApplicationName);
             }
@@ -159,7 +155,6 @@ namespace A9N.FlexTimeMonitor.Windows
                 }
             }
         }
-        #endregion
 
         /// <summary>
         /// Updates the settings.
@@ -176,7 +171,6 @@ namespace A9N.FlexTimeMonitor.Windows
         }
 
 
-        #region Window Events
         /// <summary>
         /// Handles the PowerModeChanged event of the SystemEvents control.
         /// </summary>
@@ -257,9 +251,7 @@ namespace A9N.FlexTimeMonitor.Windows
                 }
             }
         }
-        #endregion
 
-        #region DataGrid Events
         /// <summary>
         /// Display selection results
         /// </summary>
@@ -292,9 +284,7 @@ namespace A9N.FlexTimeMonitor.Windows
             statusBarIntendedValue.Text = TimeSpanExtension.ToHhmmss(timeIntended);
             statusBarDifferenceValue.Text = TimeSpanExtension.ToHhmmss(timeOverall - timeIntended);
         }
-        #endregion
 
-        #region Menu item events
         /// <summary>
         /// Handles the Click event of the MenuItemSave control.
         /// </summary>
@@ -339,7 +329,5 @@ namespace A9N.FlexTimeMonitor.Windows
 
             about.ShowDialog();
         }
-        #endregion
-
     }
 }

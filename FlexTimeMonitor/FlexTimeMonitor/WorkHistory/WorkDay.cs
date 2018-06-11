@@ -13,16 +13,13 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public sealed class WorkDay : INotifyPropertyChanged
     {
-        #region Fields
         private int _weekNumber;
 
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
-        #endregion Fields
 
-        #region Constructor
         /// <summary>
         /// Creates Workday instance with start time now
         /// </summary>
@@ -34,9 +31,7 @@ namespace A9N.FlexTimeMonitor
             Data.Start = DateTime.Now;
             Data.End = DateTime.Now;
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Notifies the property change.
         /// </summary>
@@ -67,10 +62,8 @@ namespace A9N.FlexTimeMonitor
         {
             return new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, time.Hours, time.Minutes, time.Seconds);
         }
-        #endregion
 
 
-        #region Properties
         /// <summary>
         /// Gets or sets the data object that stores the workday data.
         /// </summary>
@@ -251,7 +244,6 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        #region Datagrid Helper
         /*
          * Instead of using enhanced WPF patterns to achieve certain benefits I took the fast approach and am using some
          * helper properties instead. These helper methods are used in the datagrid for trigger and display purposes.
@@ -321,7 +313,5 @@ namespace A9N.FlexTimeMonitor
                 return TimeSpanExtension.ToHhmmss(OverTime);
             }
         }
-        #endregion
-        #endregion
     }
 }
