@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using System.Runtime.CompilerServices;
 using System.ComponentModel;
 
 namespace A9N.FlexTimeMonitor
@@ -25,23 +24,12 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         public WorkDay()
         {
-            Data = new WorkDayData();
-
-            Data.Date = DateTime.Now;
-            Data.Start = DateTime.Now;
-            Data.End = DateTime.Now;
-        }
-
-        /// <summary>
-        /// Notifies the property change.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        private void NotifyPropertyChanged(String propertyName)
-        {
-            if (PropertyChanged != null)
+            Data = new WorkDayData
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+                Date = DateTime.Now,
+                Start = DateTime.Now,
+                End = DateTime.Now
+            };
         }
 
         /// <summary>
@@ -77,16 +65,8 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public DateTime Date
         {
-            get
-            {
-                return Data.Date;
-            }
-            set
-            {
-                Data.Date = value;
-              
-                NotifyPropertyChanged("Date");
-            }
+            get => Data.Date;
+            set => Data.Date = value;
         }
 
         /// <summary>
@@ -100,9 +80,9 @@ namespace A9N.FlexTimeMonitor
             {
                 if (_weekNumber == 0)
                 {
-                    var info = System.Globalization.DateTimeFormatInfo.CurrentInfo;
+                    var calendar = System.Globalization.DateTimeFormatInfo.CurrentInfo?.Calendar;
 
-                    _weekNumber = info.Calendar.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                    _weekNumber = calendar?.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday) ?? 0;
                 }
 
                 return _weekNumber;
@@ -116,16 +96,8 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public TimeSpan Start
         {
-            get
-            {
-                return Data.Start.TimeOfDay;
-            }
-            set
-            {
-                Data.Start = ConvertToDateTime(value);
-              
-                NotifyPropertyChanged("Start");
-            }
+            get => Data.Start.TimeOfDay;
+            set => Data.Start = ConvertToDateTime(value);
         }
 
         /// <summary>
@@ -135,20 +107,8 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public TimeSpan End
         {
-            get
-            {
-                if (IsToday)
-                {
-                    return DateTime.Now.TimeOfDay;
-                }
-                return Data.End.TimeOfDay;
-            }
-            set
-            {
-                Data.End = ConvertToDateTime(value);
-
-                NotifyPropertyChanged("End");
-            }
+            get => IsToday ? DateTime.Now.TimeOfDay : Data.End.TimeOfDay;
+            set => Data.End = ConvertToDateTime(value);
         }
 
 
@@ -157,13 +117,7 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The over time.</value>
         [XmlIgnore]
-        public TimeSpan OverTime
-        {
-            get
-            {
-                return Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-            }
-        }
+        public TimeSpan OverTime => Elapsed - (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Gets or sets the discrepancy. Discrepancy is a positive or negative time offset that is taken into account
@@ -174,16 +128,8 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public TimeSpan Discrepancy
         {
-            get
-            {
-                return Data.Discrepancy.TimeOfDay;
-            }
-            set
-            {
-                Data.Discrepancy = ConvertToDateTime(value);
-
-                NotifyPropertyChanged("Discrepancy");
-            }
+            get => Data.Discrepancy.TimeOfDay;
+            set => Data.Discrepancy = ConvertToDateTime(value);
         }
 
         /// <summary>
@@ -191,39 +137,21 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The elapsed.</value>
         [XmlIgnore]
-        public TimeSpan Elapsed
-        {
-            get
-            {
-                return End - Start + Discrepancy;
-            }
-        }
+        public TimeSpan Elapsed => End - Start + Discrepancy;
 
         /// <summary>
         /// Estimated end time
         /// </summary>
         /// <value>The estimated.</value>
         [XmlIgnore]
-        public TimeSpan Estimated
-        {
-            get
-            {
-                return Start - Discrepancy + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
-            }
-        }
+        public TimeSpan Estimated => Start - Discrepancy + (Properties.Settings.Default.WorkPeriod + Properties.Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Remaining time - opposite of OverTime (5min Remaining == -5min OverTime)
         /// </summary>
         /// <value>The remaining.</value>
         [XmlIgnore]
-        public TimeSpan Remaining
-        {
-            get
-            {
-                return -OverTime;
-            }
-        }
+        public TimeSpan Remaining => -OverTime;
 
         /// <summary>
         /// Additional note
@@ -232,16 +160,8 @@ namespace A9N.FlexTimeMonitor
         [XmlIgnore]
         public String Note
         {
-            get
-            {
-                return Data.Note;
-            }
-            set
-            {
-                Data.Note = value;
-
-                NotifyPropertyChanged("Note");
-            }
+            get => Data.Note;
+            set => Data.Note = value;
         }
 
         /*
@@ -249,7 +169,7 @@ namespace A9N.FlexTimeMonitor
          * helper properties instead. These helper methods are used in the datagrid for trigger and display purposes.
          * 
          */
-        
+
         /// <summary>
         /// Gets a value indicating whether this instance is odd week.
         /// </summary>
@@ -279,26 +199,14 @@ namespace A9N.FlexTimeMonitor
         /// </remarks>
         /// <value><c>true</c> if this instance is today; otherwise, <c>false</c>.</value>
         [XmlIgnore]
-        public bool IsToday
-        {
-            get
-            {
-                return Date.Date == DateTime.Now.Date;
-            }
-        }
+        public bool IsToday => Date.Date == DateTime.Now.Date;
 
         /// <summary>
         /// Gets a value indicating whether this instance has discrepancy which is either Discrepancy != Zero or negative OverTim.
         /// </summary>
         /// <value><c>true</c> if this instance has discrepancy; otherwise, <c>false</c>.</value>
         [XmlIgnore]
-        public bool HasNegativeOvertime
-        {
-            get
-            {
-                return (OverTime < TimeSpan.Zero) && !IsToday;
-            }
-        }
+        public bool HasNegativeOvertime => OverTime < TimeSpan.Zero && !IsToday;
 
         /// <summary>
         /// This is a workaround for the missing capability of TimeSpan formating to handle negative values.
@@ -306,12 +214,6 @@ namespace A9N.FlexTimeMonitor
         /// </summary>
         /// <value>The over time string.</value>
         [XmlIgnore]
-        public String OverTimeString
-        {
-            get
-            {
-                return TimeSpanExtension.ToHhmmss(OverTime);
-            }
-        }
+        public String OverTimeString => TimeSpanExtension.ToHhmmss(OverTime);
     }
 }

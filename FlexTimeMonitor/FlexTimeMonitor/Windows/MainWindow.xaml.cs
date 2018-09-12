@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using A9N.FlexTimeMonitor.Properties;
+using A9N.FlexTimeMonitor.ViewModels;
 
 namespace A9N.FlexTimeMonitor.Windows
 {
@@ -26,6 +27,8 @@ namespace A9N.FlexTimeMonitor.Windows
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainViewModel(this);
 
             this.ShowSaveDialog = true;
 
@@ -65,12 +68,17 @@ namespace A9N.FlexTimeMonitor.Windows
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
             {
-                String balloonText = String.Format("{0,-16}\t{1,10}\n", "Start:", today.Start.ToHhmmss());
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Estimated:", today.Estimated.ToHhmmss());
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Elapsed:", today.Elapsed.ToHhmmss());
-                balloonText += String.Format("{0,-16}\t{1,10}\n", "Remaining:", today.Remaining.ToHhmmss());
-                systrayIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
+                ShowBalloonTip(today);
             }
+        }
+
+        private void ShowBalloonTip(WorkDay today)
+        {
+            var balloonText = $"{"Start:",-16}\t{today.Start.ToHhmmss(),10}\n";
+            balloonText += $"{"Estimated:",-16}\t{today.Estimated.ToHhmmss(),10}\n";
+            balloonText += $"{"Elapsed:",-16}\t{today.Elapsed.ToHhmmss(),10}\n";
+            balloonText += $"{"Remaining:",-16}\t{today.Remaining.ToHhmmss(),10}\n";
+            systrayIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
         }
 
         /// <summary>
@@ -82,15 +90,6 @@ namespace A9N.FlexTimeMonitor.Windows
         {
             // The state change will trigger the state changed event and do everything else there
             this.WindowState = WindowState.Normal;
-
-            try
-            {
-                this.dataGridWorkDays.Items.Refresh();
-            }
-            catch (InvalidOperationException)
-            {
-                // This exception occurs if the cell of an edited item has not been left before putting this app to tray.
-            }
         }
 
         /// <summary>
@@ -111,14 +110,7 @@ namespace A9N.FlexTimeMonitor.Windows
             {
                 historyFile.Load();
 
-                dataGridWorkDays.ItemsSource = historyFile.History;
-
-                // Set focus on last item
-                if (dataGridWorkDays.Items.Count > 0)
-                {
-                    dataGridWorkDays.UpdateLayout();
-                    dataGridWorkDays.ScrollIntoView(dataGridWorkDays.Items[dataGridWorkDays.Items.Count - 1]);
-                }
+                WorkdayGrid.ItemsSource = historyFile.History;
             }
             catch (Exception e)
             {
@@ -140,7 +132,7 @@ namespace A9N.FlexTimeMonitor.Windows
                 try
                 {
                     // Commit edits of opened cells that have not yet been committed (by leaving the cell or pressing "enter").
-                    this.dataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
+                    WorkdayGrid.CommitChanges();
 
                     historyFile.Save();
                 }
@@ -161,12 +153,12 @@ namespace A9N.FlexTimeMonitor.Windows
         /// </summary>
         private static void UpdateSettings()
         {
-            if (Properties.Settings.Default.UpdateSettings)
+            if (Settings.Default.UpdateSettings)
             {
-                Properties.Settings.Default.Upgrade();
+                Settings.Default.Upgrade();
                 // Custom user variable that triggers the update process (true by default)
-                Properties.Settings.Default.UpdateSettings = false;
-                Properties.Settings.Default.Save();
+                Settings.Default.UpdateSettings = false;
+                Settings.Default.Save();
             }
         }
 
@@ -252,82 +244,8 @@ namespace A9N.FlexTimeMonitor.Windows
             }
         }
 
-        /// <summary>
-        /// Display selection results
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
-        private void dataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TimeSpan timeOverall = TimeSpan.Zero;
-            TimeSpan timeIntended = TimeSpan.Zero;
+  
 
-            try
-            {
-                foreach (Object item in dataGridWorkDays.SelectedItems)
-                {
-                    if (item is WorkDay)
-                    {
-                        timeOverall += ((WorkDay)item).Elapsed - Settings.Default.BreakPeriod;
-                        timeIntended += Settings.Default.WorkPeriod;
-                    }
-                }
-            }
-            catch (InvalidCastException x)
-            {
-                System.Diagnostics.Debug.WriteLine("Unsupported new-line-select in datagridview" + x);
-            }
-
-            // Display results in status bar
-            statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            statusBarOverallValue.Text = TimeSpanExtension.ToHhmmss(timeOverall);
-            statusBarIntendedValue.Text = TimeSpanExtension.ToHhmmss(timeIntended);
-            statusBarDifferenceValue.Text = TimeSpanExtension.ToHhmmss(timeOverall - timeIntended);
-        }
-
-        /// <summary>
-        /// Handles the Click event of the MenuItemSave control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
-        {
-            SaveHistory();
-        }
-
-        /// <summary>
-        /// Handles the Click event of the MenuItemQuit control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
-        private void MenuItemQuit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        /// <summary>
-        /// Handles the 1 event of the MenuItemEditOptions_Click control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
-        private void MenuItemEditOptions_Click_1(object sender, RoutedEventArgs e)
-        {
-            var options = new OptionsWindow();
-            options.Owner = this;
-            options.ShowDialog();
-        }
-
-        /// <summary>
-        /// Handles the Click event of the MenuItemAbout control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
-        private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
-        {
-            var about = new AboutWindow();
-            about.Owner = this;
-
-            about.ShowDialog();
-        }
+ 
     }
 }
