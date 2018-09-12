@@ -17,7 +17,7 @@ namespace A9N.FlexTimeMonitor.ViewModels
 
         internal MenuViewModel(MainWindow window)
         {
-            Save = new RelayCommand(window.SaveHistory);
+            Save = new RelayCommand(window.Save);
             Quit = new RelayCommand(window.Close);
             ShowAbout = new RelayCommand(() =>
             {

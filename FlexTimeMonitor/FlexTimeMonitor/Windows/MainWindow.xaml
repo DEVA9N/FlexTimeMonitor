@@ -4,17 +4,12 @@
         xmlns:p="clr-namespace:A9N.FlexTimeMonitor.Properties"
         xmlns:windows="clr-namespace:A9N.FlexTimeMonitor.Windows"
         Title="Flex Time Monitor" 
-        Height="768" 
-        Width="1279" 
-        Closing="Window_Closing" 
-        StateChanged="Window_StateChanged" 
-        MinWidth="400" 
-        MinHeight="300" 
-        Loaded="Window_Loaded" 
+        Height="800" MinHeight="300" 
+        Width="1200" MinWidth="400" 
         Icon="/FlexTimeMonitor;component/Resources/performance-clock-speed.ico">
     <DockPanel>
         <windows:MenuView DataContext="{Binding Menu}" DockPanel.Dock="Top"/>
         <windows:StatusBar DataContext="{Binding Status}" DockPanel.Dock="Bottom"/>
-        <windows:WorkdayGrid DataContext="{Binding Content}" x:Name="WorkdayGrid"/>
+        <windows:WorkdayGrid DataContext="{Binding History}" x:Name="WorkdayGrid"/>
     </DockPanel>
 </Window>

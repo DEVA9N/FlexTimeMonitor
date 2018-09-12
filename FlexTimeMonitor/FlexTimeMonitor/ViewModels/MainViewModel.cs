@@ -10,15 +10,31 @@ namespace A9N.FlexTimeMonitor.ViewModels
 {
     internal sealed class MainViewModel : ViewModelBase
     {
-        public MainViewModel(MainWindow window)
-        {
-            Content = new WorkDayGridViewModel();
-            Menu = new MenuViewModel(window);
-            Status = new StatusBarViewModel();
-        }
+        private readonly WorkHistoryFile _historyFile;
 
-        public WorkDayGridViewModel Content { get; }
+        public WorkHistory History { get; private set; }
         public MenuViewModel Menu { get; }
         public StatusBarViewModel Status { get; }
+
+        public MainViewModel(MainWindow window)
+        {
+            _historyFile = new WorkHistoryFile();
+
+            Status = new StatusBarViewModel();
+            Menu = new MenuViewModel(window);
+            OpenHistory();
+        }
+
+        internal void OpenHistory()
+        {
+            _historyFile.Load();
+            History = _historyFile.History;
+        }
+
+        internal void SaveHistory()
+        {
+            _historyFile?.Save();
+        }
+
     }
 }
