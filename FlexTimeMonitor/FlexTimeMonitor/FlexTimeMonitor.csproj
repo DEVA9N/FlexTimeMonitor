@@ -126,13 +126,13 @@
     <Compile Include="Windows\WorkdayGrid.xaml.cs">
       <DependentUpon>WorkdayGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorkHistory\WorkDayData.cs" />
-    <Compile Include="WorkHistory\WorkHistory.cs" />
-    <Compile Include="WorkHistory\WorkHistoryFile.cs" />
+    <Compile Include="Work\WorkDayData.cs" />
+    <Compile Include="Work\WorkHistory.cs" />
+    <Compile Include="Work\WorkHistoryFile.cs" />
     <Compile Include="Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorkHistory\WorkDay.cs" />
+    <Compile Include="Work\WorkDay.cs" />
     <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
