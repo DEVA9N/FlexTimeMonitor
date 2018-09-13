@@ -20,15 +20,13 @@ namespace A9N.FlexTimeMonitor.Windows
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
         /// </summary>
         /// <value><c>true</c> if the save dialog should be shown; otherwise, <c>false</c>.</value>
-        internal bool ShowSaveDialog { get; set; }
+        internal bool ShowSaveDialog { get; set; } = true;
 
         public MainWindow()
         {
             InitializeComponent();
 
             DataContext = new MainViewModel(this);
-
-            this.ShowSaveDialog = true;
 
             InitializeNotificationIcon();
 
@@ -37,7 +35,6 @@ namespace A9N.FlexTimeMonitor.Windows
             UpdateSettings();
 
             Load();
-
         }
 
         private void InitializeNotificationIcon()

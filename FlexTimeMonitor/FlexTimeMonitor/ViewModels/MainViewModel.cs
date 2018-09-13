@@ -23,7 +23,6 @@ namespace A9N.FlexTimeMonitor.ViewModels
             _historyFile = new WorkHistoryFile();
 
             Menu = new MenuViewModel(window);
-            OpenHistory();
         }
 
         internal void OpenHistory()

@@ -33,6 +33,11 @@ namespace A9N.FlexTimeMonitor.Windows
             DataGridWorkDays.CommitEdit(DataGridEditingUnit.Row, true);
         }
 
+        public void Refresh()
+        {
+            DataGridWorkDays.UpdateLayout();
+        }
+
         /// <summary>
         /// Display selection results
         /// </summary>
