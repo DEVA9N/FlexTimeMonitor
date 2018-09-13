@@ -8,7 +8,7 @@
         Width="1200" MinWidth="400" 
         Icon="/FlexTimeMonitor;component/Resources/performance-clock-speed.ico">
     <DockPanel>
-        <Popup IsOpen="{Binding SelectionPopupVisible}" AllowsTransparency="True" Placement="Mouse">
+        <Popup IsOpen="{Binding SelectionPopupVisible}" AllowsTransparency="True" Placement="MousePoint" HorizontalOffset="20" VerticalOffset="20">
             <windows:SelectionView DataContext="{Binding Selection}"/>
         </Popup>
         <windows:MenuView DataContext="{Binding Menu}" DockPanel.Dock="Top"/>

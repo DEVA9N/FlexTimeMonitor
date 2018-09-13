@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using A9N.FlexTimeMonitor.Windows;
 
@@ -21,12 +22,20 @@ namespace A9N.FlexTimeMonitor.ViewModels
             Quit = new RelayCommand(window.Close);
             ShowAbout = new RelayCommand(() =>
             {
-                var about = new AboutWindow {Owner = window};
+                var about = new AboutWindow
+                {
+                    Owner = window,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
                 about.ShowDialog();
             });
             ShowOptions = new RelayCommand(() =>
             {
-                var options = new OptionsWindow { Owner = window };
+                var options = new OptionsWindow
+                {
+                    Owner = window,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
                 options.ShowDialog();
             });
         }

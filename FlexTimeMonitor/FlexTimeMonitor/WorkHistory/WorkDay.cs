@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
-using System.ComponentModel;
 
-namespace A9N.FlexTimeMonitor
+namespace A9N.FlexTimeMonitor.WorkHistory
 {
     /// <summary>
     /// Represents a work day

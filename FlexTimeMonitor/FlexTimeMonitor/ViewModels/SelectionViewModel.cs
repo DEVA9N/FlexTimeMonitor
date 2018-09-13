@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using A9N.FlexTimeMonitor.Properties;
+using A9N.FlexTimeMonitor.WorkHistory;
 
 namespace A9N.FlexTimeMonitor.ViewModels
 {

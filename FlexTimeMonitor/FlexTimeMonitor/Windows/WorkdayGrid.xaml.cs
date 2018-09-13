@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.ViewModels;
+using A9N.FlexTimeMonitor.WorkHistory;
 
 namespace A9N.FlexTimeMonitor.Windows
 {
@@ -22,14 +23,14 @@ namespace A9N.FlexTimeMonitor.Windows
     /// </summary>
     public partial class WorkdayGrid : UserControl
     {
-        private WorkHistory _dataSource;
+        private WorkHistory.WorkHistory _dataSource;
 
         public WorkdayGrid()
         {
             InitializeComponent();
         }
 
-        public WorkHistory ItemsSource
+        public WorkHistory.WorkHistory ItemsSource
         {
             get => _dataSource;
             set

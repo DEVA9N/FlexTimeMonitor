@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Properties;
 
-namespace A9N.FlexTimeMonitor
+namespace A9N.FlexTimeMonitor.WorkHistory
 {
     /// <summary>
     /// This class reads and writes objects to history files.
@@ -85,12 +86,12 @@ namespace A9N.FlexTimeMonitor
             {
                 // It is still possible that the data is invalid and an exception is thrown.
                 // This is good though! The other classes should get an option to handle the error.
-                History = Read<WorkHistory>(_fileName);
+                History = Read<FlexTimeMonitor.WorkHistory.WorkHistory>(_fileName);
             }
             else
             {
                 // No previous history so create a new one
-                History = new WorkHistory();
+                History = new FlexTimeMonitor.WorkHistory.WorkHistory();
             }
 
             // Add the current day as new item 
@@ -120,7 +121,7 @@ namespace A9N.FlexTimeMonitor
             Save(this.History, _fileName);
         }
 
-        private static void Save(WorkHistory history, String fileName)
+        private static void Save(FlexTimeMonitor.WorkHistory.WorkHistory history, String fileName)
         {
             FileInfo info = new FileInfo(fileName);
 
@@ -145,6 +146,6 @@ namespace A9N.FlexTimeMonitor
         /// Gets the history.
         /// </summary>
         /// <value>The history.</value>
-        public WorkHistory History { get; private set; }
+        public FlexTimeMonitor.WorkHistory.WorkHistory History { get; private set; }
     }
 }

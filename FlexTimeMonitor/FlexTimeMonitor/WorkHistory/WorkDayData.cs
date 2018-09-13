@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace A9N.FlexTimeMonitor
+namespace A9N.FlexTimeMonitor.WorkHistory
 {
     /// <summary>
     /// Class WorkDayData is a serializable class that contains all the workday related data. WorkDayData separates the

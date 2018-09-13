@@ -1,41 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
-using A9N.FlexTimeMonitor.Properties;
+using System.Threading.Tasks;
 
-namespace A9N.FlexTimeMonitor
+namespace A9N.FlexTimeMonitor.WorkHistory
 {
     public class WorkHistory : ObservableCollection<WorkDay>
     {
         private WorkDay _today;
 
-        /// <summary>
-        /// Gets today.
-        /// </summary>
         private WorkDay GetToday()
         {
             if (_today == null)
             {
-                var allTodays = from day in this
-                                where day.Date.Date == DateTime.Now.Date
-                                select day;
-
-                if (allTodays.Count() > 0)
-                {
-                    return allTodays.Last();
-                }
+                return (from day in this
+                        where day.Date.Date == DateTime.Now.Date
+                        select day).LastOrDefault();
             }
+
             return _today;
         }
 
-        /// <summary>
-        /// Gets the today.
-        /// </summary>
-        /// <value>The today.</value>
         public WorkDay Today
         {
             get
