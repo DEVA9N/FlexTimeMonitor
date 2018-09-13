@@ -111,7 +111,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MenuViewModel.cs" />
-    <Compile Include="ViewModels\StatusBarViewModel.cs" />
+    <Compile Include="ViewModels\SelectionViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
@@ -120,8 +120,8 @@
     <Compile Include="Windows\MenuView.xaml.cs">
       <DependentUpon>MenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\StatusBar.xaml.cs">
-      <DependentUpon>StatusBar.xaml</DependentUpon>
+    <Compile Include="Windows\SelectionView.xaml.cs">
+      <DependentUpon>SelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\WorkdayGrid.xaml.cs">
       <DependentUpon>WorkdayGrid.xaml</DependentUpon>
@@ -157,7 +157,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\StatusBar.xaml">
+    <Page Include="Windows\SelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

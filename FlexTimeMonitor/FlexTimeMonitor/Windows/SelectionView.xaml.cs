@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,11 +16,11 @@ using System.Windows.Shapes;
 namespace A9N.FlexTimeMonitor.Windows
 {
     /// <summary>
-    /// Interaction logic for StatusBar.xaml
+    /// Interaction logic for SelectionView.xaml
     /// </summary>
-    public partial class StatusBar : UserControl
+    public partial class SelectionView : UserControl
     {
-        public StatusBar()
+        public SelectionView()
         {
             InitializeComponent();
         }

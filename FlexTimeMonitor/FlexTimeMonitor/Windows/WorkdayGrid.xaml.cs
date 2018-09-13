@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using A9N.FlexTimeMonitor.Properties;
+using A9N.FlexTimeMonitor.ViewModels;
 
 namespace A9N.FlexTimeMonitor.Windows
 {
@@ -71,30 +73,15 @@ namespace A9N.FlexTimeMonitor.Windows
         /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
         private void dataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //TimeSpan timeOverall = TimeSpan.Zero;
-            //TimeSpan timeIntended = TimeSpan.Zero;
+            if (!(DataContext is MainViewModel mainViewModel))
+            {
+                return;
+            }
 
-            //try
-            //{
-            //    foreach (Object item in dataGridWorkDays.SelectedItems)
-            //    {
-            //        if (item is WorkDay)
-            //        {
-            //            timeOverall += ((WorkDay)item).Elapsed - Settings.Default.BreakPeriod;
-            //            timeIntended += Settings.Default.WorkPeriod;
-            //        }
-            //    }
-            //}
-            //catch (InvalidCastException x)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("Unsupported new-line-select in datagridview" + x);
-            //}
+            var selection = new SelectionViewModel(DataGridWorkDays.SelectedItems.OfType<WorkDay>());
 
-            //// Display results in status bar
-            //statusBarDayCountValue.Text = dataGridWorkDays.SelectedItems.Count.ToString();
-            //statusBarOverallValue.Text = TimeSpanExtension.ToHhmmss(timeOverall);
-            //statusBarIntendedValue.Text = TimeSpanExtension.ToHhmmss(timeIntended);
-            //statusBarDifferenceValue.Text = TimeSpanExtension.ToHhmmss(timeOverall - timeIntended);
+            mainViewModel.Selection = selection;
+            mainViewModel.SelectionPopupVisible = selection.DayCount > 1;
         }
     }
 }

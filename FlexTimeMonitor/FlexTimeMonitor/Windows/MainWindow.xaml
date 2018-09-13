@@ -8,8 +8,10 @@
         Width="1200" MinWidth="400" 
         Icon="/FlexTimeMonitor;component/Resources/performance-clock-speed.ico">
     <DockPanel>
+        <Popup IsOpen="{Binding SelectionPopupVisible}" AllowsTransparency="True" Placement="Mouse">
+            <windows:SelectionView DataContext="{Binding Selection}"/>
+        </Popup>
         <windows:MenuView DataContext="{Binding Menu}" DockPanel.Dock="Top"/>
-        <windows:StatusBar DataContext="{Binding Status}" DockPanel.Dock="Bottom"/>
-        <windows:WorkdayGrid DataContext="{Binding History}" x:Name="WorkdayGrid"/>
+        <windows:WorkdayGrid x:Name="WorkdayGrid"/>
     </DockPanel>
 </Window>

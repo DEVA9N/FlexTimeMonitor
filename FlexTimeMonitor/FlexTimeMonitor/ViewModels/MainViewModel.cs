@@ -12,15 +12,15 @@ namespace A9N.FlexTimeMonitor.ViewModels
     {
         private readonly WorkHistoryFile _historyFile;
 
+        public bool SelectionPopupVisible { get; set; }
         public WorkHistory History { get; private set; }
         public MenuViewModel Menu { get; }
-        public StatusBarViewModel Status { get; }
+        public SelectionViewModel Selection { get; set; }
 
         public MainViewModel(MainWindow window)
         {
             _historyFile = new WorkHistoryFile();
 
-            Status = new StatusBarViewModel();
             Menu = new MenuViewModel(window);
             OpenHistory();
         }
