@@ -87,17 +87,13 @@ namespace A9N.FlexTimeMonitor.Work
                 // It is still possible that the data is invalid and an exception is thrown.
                 // This is good though! The other classes should get an option to handle the error.
                 History = Read<WorkHistory>(_fileName);
+                History.AddToday();
             }
             else
             {
                 // No previous history so create a new one
                 History = new WorkHistory();
-            }
-
-            // Add the current day as new item 
-            if (History.Today == null)
-            {
-                History.Today = new WorkDay();
+                History.AddToday();
             }
 
             try

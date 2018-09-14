@@ -66,6 +66,8 @@ namespace A9N.FlexTimeMonitor.Windows
             try
             {
                 (DataContext as MainViewModel)?.OpenHistory();
+
+                WorkdayGrid.SortByDateDescending();
             }
             catch (Exception e)
             {

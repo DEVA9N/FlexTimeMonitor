@@ -28,7 +28,7 @@
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" MinWidth="80" SortDirection="Descending">
+            <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="Date of the workday." />
