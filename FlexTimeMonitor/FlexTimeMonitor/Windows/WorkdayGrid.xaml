@@ -7,13 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DataGrid AutoGenerateColumns="False" 
-              ItemsSource="{Binding .}"    
+              ItemsSource="{Binding History}"    
               Name="DataGridWorkDays" 
-              GridLinesVisibility="All" 
-              SelectionChanged="dataGridWorkDays_SelectionChanged" 
+              GridLinesVisibility="None" 
+              SelectionChanged="DataGridWorkDays_SelectionChanged" 
               IsReadOnly="False"
-              CanUserAddRows="False" 
-              DataContext="{Binding History}">
+              CanUserAddRows="False" >
         <DataGrid.Columns>
             <DataGridTextColumn Header="Week"  Binding="{Binding WeekOfYear}" IsReadOnly="True" MinWidth="20">
                 <DataGridTextColumn.HeaderStyle>

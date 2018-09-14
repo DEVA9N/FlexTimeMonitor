@@ -43,7 +43,7 @@ namespace A9N.FlexTimeMonitor.Windows
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
-        private void dataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!(DataContext is MainViewModel mainViewModel))
             {
