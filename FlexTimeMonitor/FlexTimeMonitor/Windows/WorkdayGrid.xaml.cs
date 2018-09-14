@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.ViewModels;
-using A9N.FlexTimeMonitor.Work;
+using A9N.FlexTimeMonitor.WorkHistory;
 
 namespace A9N.FlexTimeMonitor.Windows
 {
@@ -23,9 +23,43 @@ namespace A9N.FlexTimeMonitor.Windows
     /// </summary>
     public partial class WorkdayGrid : UserControl
     {
+        private WorkHistory.WorkHistory _dataSource;
+
         public WorkdayGrid()
         {
             InitializeComponent();
+        }
+
+        public WorkHistory.WorkHistory ItemsSource
+        {
+            get => _dataSource;
+            set
+            {
+                _dataSource = value;
+
+                DataGridWorkDays.ItemsSource = value;
+
+                // Set focus on last item
+                if (DataGridWorkDays.Items.Count > 0)
+                {
+                    DataGridWorkDays.UpdateLayout();
+                    DataGridWorkDays.ScrollIntoView(DataGridWorkDays.Items[DataGridWorkDays.Items.Count - 1]);
+                }
+            }
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+
+            try
+            {
+                this.DataGridWorkDays.Items.Refresh();
+            }
+            catch (InvalidOperationException)
+            {
+                // This exception occurs if the cell of an edited item has not been left before putting this app to tray.
+            }
         }
 
         public void CommitChanges()

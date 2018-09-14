@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.ViewModels;
-using A9N.FlexTimeMonitor.Work;
+using A9N.FlexTimeMonitor.WorkHistory;
 
 namespace A9N.FlexTimeMonitor.Windows
 {

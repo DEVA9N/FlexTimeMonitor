@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using A9N.FlexTimeMonitor.Windows;
-using A9N.FlexTimeMonitor.Work;
+using A9N.FlexTimeMonitor.WorkHistory;
 
 namespace A9N.FlexTimeMonitor.ViewModels
 {
@@ -14,7 +14,7 @@ namespace A9N.FlexTimeMonitor.ViewModels
         private readonly WorkHistoryFile _historyFile;
 
         public bool SelectionPopupVisible { get; set; }
-        public Work.WorkHistory History { get; private set; }
+        public WorkHistory.WorkHistory History { get; private set; }
         public MenuViewModel Menu { get; }
         public SelectionViewModel Selection { get; set; }
 
