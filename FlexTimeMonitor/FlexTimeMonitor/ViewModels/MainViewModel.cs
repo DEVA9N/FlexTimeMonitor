@@ -14,7 +14,7 @@ namespace A9N.FlexTimeMonitor.ViewModels
         private readonly WorkHistoryFile _historyFile;
 
         public bool SelectionPopupVisible { get; set; }
-        public Work.WorkHistory History { get; private set; }
+        public WorkHistory History { get; private set; }
         public MenuViewModel Menu { get; }
         public SelectionViewModel Selection { get; set; }
 
