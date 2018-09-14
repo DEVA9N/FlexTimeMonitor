@@ -132,8 +132,8 @@ namespace A9N.FlexTimeMonitor.Work
             }
 
             // Set the end of today
-            history.Today.End = DateTime.Now.TimeOfDay;
-
+            history.Today.UpdateEnd();
+            
             // Save the file
             Write(fileName, history);
         }
