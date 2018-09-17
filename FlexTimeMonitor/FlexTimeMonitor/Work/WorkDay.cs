@@ -109,20 +109,15 @@ namespace A9N.FlexTimeMonitor.Work
         [XmlIgnore]
         public TimeSpan End
         {
-            get => IsToday ? DateTime.Now.TimeOfDay : Data.End.TimeOfDay;
+            get => Data.End.TimeOfDay;
+            set => Data.End = ConvertToDateTime(value);
         }
 
-        // When using PropertyChanged.Fody the property is not reliably set
-        internal void UpdateEnd()
-        {
-            Data.End = ConvertToDateTime(DateTime.Now.TimeOfDay);
-        }
-
-        /// <summary>
-        /// The difference between Difference and the complete workday (including break period)
-        /// </summary>
-        /// <value>The over time.</value>
-        [XmlIgnore]
+    /// <summary>
+    /// The difference between Difference and the complete workday (including break period)
+    /// </summary>
+    /// <value>The over time.</value>
+    [XmlIgnore]
         public TimeSpan OverTime => Elapsed - (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
 
         /// <summary>
