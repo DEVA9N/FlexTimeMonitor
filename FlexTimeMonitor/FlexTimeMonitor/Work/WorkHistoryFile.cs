@@ -34,15 +34,16 @@ namespace A9N.FlexTimeMonitor.Work
         /// <returns>``0.</returns>
         private T Read<T>(String fileName)
         {
-            if (File.Exists(fileName))
+            if (!File.Exists(fileName))
             {
-                using (XmlReader reader = XmlReader.Create(fileName))
-                {
-                    XmlSerializer x = new XmlSerializer(typeof(T));
-                    return (T)x.Deserialize(reader);
-                }
+                return default(T);
             }
-            return default(T);
+
+            using (var reader = new XmlTextReader(fileName))
+            {
+                var x = new XmlSerializer(typeof(T));
+                return (T)x.Deserialize(reader);
+            }
         }
 
         /// <summary>
@@ -52,15 +53,10 @@ namespace A9N.FlexTimeMonitor.Work
         /// <param name="output">The output.</param>
         private static void Write(String fileName, Object output)
         {
-            StringBuilder builder = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(builder))
+            using (var xmlWriter = new XmlTextWriter(fileName, Encoding.UTF8) { Formatting = Formatting.Indented })
             {
-                XmlSerializer serializer = new XmlSerializer(output.GetType());
-                serializer.Serialize(writer, output);
-
-                XmlDocument outputDocument = new XmlDocument();
-                outputDocument.LoadXml(builder.ToString());
-                outputDocument.Save(fileName);
+                var serializer = new XmlSerializer(output.GetType());
+                serializer.Serialize(xmlWriter, output);
             }
         }
 
@@ -133,7 +129,7 @@ namespace A9N.FlexTimeMonitor.Work
 
             // Set the end of today
             history.Today.End = DateTime.Now.TimeOfDay;
-            
+
             // Save the file
             Write(fileName, history);
         }
