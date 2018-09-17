@@ -138,7 +138,9 @@ namespace A9N.FlexTimeMonitor.Work
         /// </summary>
         /// <value>The elapsed.</value>
         [XmlIgnore]
-        public TimeSpan Elapsed => End - Start + Discrepancy;
+        public TimeSpan Elapsed => IsToday 
+            ? DateTime.Now.TimeOfDay - Start + Discrepancy
+            : End - Start + Discrepancy;
 
         /// <summary>
         /// Estimated end time
