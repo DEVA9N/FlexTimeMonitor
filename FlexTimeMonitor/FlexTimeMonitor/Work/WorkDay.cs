@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Properties;
 
 namespace A9N.FlexTimeMonitor.Work
@@ -14,8 +15,6 @@ namespace A9N.FlexTimeMonitor.Work
     /// </summary>
     public sealed class WorkDay : INotifyPropertyChanged
     {
-        private int _weekNumber;
-
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
@@ -34,25 +33,15 @@ namespace A9N.FlexTimeMonitor.Work
             };
         }
 
-        /// <summary>
-        /// Converts the TimeSpan to a DateTime instance for the current workday.
-        /// </summary>
-        /// <remarks>
-        /// This methods is a workaround that solves the problems that TimeSpans that are entered in the grid view by
-        /// the user do not contain a proper date component. In order to store a DateTime that matches the current
-        /// date of the workday this method takes Date to create a valid DateTime object.
-        /// 
-        /// BTW: for DateTime objects that are entered in the grid view there is another issue. If only the time is 
-        /// entered the DateTime object will always use the date of today. It makes it impossible to alter old times
-        /// from the history without making the date invalid.
-        /// </remarks>
-        /// <param name="time">The time.</param>
-        /// <returns>DateTime.</returns>
-        private DateTime ConvertToDateTime(TimeSpan time)
+        public void UpdateEnd()
         {
-            return new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, time.Hours, time.Minutes, time.Seconds);
-        }
+            if (!IsToday)
+            {
+                return;
+            }
 
+            Data.End = DateTime.Now;
+        }
 
         /// <summary>
         /// Gets or sets the data object that stores the workday data.
@@ -72,52 +61,24 @@ namespace A9N.FlexTimeMonitor.Work
         }
 
         /// <summary>
-        /// Gets the week number.
-        /// </summary>
-        /// <value>The week number.</value>
-        [XmlIgnore]
-        public int WeekOfYear
-        {
-            get
-            {
-                if (_weekNumber == 0)
-                {
-                    var calendar = System.Globalization.DateTimeFormatInfo.CurrentInfo?.Calendar;
-
-                    _weekNumber = calendar?.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday) ?? 0;
-                }
-
-                return _weekNumber;
-            }
-        }
-
-        /// <summary>
         /// Start time
         /// </summary>
         /// <value>The start.</value>
         [XmlIgnore]
-        public TimeSpan Start
-        {
-            get => Data.Start.TimeOfDay;
-            set => Data.Start = ConvertToDateTime(value);
-        }
+        public TimeSpan Start => Data.Start.TimeOfDay;
 
         /// <summary>
         /// End time
         /// </summary>
         /// <value>The end.</value>
         [XmlIgnore]
-        public TimeSpan End
-        {
-            get => Data.End.TimeOfDay;
-            set => Data.End = ConvertToDateTime(value);
-        }
+        public TimeSpan End => IsToday ? DateTime.Now.TimeOfDay : Data.End.TimeOfDay;
 
-    /// <summary>
-    /// The difference between Difference and the complete workday (including break period)
-    /// </summary>
-    /// <value>The over time.</value>
-    [XmlIgnore]
+        /// <summary>
+        /// The difference between Difference and the complete workday (including break period)
+        /// </summary>
+        /// <value>The over time.</value>
+        [XmlIgnore]
         public TimeSpan OverTime => Elapsed - (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
 
         /// <summary>
@@ -130,7 +91,7 @@ namespace A9N.FlexTimeMonitor.Work
         public TimeSpan Discrepancy
         {
             get => Data.Discrepancy.TimeOfDay;
-            set => Data.Discrepancy = ConvertToDateTime(value);
+            set => Data.Discrepancy = new DateTime(Date.Year, Date.Month, Date.Day, value.Hours, value.Minutes, value.Seconds);
         }
 
         /// <summary>
@@ -138,7 +99,7 @@ namespace A9N.FlexTimeMonitor.Work
         /// </summary>
         /// <value>The elapsed.</value>
         [XmlIgnore]
-        public TimeSpan Elapsed => IsToday 
+        public TimeSpan Elapsed => IsToday
             ? DateTime.Now.TimeOfDay - Start + Discrepancy
             : End - Start + Discrepancy;
 
@@ -185,9 +146,12 @@ namespace A9N.FlexTimeMonitor.Work
         {
             get
             {
-                if (WeekOfYear > 0)
+                var calendar = System.Globalization.DateTimeFormatInfo.CurrentInfo?.Calendar;
+                var weekNumber = calendar?.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday) ?? 0;
+
+                if (weekNumber > 0)
                 {
-                    return WeekOfYear % 2 > 0;
+                    return weekNumber % 2 > 0;
                 }
 
                 return true;
@@ -218,5 +182,6 @@ namespace A9N.FlexTimeMonitor.Work
         /// <value>The over time string.</value>
         [XmlIgnore]
         public String OverTimeString => TimeSpanExtension.ToHhmmss(OverTime);
+
     }
 }

@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using A9N.FlexTimeMonitor.Helper;
+using A9N.FlexTimeMonitor.Registry;
 
 namespace A9N.FlexTimeMonitor
 {

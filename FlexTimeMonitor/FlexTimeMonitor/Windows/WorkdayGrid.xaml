@@ -14,19 +14,17 @@
               IsReadOnly="False"
               CanUserAddRows="False" >
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Week"  Binding="{Binding WeekOfYear}" IsReadOnly="True" MinWidth="20">
-                <DataGridTextColumn.HeaderStyle>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="ToolTip" Value="Week number." />
-                    </Style>
-                </DataGridTextColumn.HeaderStyle>
-            </DataGridTextColumn>
             <DataGridTextColumn Header="Day"  Binding="{Binding Date.DayOfWeek}" IsReadOnly="True" MinWidth="80">
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="Day of week." />
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
@@ -34,6 +32,11 @@
                         <Setter Property="ToolTip" Value="Date of the workday." />
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Start"  Binding="{Binding Start, StringFormat=hh\\:mm\\:ss}" IsReadOnly="False" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
@@ -41,6 +44,11 @@
                         <Setter Property="ToolTip" Value="Start time." />
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat=hh\\:mm\\:ss}" IsReadOnly="False" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
@@ -48,6 +56,11 @@
                         <Setter Property="ToolTip" Value="End time." />
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Discrepancy"  Binding="{Binding Discrepancy}" IsReadOnly="false" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
@@ -55,13 +68,23 @@
                         <Setter Property="ToolTip" Value="Discrepancy is a positive or negative time offset that is taken into account when calculating the total workday time. For example a skipped lunch break can be set by +1h or a doctor's appointment can be set by -1h." />
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Overtime"  Binding="{Binding OverTimeString}" IsReadOnly="True" MinWidth="80" >
+            <DataGridTextColumn Header="Overtime" Binding="{Binding OverTimeString}" IsReadOnly="True" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="The overall work period. The value is positive if you worked longer than necessary and negative if you left too early." />
                     </Style>
                 </DataGridTextColumn.HeaderStyle>
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Note"  Binding="{Binding Note}" MinWidth="200" Width="*" >
                 <DataGridTextColumn.HeaderStyle>

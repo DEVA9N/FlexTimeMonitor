@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.ViewModels;
 using A9N.FlexTimeMonitor.Work;
