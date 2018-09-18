@@ -36,7 +36,7 @@ namespace A9N.FlexTimeMonitor.Windows
 
         public void SortByDateDescending()
         {
-            SortDataGrid(DataGridWorkDays, 2, ListSortDirection.Descending);
+            SortDataGrid(DataGridWorkDays, 1, ListSortDirection.Descending);
         }
 
         public static void SortDataGrid(DataGrid dataGrid, int columnIndex = 0, ListSortDirection sortDirection = ListSortDirection.Ascending)
