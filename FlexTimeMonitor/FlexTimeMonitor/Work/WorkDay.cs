@@ -65,7 +65,11 @@ namespace A9N.FlexTimeMonitor.Work
         /// </summary>
         /// <value>The start.</value>
         [XmlIgnore]
-        public TimeSpan Start => Data.Start.TimeOfDay;
+        public TimeSpan Start
+        {
+            get => Data.Start.TimeOfDay;
+            set => Data.Start = new DateTime(Data.Start.Year, Data.Start.Month, Data.Start.Day, value.Hours, value.Minutes, value.Seconds);
+        }
 
         /// <summary>
         /// End time

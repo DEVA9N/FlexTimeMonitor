@@ -14,7 +14,7 @@
               IsReadOnly="False"
               CanUserAddRows="False" >
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Day"  Binding="{Binding Date.DayOfWeek}" IsReadOnly="True" MinWidth="80">
+            <DataGridTextColumn Header="Day"  Binding="{Binding Date.DayOfWeek, Mode=OneWay}" IsReadOnly="True" MinWidth="80">
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="Day of week." />
@@ -26,7 +26,7 @@
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" MinWidth="80" >
+            <DataGridTextColumn Header="Date"  Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}, Mode=OneWay}" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="Date of the workday." />
@@ -50,7 +50,7 @@
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat=hh\\:mm\\:ss}" IsReadOnly="False" MinWidth="80" >
+            <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat=hh\\:mm\\:ss, Mode=OneWay}" IsReadOnly="False" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="End time." />
@@ -74,7 +74,7 @@
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Overtime" Binding="{Binding OverTimeString}" IsReadOnly="True" MinWidth="80" >
+            <DataGridTextColumn Header="Overtime" Binding="{Binding OverTimeString, Mode=OneWay}" IsReadOnly="True" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="The overall work period. The value is positive if you worked longer than necessary and negative if you left too early." />
