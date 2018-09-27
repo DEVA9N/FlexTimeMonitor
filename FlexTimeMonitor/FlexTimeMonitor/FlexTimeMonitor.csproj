@@ -33,7 +33,7 @@
     <ErrorReportUrl>http://a9n.de</ErrorReportUrl>
     <ProductName>FlexTimeMonitor</ProductName>
     <PublisherName>A9N</PublisherName>
-    <ApplicationRevision>67</ApplicationRevision>
+    <ApplicationRevision>68</ApplicationRevision>
     <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
