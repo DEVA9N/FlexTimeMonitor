@@ -27,5 +27,11 @@ namespace A9N.FlexTimeMonitor.Extensions
             return $"{noMilliseconds:c}";
         }
 
+        public static DateTime ToDateTime(this TimeSpan t, DateTime date)
+        {
+            // TimeSpan does not keep track of the date - that's why 'date' is required
+            return new DateTime(date.Year, date.Month, date.Day, t.Hours, t.Minutes, t.Seconds);
+        }
+
     }
 }

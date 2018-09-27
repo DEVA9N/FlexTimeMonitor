@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Properties;
+using PropertyChanged;
 
 namespace A9N.FlexTimeMonitor.Work
 {
@@ -31,16 +32,6 @@ namespace A9N.FlexTimeMonitor.Work
                 Start = DateTime.Now,
                 End = DateTime.Now
             };
-        }
-
-        public void UpdateEnd()
-        {
-            if (!IsToday)
-            {
-                return;
-            }
-
-            Data.End = DateTime.Now;
         }
 
         /// <summary>
@@ -68,7 +59,7 @@ namespace A9N.FlexTimeMonitor.Work
         public TimeSpan Start
         {
             get => Data.Start.TimeOfDay;
-            set => Data.Start = new DateTime(Data.Start.Year, Data.Start.Month, Data.Start.Day, value.Hours, value.Minutes, value.Seconds);
+            set => Data.Start = value.ToDateTime(Data.Start);
         }
 
         /// <summary>
@@ -76,7 +67,13 @@ namespace A9N.FlexTimeMonitor.Work
         /// </summary>
         /// <value>The end.</value>
         [XmlIgnore]
-        public TimeSpan End => IsToday ? DateTime.Now.TimeOfDay : Data.End.TimeOfDay;
+        [DoNotCheckEquality]
+        [DoNotSetChanged]
+        public TimeSpan End
+        {
+            get => IsToday ? DateTime.Now.TimeOfDay : Data.End.TimeOfDay;
+            set => Data.End = value.ToDateTime(Data.End);
+        }
 
         /// <summary>
         /// The difference between Difference and the complete workday (including break period)
@@ -95,7 +92,7 @@ namespace A9N.FlexTimeMonitor.Work
         public TimeSpan Discrepancy
         {
             get => Data.Discrepancy.TimeOfDay;
-            set => Data.Discrepancy = new DateTime(Date.Year, Date.Month, Date.Day, value.Hours, value.Minutes, value.Seconds);
+            set => Data.Discrepancy = value.ToDateTime(Date);
         }
 
         /// <summary>

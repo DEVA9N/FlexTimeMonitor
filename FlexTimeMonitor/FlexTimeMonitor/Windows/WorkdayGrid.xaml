@@ -50,7 +50,7 @@
                     </Style>
                 </DataGridTextColumn.ElementStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat=hh\\:mm\\:ss, Mode=OneWay}" IsReadOnly="False" MinWidth="80" >
+            <DataGridTextColumn Header="End"  Binding="{Binding End, StringFormat=hh\\:mm\\:ss}" IsReadOnly="False" MinWidth="80" >
                 <DataGridTextColumn.HeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="ToolTip" Value="End time." />
