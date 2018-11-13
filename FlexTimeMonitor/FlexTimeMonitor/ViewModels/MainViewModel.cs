@@ -33,7 +33,7 @@ namespace A9N.FlexTimeMonitor.ViewModels
 
         internal void SaveHistory()
         {
-            _historyFile?.Save();
+            _historyFile.Save();
         }
 
     }

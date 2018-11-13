@@ -9,9 +9,7 @@ namespace A9N.FlexTimeMonitor.Work
 {
     public class WorkHistory : ObservableCollection<WorkDay>
     {
-        public WorkDay Today => GetToday();
-
-        private WorkDay GetToday()
+        public WorkDay GetToday()
         {
             return (from day in this
                     where day.Date.Date == DateTime.Now.Date

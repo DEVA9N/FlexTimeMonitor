@@ -78,19 +78,10 @@ namespace A9N.FlexTimeMonitor.Work
         /// <returns>valid history data</returns>
         public void Load()
         {
-            if (File.Exists(_fileName))
-            {
-                // It is still possible that the data is invalid and an exception is thrown.
-                // This is good though! The other classes should get an option to handle the error.
-                History = Read<WorkHistory>(_fileName);
-                History.AddToday();
-            }
-            else
-            {
-                // No previous history so create a new one
-                History = new WorkHistory();
-                History.AddToday();
-            }
+            // It is still possible that the data is invalid and an exception is thrown.
+            // This is good though! The other classes should get an option to handle the error.
+            History = File.Exists(_fileName) ? Read<WorkHistory>(_fileName) : new WorkHistory();         
+            History.AddToday();
 
             try
             {
@@ -128,7 +119,7 @@ namespace A9N.FlexTimeMonitor.Work
             }
 
             // Set the end of today
-            history.Today.End = DateTime.Now.TimeOfDay;
+            history.GetToday().End = DateTime.Now.TimeOfDay;
 
             // Save the file
             Write(fileName, history);

@@ -127,7 +127,7 @@ namespace A9N.FlexTimeMonitor.Windows
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void notificationIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            var today = (DataContext as MainViewModel)?.History.Today;
+            var today = (DataContext as MainViewModel)?.History.GetToday();
 
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
@@ -203,6 +203,10 @@ namespace A9N.FlexTimeMonitor.Windows
                         e.Cancel = false;
                         break;
                 }
+            }
+            else
+            {
+                SaveSilent();
             }
         }
     }

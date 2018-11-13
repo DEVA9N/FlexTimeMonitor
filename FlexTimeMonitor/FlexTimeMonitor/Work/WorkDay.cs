@@ -67,11 +67,9 @@ namespace A9N.FlexTimeMonitor.Work
         /// </summary>
         /// <value>The end.</value>
         [XmlIgnore]
-        [DoNotCheckEquality]
-        [DoNotSetChanged]
         public TimeSpan End
         {
-            get => IsToday ? DateTime.Now.TimeOfDay : Data.End.TimeOfDay;
+            get => Data.End.TimeOfDay;
             set => Data.End = value.ToDateTime(Data.End);
         }
 
