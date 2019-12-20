@@ -3,11 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:A9N.FlexTimeMonitor.Windows"
              Height="160" MinHeight="160" MaxHeight="160"
              Width="250" MinWidth="200"
              mc:Ignorable="d" >
     <Grid Background="#A0A0A0A0">
+        <Grid.Resources>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
@@ -18,13 +29,13 @@
             <ColumnDefinition Width="80"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Count" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" Height="26" Width="42" Foreground="White"/>
-        <Label Content="Overall" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Height="26" Width="47" Foreground="White"/>
-        <Label Content="Intended" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Height="26" Width="58" Foreground="White"/>
-        <Label Content="Difference" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Height="26" Width="64" Foreground="White"/>
-        <TextBox Height="23" Margin="10,10,10,0" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Text="{Binding DayCount}" VerticalAlignment="Top" IsReadOnly="True" Background="Transparent"  BorderBrush="Transparent" Foreground="White"/>
-        <TextBox Height="23" Margin="10,10,10,0" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Overall}" VerticalAlignment="Top" IsReadOnly="True" Background="Transparent"  BorderBrush="Transparent" Foreground="White"/>
-        <TextBox Height="23" Margin="10,10,10,0" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Intended}" VerticalAlignment="Top" IsReadOnly="True" Background="Transparent"  BorderBrush="Transparent" Foreground="White"/>
-        <TextBox Height="23" Margin="10,10,10,0" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Difference}" VerticalAlignment="Top" IsReadOnly="True" Background="Transparent" BorderBrush="Transparent" Foreground="White"/>
+        <Label Content="Count" Grid.Row="0" Grid.Column="0" />
+        <Label Content="Overall" Grid.Row="1" Grid.Column="0" />
+        <Label Content="Intended" Grid.Row="2" Grid.Column="0" />
+        <Label Content="Difference" Grid.Row="3" Grid.Column="0" />
+        <TextBlock Text="{Binding DayCount}" Grid.Row="0" Grid.Column="1" />
+        <TextBlock Text="{Binding Overall}" Grid.Row="1" Grid.Column="1" />
+        <TextBlock Text="{Binding Intended}" Grid.Row="2" Grid.Column="1" />
+        <TextBlock Text="{Binding Difference}" Grid.Row="3" Grid.Column="1" />
     </Grid>
 </UserControl>
