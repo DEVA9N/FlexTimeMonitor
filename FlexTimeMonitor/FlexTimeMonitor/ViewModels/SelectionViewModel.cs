@@ -24,9 +24,9 @@ namespace A9N.FlexTimeMonitor.ViewModels
             var timeIntended = CalculateIntended(workDaysList);
 
             DayCount = workDaysList.Count;
-            Overall = timeOverall.ToHhmmss();
-            Intended = timeIntended.ToHhmmss();
-            Difference = (timeOverall - timeIntended).ToHhmmss();
+            Overall = timeOverall.ToTotalHhmmss();
+            Intended = timeIntended.ToTotalHhmmss();
+            Difference = (timeOverall - timeIntended).ToTotalHhmmss();
         }
 
         private static TimeSpan CalculateOverall(List<WorkDay> workDays)

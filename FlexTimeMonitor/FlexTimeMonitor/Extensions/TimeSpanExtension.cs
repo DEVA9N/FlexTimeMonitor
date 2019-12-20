@@ -27,6 +27,12 @@ namespace A9N.FlexTimeMonitor.Extensions
             return $"{noMilliseconds:c}";
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static String ToTotalHhmmss(this TimeSpan t)
+        {
+            return $"{t.TotalHours:N0}:{t.Minutes}:{t.Seconds}";
+        }
+
         public static DateTime ToDateTime(this TimeSpan t, DateTime date)
         {
             // TimeSpan does not keep track of the date - that's why 'date' is required
