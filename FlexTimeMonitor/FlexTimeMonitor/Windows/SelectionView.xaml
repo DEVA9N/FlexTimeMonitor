@@ -4,19 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Height="160" MinHeight="160" MaxHeight="160"
-             Width="250" MinWidth="200"
+             Width="250" MinWidth="200" MaxWidth="200"
              mc:Ignorable="d" >
-    <Grid Background="#A0A0A0A0">
+    <Grid Background="#F0A0A0A0">
         <Grid.Resources>
             <Style TargetType="Label">
                 <Setter Property="Foreground" Value="White"/>
-                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10,0,5,0"/>
             </Style>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5,0,10,0"/>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>

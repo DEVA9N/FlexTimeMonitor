@@ -30,7 +30,15 @@ namespace A9N.FlexTimeMonitor.Extensions
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static String ToTotalHhmmss(this TimeSpan t)
         {
-            return $"{t.TotalHours:N0}:{t.Minutes}:{t.Seconds}";
+            if (t.Ticks < 0)
+            {
+                // Create positive representation
+                t = t.Duration();
+
+                return $"-{Math.Floor(t.TotalHours):N0}:{t.Minutes}:{t.Seconds}";
+            }
+
+            return $"{Math.Floor(t.TotalHours):N0}:{Math.Abs(t.Minutes)}:{Math.Abs(t.Seconds)}";
         }
 
         public static DateTime ToDateTime(this TimeSpan t, DateTime date)
