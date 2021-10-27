@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using A9N.FlexTimeMonitor.Extensions;
+using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.Work;
 
-namespace A9N.FlexTimeMonitor.ViewModels
+namespace A9N.FlexTimeMonitor.Views
 {
-    internal class SelectionViewModel : ViewModelBase
+    internal class SelectionViewModel : ViewModel
     {
         public int DayCount { get; set; }
         public String Overall { get; set; }

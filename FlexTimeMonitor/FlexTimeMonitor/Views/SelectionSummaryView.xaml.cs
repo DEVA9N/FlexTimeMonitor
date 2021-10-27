@@ -18,9 +18,9 @@ namespace A9N.FlexTimeMonitor.Windows
     /// <summary>
     /// Interaction logic for SelectionView.xaml
     /// </summary>
-    public partial class SelectionView : UserControl
+    public partial class SelectionSummaryView : UserControl
     {
-        public SelectionView()
+        public SelectionSummaryView()
         {
             InitializeComponent();
         }

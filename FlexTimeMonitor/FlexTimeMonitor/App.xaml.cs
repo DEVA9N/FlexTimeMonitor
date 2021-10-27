@@ -7,7 +7,7 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
-using A9N.FlexTimeMonitor.Windows;
+using A9N.FlexTimeMonitor;
 
 namespace FlexTimeMonitor
 {
@@ -88,7 +88,7 @@ namespace FlexTimeMonitor
         {
             base.OnSessionEnding(e);
 
-            if (MainWindow is MainWindow flexTimeWindow)
+            if (MainWindow is MainView flexTimeWindow)
             {
                 flexTimeWindow.ShowSaveDialog = false;
             }

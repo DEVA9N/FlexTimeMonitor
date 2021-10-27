@@ -1,0 +1,18 @@
+﻿<Window x:Class="A9N.FlexTimeMonitor.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:p="clr-namespace:A9N.FlexTimeMonitor.Properties"
+        xmlns:windows="clr-namespace:A9N.FlexTimeMonitor.Windows"
+        xmlns:menus="clr-namespace:A9N.FlexTimeMonitor.Menus"
+        Title="Flex Time Monitor" 
+        Height="800" MinHeight="300" 
+        Width="1200" MinWidth="400" 
+        Icon="/FlexTimeMonitor;component/Resources/performance-clock-speed.ico">
+    <DockPanel>
+        <Popup IsOpen="{Binding SelectionPopupVisible}" AllowsTransparency="True" Placement="MousePoint" HorizontalOffset="20" VerticalOffset="20">
+            <windows:SelectionSummaryView DataContext="{Binding Selection}"/>
+        </Popup>
+        <menus:MenuView DataContext="{Binding Menu}" DockPanel.Dock="Top"/>
+        <windows:WorkdayGrid x:Name="WorkdayGrid"/>
+    </DockPanel>
+</Window>

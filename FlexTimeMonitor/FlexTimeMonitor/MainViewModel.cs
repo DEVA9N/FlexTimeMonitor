@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using A9N.FlexTimeMonitor.Windows;
+﻿using A9N.FlexTimeMonitor.Mvvm;
+using A9N.FlexTimeMonitor.Views;
 using A9N.FlexTimeMonitor.Work;
 
-namespace A9N.FlexTimeMonitor.ViewModels
+namespace A9N.FlexTimeMonitor
 {
-    internal sealed class MainViewModel : ViewModelBase
+    internal sealed class MainViewModel : ViewModel
     {
         private readonly WorkHistoryFile _historyFile;
 
@@ -18,7 +13,7 @@ namespace A9N.FlexTimeMonitor.ViewModels
         public MenuViewModel Menu { get; }
         public SelectionViewModel Selection { get; set; }
 
-        public MainViewModel(MainWindow window)
+        public MainViewModel(MainView window)
         {
             _historyFile = new WorkHistoryFile();
 
