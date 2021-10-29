@@ -25,7 +25,7 @@ namespace A9N.FlexTimeMonitor.Views
         {
             return new RelayCommand(() =>
             {
-                var about = new AboutWindow
+                var about = new AboutDialog()
                 {
                     Owner = owner,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
@@ -38,7 +38,7 @@ namespace A9N.FlexTimeMonitor.Views
         {
             return new RelayCommand(() =>
             {
-                var options = new OptionsWindow
+                var options = new OptionsDialog()
                 {
                     Owner = owner,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner

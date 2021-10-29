@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="A9N.FlexTimeMonitor.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:A9N.FlexTimeMonitor.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:AboutViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel>
+        <Label Content="{Binding Title}" FontSize="20" FontWeight="Bold"/>
+        <Label Content="{Binding Version}"/>
+        <Label Content="{Binding Copyright}"/>
+        <Label Content="{Binding Description}"/>
+    </StackPanel>
+</UserControl>

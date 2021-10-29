@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace A9N.FlexTimeMonitor.Windows
+namespace A9N.FlexTimeMonitor.Views
 {
     /// <summary>
-    /// Interaction logic for SelectionView.xaml
+    /// Interaction logic for OptionsView.xaml
     /// </summary>
-    public partial class SelectionSummaryView : UserControl
+    public partial class OptionsView : UserControl
     {
-        public SelectionSummaryView()
+        public OptionsView()
         {
             InitializeComponent();
         }

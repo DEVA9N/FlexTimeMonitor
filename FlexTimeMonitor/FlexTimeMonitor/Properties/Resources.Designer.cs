@@ -19,7 +19,7 @@ namespace A9N.FlexTimeMonitor.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -125,51 +125,6 @@ namespace A9N.FlexTimeMonitor.Properties {
         internal static string Status_ErrorLoadingHistory {
             get {
                 return ResourceManager.GetString("Status_ErrorLoadingHistory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string ToolTip_Date {
-            get {
-                return ResourceManager.GetString("ToolTip_Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string ToolTip_Discrepancy {
-            get {
-                return ResourceManager.GetString("ToolTip_Discrepancy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string ToolTip_End {
-            get {
-                return ResourceManager.GetString("ToolTip_End", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string ToolTip_Overtime {
-            get {
-                return ResourceManager.GetString("ToolTip_Overtime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string ToolTip_Start {
-            get {
-                return ResourceManager.GetString("ToolTip_Start", resourceCulture);
             }
         }
     }
