@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using A9N.FlexTimeMonitor.Entities;
+using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Properties;

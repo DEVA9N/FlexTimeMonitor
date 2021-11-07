@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using A9N.FlexTimeMonitor.Entities;
 
 namespace A9N.FlexTimeMonitor.Contracts
 {

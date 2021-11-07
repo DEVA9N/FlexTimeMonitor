@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexTimeMonitor.Contracts",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexTimeMonitor.DataAccess", "FlexTimeMonitor.DataAccess\FlexTimeMonitor.DataAccess.csproj", "{577E894D-041A-4B04-9189-5170DEC7B948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexTimeMonitor.Entities", "FlexTimeMonitor.Entities\FlexTimeMonitor.Entities.csproj", "{998135E6-9925-4C0B-90FE-60E905A04486}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,14 +41,6 @@ Global
 		{577E894D-041A-4B04-9189-5170DEC7B948}.Release|Any CPU.Build.0 = Release|Any CPU
 		{577E894D-041A-4B04-9189-5170DEC7B948}.Release|x86.ActiveCfg = Release|Any CPU
 		{577E894D-041A-4B04-9189-5170DEC7B948}.Release|x86.Build.0 = Release|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Debug|x86.Build.0 = Debug|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Release|Any CPU.Build.0 = Release|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Release|x86.ActiveCfg = Release|Any CPU
-		{998135E6-9925-4C0B-90FE-60E905A04486}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

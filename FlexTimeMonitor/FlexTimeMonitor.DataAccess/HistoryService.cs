@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.DataAccess.Serialization;
-using A9N.FlexTimeMonitor.Entities;
 
 namespace A9N.FlexTimeMonitor.DataAccess
 {
