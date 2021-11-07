@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using A9N.FlexTimeMonitor.DataAccess;
 using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Properties;
+using A9N.FlexTimeMonitor.Views;
 using A9N.FlexTimeMonitor.Work;
 using Microsoft.Win32;
 
@@ -27,7 +29,8 @@ namespace A9N.FlexTimeMonitor
         {
             InitializeComponent();
 
-            DataContext = new MainViewModel(this);
+            var historyService = new WorkHistoryService(Properties.Resources.ApplicationName);
+            DataContext = new MainViewModel(new MenuViewModel(this), historyService);
 
             _notificationIcon = CreateNotificationIcon();
             _notificationIcon.MouseClick += notificationIcon_MouseClick;
@@ -131,7 +134,7 @@ namespace A9N.FlexTimeMonitor
         /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
         private void notificationIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            var today = (DataContext as MainViewModel)?.History.GetToday();
+            var today = (DataContext as MainViewModel)?.Grid.Today;
 
             // Check last balloon update to prevent it from flickering
             if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Views;
-using A9N.FlexTimeMonitor.Work;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -12,27 +13,27 @@ namespace A9N.FlexTimeMonitor
         private readonly IWorkHistoryService _historyService;
         public bool SelectionPopupVisible { get; set; }
         public MenuViewModel Menu { get; }
+        public WorkDayGridViewModel Grid { get; private set; }
         public SelectionViewModel Selection { get; set; }
 
-        public MainViewModel(MainView window, IWorkHistoryService historyService)
+        public MainViewModel(MenuViewModel menu, IWorkHistoryService historyService)
         {
             _historyService = historyService ?? throw new ArgumentNullException(nameof(historyService));
-            Menu = new MenuViewModel(window);
+            Menu = menu ?? throw new ArgumentNullException(nameof(menu));
         }
 
         internal void OpenHistory()
         {
-            var historyData = _historyService.GetHistory();
+            var items = _historyService.GetItems();
 
+            Grid = new WorkDayGridViewModel(items);
         }
 
         internal void SaveHistory()
         {
+            var data = Grid.Items.Select(i => i.ToWorkDayData());
 
-            _historyService.SaveHistory();
+            _historyService.SaveItems(data);
         }
-
     }
-
-
 }

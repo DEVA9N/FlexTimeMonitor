@@ -4,8 +4,8 @@ namespace A9N.FlexTimeMonitor.Contracts
 {
     public interface IWorkHistoryService
     {
-        IEnumerable<WorkDayData>  GetHistory();
+        IEnumerable<WorkDayEntity>  GetItems();
 
-        void SaveHistory(IEnumerable<WorkDayData> days);
+        void SaveItems(IEnumerable<WorkDayEntity> days);
     }
 }

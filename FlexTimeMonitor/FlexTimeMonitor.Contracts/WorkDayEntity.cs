@@ -7,7 +7,7 @@ namespace A9N.FlexTimeMonitor.Contracts
     /// Class WorkDayData is a serializable class that contains all the workday related data. WorkDayData separates the
     /// data from the view logic.
     /// </summary>
-    public class WorkDayData
+    public class WorkDayEntity
     {
         /// <summary>
         /// Gets or sets the date of the WorkDay. This date will determine the date of the workday regardless its Start

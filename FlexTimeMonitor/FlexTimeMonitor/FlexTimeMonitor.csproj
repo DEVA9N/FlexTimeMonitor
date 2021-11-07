@@ -244,6 +244,10 @@
       <Project>{6316761C-5836-44A9-8CC1-27178D61016E}</Project>
       <Name>FlexTimeMonitor.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FlexTimeMonitor.DataAccess\FlexTimeMonitor.DataAccess.csproj">
+      <Project>{577E894D-041A-4B04-9189-5170DEC7B948}</Project>
+      <Name>FlexTimeMonitor.DataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

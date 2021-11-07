@@ -90,15 +90,6 @@ namespace A9N.FlexTimeMonitor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to History.xml.
-        /// </summary>
-        internal static string FileName {
-            get {
-                return ResourceManager.GetString("FileName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Do you want to save the history?.
         /// </summary>
         internal static string Message_Save_Text {

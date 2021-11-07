@@ -2,20 +2,21 @@
 using System.IO;
 using A9N.FlexTimeMonitor.DataAccess.Serialization;
 
-namespace A9N.FlexTimeMonitor.DataAccess
+namespace A9N.FlexTimeMonitor.DataAccess.FileAccess
 {
     internal sealed class HistoryFile
     {
-        private readonly string _fileName;
+        private const String DefaultFileName = "History.xml";
+        private readonly String _fileName;
 
         public bool Exists => File.Exists(_fileName);
 
-        public HistoryFile(Environment.SpecialFolder folder, string applicationName, string fileName)
+        public HistoryFile(Environment.SpecialFolder folder, String applicationName)
         {
-            _fileName = CreateFileName(folder, applicationName, fileName);
+            _fileName = CreateFileName(folder, applicationName, DefaultFileName);
         }
 
-        private static string CreateFileName(Environment.SpecialFolder specialFolder, string applicationName, string fileName)
+        private static String CreateFileName(Environment.SpecialFolder specialFolder, String applicationName, String fileName)
         {
             var roaming = Environment.GetFolderPath(specialFolder);
 

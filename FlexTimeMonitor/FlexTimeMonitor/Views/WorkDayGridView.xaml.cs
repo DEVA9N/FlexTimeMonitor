@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
-using A9N.FlexTimeMonitor.Views;
 using A9N.FlexTimeMonitor.Work;
 
-namespace A9N.FlexTimeMonitor.Controls
+namespace A9N.FlexTimeMonitor.Views
 {
     /// <summary>
     /// Interaction logic for WorkdayGrid.xaml

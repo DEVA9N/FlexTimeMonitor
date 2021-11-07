@@ -14,29 +14,29 @@ namespace A9N.FlexTimeMonitor.Work
 {
     internal sealed class WorkDayGridItemViewModel : ViewModel
     {
-        private readonly WorkDayData _data;
+        private readonly WorkDayEntity _entity;
 
-        public WorkDayGridItemViewModel(WorkDayData data)
+        public WorkDayGridItemViewModel(WorkDayEntity entity)
         {
-            _data = data ?? throw new ArgumentNullException(nameof(data));
+            _entity = entity ?? throw new ArgumentNullException(nameof(entity));
         }
 
         public DateTime Date
         {
-            get => _data.Date;
-            set => _data.Date = value;
+            get => _entity.Date;
+            set => _entity.Date = value;
         }
 
         public TimeSpan Start
         {
-            get => _data.Start.TimeOfDay;
-            set => _data.Start = value.ToDateTime(_data.Start);
+            get => _entity.Start.TimeOfDay;
+            set => _entity.Start = value.ToDateTime(_entity.Start);
         }
 
         public TimeSpan End
         {
-            get => _data.End.TimeOfDay;
-            set => _data.End = value.ToDateTime(_data.End);
+            get => _entity.End.TimeOfDay;
+            set => _entity.End = value.ToDateTime(_entity.End);
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace A9N.FlexTimeMonitor.Work
         /// <value>The discrepancy.</value>
         public TimeSpan Discrepancy
         {
-            get => _data.Discrepancy.TimeOfDay;
-            set => _data.Discrepancy = value.ToDateTime(Date);
+            get => _entity.Discrepancy.TimeOfDay;
+            set => _entity.Discrepancy = value.ToDateTime(Date);
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace A9N.FlexTimeMonitor.Work
         /// <value>The note.</value>
         public String Note
         {
-            get => _data.Note;
-            set => _data.Note = value;
+            get => _entity.Note;
+            set => _entity.Note = value;
         }
 
         /*
@@ -142,5 +142,9 @@ namespace A9N.FlexTimeMonitor.Work
         [XmlIgnore]
         public String OverTimeString => TimeSpanExtension.ToHhmmss(OverTime);
 
+        public WorkDayEntity ToWorkDayData()
+        {
+            return _entity;
+        }
     }
 }
