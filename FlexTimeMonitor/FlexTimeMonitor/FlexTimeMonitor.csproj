@@ -132,13 +132,11 @@
     <Compile Include="Views\SelectionView.xaml.cs">
       <DependentUpon>SelectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WorkdayGrid.xaml.cs">
-      <DependentUpon>WorkdayGrid.xaml</DependentUpon>
+    <Compile Include="Views\WorkDayGridView.xaml.cs">
+      <DependentUpon>WorkDayGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Work\WorkDayData.cs" />
-    <Compile Include="Work\WorkHistory.cs" />
-    <Compile Include="Work\WorkHistoryFile.cs" />
-    <Compile Include="Work\WorkDay.cs" />
+    <Compile Include="Views\WorkDayGridViewModel.cs" />
+    <Compile Include="Views\WorkDayGridItemViewModel.cs" />
     <Page Include="Views\AboutDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,7 +173,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\WorkdayGrid.xaml">
+    <Page Include="Views\WorkDayGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,6 +238,16 @@
     <PackageReference Include="PropertyChanged.Fody">
       <Version>2.5.9</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlexTimeMonitor.Contracts\FlexTimeMonitor.Contracts.csproj">
+      <Project>{6316761C-5836-44A9-8CC1-27178D61016E}</Project>
+      <Name>FlexTimeMonitor.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlexTimeMonitor.Entities\FlexTimeMonitor.Entities.csproj">
+      <Project>{998135E6-9925-4C0B-90FE-60E905A04486}</Project>
+      <Name>FlexTimeMonitor.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -59,7 +59,7 @@ namespace A9N.FlexTimeMonitor.Controls
                 return;
             }
 
-            var selection = new SelectionViewModel(DataGridWorkDays.SelectedItems.OfType<WorkDay>());
+            var selection = new SelectionViewModel(DataGridWorkDays.SelectedItems.OfType<WorkDayGridItemViewModel>());
 
             mainViewModel.Selection = selection;
             mainViewModel.SelectionPopupVisible = selection.DayCount > 1;

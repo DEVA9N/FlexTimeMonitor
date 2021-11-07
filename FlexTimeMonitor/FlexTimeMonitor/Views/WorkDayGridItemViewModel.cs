@@ -5,79 +5,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using A9N.FlexTimeMonitor.Entities;
 using A9N.FlexTimeMonitor.Extensions;
+using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Properties;
-using PropertyChanged;
 
 namespace A9N.FlexTimeMonitor.Work
 {
-    /// <summary>
-    /// Represents a work day
-    /// </summary>
-    public sealed class WorkDay : INotifyPropertyChanged
+    internal sealed class WorkDayGridItemViewModel : ViewModel
     {
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly WorkDayData _data;
 
-        /// <summary>
-        /// Creates Workday instance with start time now
-        /// </summary>
-        public WorkDay()
+        public WorkDayGridItemViewModel(WorkDayData data)
         {
-            Data = new WorkDayData
-            {
-                Date = DateTime.Now,
-                Start = DateTime.Now,
-                End = DateTime.Now
-            };
+            _data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
-        /// <summary>
-        /// Gets or sets the data object that stores the workday data.
-        /// </summary>
-        /// <value>The data.</value>
-        public WorkDayData Data { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date of the workday
-        /// </summary>
-        /// <value>The date.</value>
-        [XmlIgnore]
         public DateTime Date
         {
-            get => Data.Date;
-            set => Data.Date = value;
+            get => _data.Date;
+            set => _data.Date = value;
         }
 
-        /// <summary>
-        /// Start time
-        /// </summary>
-        /// <value>The start.</value>
-        [XmlIgnore]
         public TimeSpan Start
         {
-            get => Data.Start.TimeOfDay;
-            set => Data.Start = value.ToDateTime(Data.Start);
+            get => _data.Start.TimeOfDay;
+            set => _data.Start = value.ToDateTime(_data.Start);
         }
 
-        /// <summary>
-        /// End time
-        /// </summary>
-        /// <value>The end.</value>
-        [XmlIgnore]
         public TimeSpan End
         {
-            get => Data.End.TimeOfDay;
-            set => Data.End = value.ToDateTime(Data.End);
+            get => _data.End.TimeOfDay;
+            set => _data.End = value.ToDateTime(_data.End);
         }
 
         /// <summary>
         /// The difference between Difference and the complete workday (including break period)
         /// </summary>
         /// <value>The over time.</value>
-        [XmlIgnore]
         public TimeSpan OverTime => Elapsed - (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
 
         /// <summary>
@@ -86,18 +51,16 @@ namespace A9N.FlexTimeMonitor.Work
         /// appointment can be set by -1h.
         /// </summary>
         /// <value>The discrepancy.</value>
-        [XmlIgnore]
         public TimeSpan Discrepancy
         {
-            get => Data.Discrepancy.TimeOfDay;
-            set => Data.Discrepancy = value.ToDateTime(Date);
+            get => _data.Discrepancy.TimeOfDay;
+            set => _data.Discrepancy = value.ToDateTime(Date);
         }
 
         /// <summary>
         /// Difference between start and now also considering a possible discrepancy.
         /// </summary>
         /// <value>The elapsed.</value>
-        [XmlIgnore]
         public TimeSpan Elapsed => IsToday
             ? DateTime.Now.TimeOfDay - Start + Discrepancy
             : End - Start + Discrepancy;
@@ -106,25 +69,22 @@ namespace A9N.FlexTimeMonitor.Work
         /// Estimated end time
         /// </summary>
         /// <value>The estimated.</value>
-        [XmlIgnore]
         public TimeSpan Estimated => Start - Discrepancy + (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Remaining time - opposite of OverTime (5min Remaining == -5min OverTime)
         /// </summary>
         /// <value>The remaining.</value>
-        [XmlIgnore]
         public TimeSpan Remaining => -OverTime;
 
         /// <summary>
         /// Additional note
         /// </summary>
         /// <value>The note.</value>
-        [XmlIgnore]
         public String Note
         {
-            get => Data.Note;
-            set => Data.Note = value;
+            get => _data.Note;
+            set => _data.Note = value;
         }
 
         /*

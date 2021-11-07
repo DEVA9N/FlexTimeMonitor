@@ -115,7 +115,7 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        private void ShowBalloonTip(WorkDay today)
+        private void ShowBalloonTip(WorkDayGridItemViewModel today)
         {
             var balloonText = $"{"Start:",-16}\t{today.Start.ToHhmmss(),10}\n";
             balloonText += $"{"Estimated:",-16}\t{today.Estimated.ToHhmmss(),10}\n";
