@@ -34,7 +34,7 @@ namespace A9N.FlexTimeMonitor.Views
         {
             if (items.All(d => d.Date.Date != DateTime.Now.Date))
             {
-                items.Add(new WorkDayEntity { Start = DateTime.Now });
+                items.Add(new WorkDayEntity { Date = DateTime.Now, Start = DateTime.Now});
             }
 
             return items;
