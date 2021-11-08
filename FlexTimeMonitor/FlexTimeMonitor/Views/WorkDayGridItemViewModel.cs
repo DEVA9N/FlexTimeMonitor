@@ -10,7 +10,7 @@ using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Properties;
 
-namespace A9N.FlexTimeMonitor.Work
+namespace A9N.FlexTimeMonitor.Views
 {
     internal sealed class WorkDayGridItemViewModel : ViewModel
     {
@@ -140,7 +140,7 @@ namespace A9N.FlexTimeMonitor.Work
         /// </summary>
         /// <value>The over time string.</value>
         [XmlIgnore]
-        public String OverTimeString => TimeSpanExtension.ToHhmmss(OverTime);
+        public String OverTimeString => OverTime.ToHhmmss();
 
         public WorkDayEntity ToWorkDayData()
         {

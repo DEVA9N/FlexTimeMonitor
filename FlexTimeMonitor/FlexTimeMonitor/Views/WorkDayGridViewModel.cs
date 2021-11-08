@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.Mvvm;
-using A9N.FlexTimeMonitor.Work;
 
 namespace A9N.FlexTimeMonitor.Views
 {
