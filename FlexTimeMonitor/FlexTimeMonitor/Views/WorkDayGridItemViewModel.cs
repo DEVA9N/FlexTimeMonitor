@@ -26,16 +26,16 @@ namespace A9N.FlexTimeMonitor.Views
             get => _entity.Start;
         }
 
-        public TimeSpan Start
+        public DateTime Start
         {
-            get => _entity.Start.TimeOfDay;
-            set => _entity.Start = value.ToDateTime(_entity.Start);
+            get => _entity.Start;
+            set => _entity.Start = value;
         }
 
-        public TimeSpan End
+        public DateTime End
         {
-            get => _entity.End.TimeOfDay;
-            set => _entity.End = value.ToDateTime(_entity.End);
+            get => _entity.End;
+            set => _entity.End = value;
         }
 
         /// <summary>
@@ -61,14 +61,14 @@ namespace A9N.FlexTimeMonitor.Views
         /// </summary>
         /// <value>The elapsed.</value>
         public TimeSpan Elapsed => IsToday
-            ? DateTime.Now.TimeOfDay - Start + Discrepancy
+            ? DateTime.Now - Start + Discrepancy
             : End - Start + Discrepancy;
 
         /// <summary>
         /// Estimated end time
         /// </summary>
         /// <value>The estimated.</value>
-        public TimeSpan Estimated => Start - Discrepancy + (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
+        public TimeSpan Estimated => Start.TimeOfDay - Discrepancy + (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Remaining time - opposite of OverTime (5min Remaining == -5min OverTime)

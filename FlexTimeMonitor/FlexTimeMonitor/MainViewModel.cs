@@ -25,7 +25,7 @@ namespace A9N.FlexTimeMonitor
                 return string.Empty;
             }
 
-            var balloonText = $"{"Start:",-16}\t{today.Start.ToHhmmss(),10}\n";
+            var balloonText = $"{"Start:",-16}\t{today.Start.TimeOfDay.ToHhmmss(),10}\n";
             balloonText += $"{"Estimated:",-16}\t{today.Estimated.ToHhmmss(),10}\n";
             balloonText += $"{"Elapsed:",-16}\t{today.Elapsed.ToHhmmss(),10}\n";
             balloonText += $"{"Remaining:",-16}\t{today.Remaining.ToHhmmss(),10}\n";
@@ -48,6 +48,7 @@ namespace A9N.FlexTimeMonitor
 
         internal void SaveHistory()
         {
+            Grid.Today.End = DateTime.Now;
             var data = Grid.Items.Select(i => i.ToWorkDayData());
 
             _historyService.SaveItems(data);
