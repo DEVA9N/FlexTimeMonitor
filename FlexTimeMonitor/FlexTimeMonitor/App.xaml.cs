@@ -7,7 +7,7 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
-using A9N.FlexTimeMonitor;
+using System.Threading.Tasks;
 
 namespace FlexTimeMonitor
 {
@@ -82,16 +82,40 @@ namespace FlexTimeMonitor
         public App()
         {
             EnforceSingleInstance();
+
+            // See https://stackoverflow.com/questions/1472498/wpf-global-exception-handler/1472562#1472562
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
         }
 
-        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+        private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            base.OnSessionEnding(e);
-
-            if (MainWindow is MainView flexTimeWindow)
+            if (e.Exception != null)
             {
-                flexTimeWindow.ShowSaveDialog = false;
+                ShowException(e.Exception);
             }
+        }
+
+        private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            if (e.Exception != null)
+            {
+                ShowException(e.Exception);
+            }
+        }
+        
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if(e.ExceptionObject is Exception exception)
+            {
+                ShowException(exception);
+            }
+        }
+
+        private static void ShowException (Exception e)
+        {
+            MessageBox.Show(e.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         /// <summary>

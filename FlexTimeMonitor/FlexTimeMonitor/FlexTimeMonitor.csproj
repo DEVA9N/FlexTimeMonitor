@@ -201,7 +201,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="FodyWeavers.xml" />
     <Resource Include="Resources\performance-clock-speed-light.ico" />
     <Content Include="doc\Readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

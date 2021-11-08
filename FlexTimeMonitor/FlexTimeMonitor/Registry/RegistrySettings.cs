@@ -20,19 +20,11 @@ namespace A9N.FlexTimeMonitor.Registry
 
         public RegistrySettings()
         {
+            // The application path changes for every installation. The only way to start it from the current
+            // location is to start it via the start menu entry.
+            var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            try
-            {
-                // The application path changes for every installation. The only way to start it from the current
-                // location is to start it via the start menu entry.
-                var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-                this.autoStartValue = Path.Combine(userProfilePath, AutoStartTarget);
-            }
-            catch (Exception e)
-            {
-                // TODO: Log this
-            }
+            this.autoStartValue = Path.Combine(userProfilePath, AutoStartTarget);
         }
 
         /// <summary>
@@ -43,48 +35,35 @@ namespace A9N.FlexTimeMonitor.Registry
         {
             get
             {
-                try
-                {
-                    var subKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey);
 
-                    if (subKey != null)
-                    {
-                        var result = subKey.GetValue(AutoStartKey, String.Empty);
+                var subKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey);
 
-                        return autoStartValue.Equals(result);
-                    }
-                }
-                catch (Exception exception)
+                if (subKey != null)
                 {
-                    // TODO: Log this
+                    var result = subKey.GetValue(AutoStartKey, String.Empty);
+
+                    return autoStartValue.Equals(result);
                 }
 
                 return false;
             }
             set
             {
-                try
+                var subKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey, true);
+
+                if (subKey == null)
                 {
-                    var subKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey, true);
-
-                    if (subKey == null)
-                    {
-                        // Something is wrong with the registry
-                        return;
-                    }
-
-                    if (value)
-                    {
-                        subKey.SetValue(AutoStartKey, autoStartValue);
-                    }
-                    else
-                    {
-                        subKey.DeleteValue(AutoStartKey);
-                    }
+                    // Something is wrong with the registry
+                    return;
                 }
-                catch (Exception exception)
+
+                if (value)
                 {
-                    // TODO: Log this
+                    subKey.SetValue(AutoStartKey, autoStartValue);
+                }
+                else
+                {
+                    subKey.DeleteValue(AutoStartKey);
                 }
             }
         }
