@@ -23,8 +23,7 @@ namespace A9N.FlexTimeMonitor.Views
 
         public DateTime Date
         {
-            get => _entity.Date;
-            set => _entity.Date = value;
+            get => _entity.Start;
         }
 
         public TimeSpan Start

@@ -32,9 +32,9 @@ namespace A9N.FlexTimeMonitor.Views
 
         private IEnumerable<WorkDayEntity> AddToday(List<WorkDayEntity> items)
         {
-            if (items.All(d => d.Date.Date != DateTime.Now.Date))
+            if (items.All(d => d.Start.Date != DateTime.Now.Date))
             {
-                items.Add(new WorkDayEntity { Date = DateTime.Now, Start = DateTime.Now});
+                items.Add(new WorkDayEntity { Start = DateTime.Now});
             }
 
             return items;
