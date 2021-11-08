@@ -3,10 +3,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using A9N.FlexTimeMonitor.DataAccess;
-using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.Views;
-using A9N.FlexTimeMonitor.Work;
 using Microsoft.Win32;
 
 namespace A9N.FlexTimeMonitor
@@ -16,8 +14,7 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class MainView : Window
     {
-        private readonly System.Windows.Forms.NotifyIcon _notificationIcon;
-        private const int BalloonTimeOut = 3000;
+        private readonly NotificationIcon notificationIcon;
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the save dialog when the program is closing.
@@ -32,27 +29,17 @@ namespace A9N.FlexTimeMonitor
             var historyService = new WorkHistoryService(Properties.Resources.ApplicationName);
             DataContext = new MainViewModel(new MenuViewModel(this), historyService);
 
-            _notificationIcon = CreateNotificationIcon();
-            _notificationIcon.MouseClick += notificationIcon_MouseClick;
-            _notificationIcon.MouseDoubleClick += notificationIcon_MouseDoubleClick;
-
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
-      
+
             UpdateSettings();
 
             Load();
-        }
 
-        private System.Windows.Forms.NotifyIcon CreateNotificationIcon()
-        {
-            var icon = new System.Windows.Forms.NotifyIcon
-            {
-                Icon = Properties.Resources.ApplicationIcon, 
-                Text = Properties.Resources.ApplicationName, 
-                Visible = true
-            };
-
-            return icon;
+            notificationIcon = new NotificationIcon(
+                Properties.Resources.ApplicationName, 
+                Properties.Resources.ApplicationIcon, 
+                state => WindowState = state, 
+                () => (DataContext as MainViewModel)?.BalloonText);
         }
 
         private static void UpdateSettings()
@@ -65,7 +52,6 @@ namespace A9N.FlexTimeMonitor
                 Settings.Default.Save();
             }
         }
-
 
         private void Load()
         {
@@ -118,57 +104,11 @@ namespace A9N.FlexTimeMonitor
             }
         }
 
-        private void ShowBalloonTip(WorkDayGridItemViewModel today)
+        void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
-            var balloonText = $"{"Start:",-16}\t{today.Start.ToHhmmss(),10}\n";
-            balloonText += $"{"Estimated:",-16}\t{today.Estimated.ToHhmmss(),10}\n";
-            balloonText += $"{"Elapsed:",-16}\t{today.Elapsed.ToHhmmss(),10}\n";
-            balloonText += $"{"Remaining:",-16}\t{today.Remaining.ToHhmmss(),10}\n";
-            _notificationIcon.ShowBalloonTip(BalloonTimeOut, Properties.Resources.ApplicationName, balloonText, System.Windows.Forms.ToolTipIcon.Info);
-        }
-
-        /// <summary>
-        /// Handles the MouseClick event of the systrayIcon control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void notificationIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            var today = (DataContext as MainViewModel)?.Grid.Today;
-
-            // Check last balloon update to prevent it from flickering
-            if (e.Button == System.Windows.Forms.MouseButtons.Right && today != null)
+            if (e.Mode == PowerModes.Suspend)
             {
-                ShowBalloonTip(today);
-            }
-        }
-
-        /// <summary>
-        /// Handles the MouseDoubleClick event of the systrayIcon control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.Windows.Forms.MouseEventArgs"/> instance containing the event data.</param>
-        private void notificationIcon_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            // The state change will trigger the state changed event and do everything else there
-            this.WindowState = WindowState.Normal;
-        }
-
-        /// <summary>
-        /// Handles the PowerModeChanged event of the SystemEvents control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Microsoft.Win32.PowerModeChangedEventArgs"/> instance containing the event data.</param>
-        void SystemEvents_PowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e)
-        {
-            switch (e.Mode)
-            {
-                case Microsoft.Win32.PowerModes.Resume:
-                    Load();
-                    break;
-                case Microsoft.Win32.PowerModes.Suspend:
-                    SaveSilent();
-                    break;
+                SaveSilent();
             }
         }
 
