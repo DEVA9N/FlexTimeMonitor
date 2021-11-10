@@ -6,6 +6,7 @@ using A9N.FlexTimeMonitor.DataAccess;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.Views;
 using Microsoft.Win32;
+using NLog;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -13,6 +14,7 @@ namespace A9N.FlexTimeMonitor
     {
         // Keep reference to prevent GC to collect item
         private readonly NotificationIcon notificationIcon;
+        private readonly ILogger log = LogManager.GetLogger(nameof(MainView));
 
         public MainView()
         {
@@ -55,9 +57,11 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
+                log.Error(e);
+
                 var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, e);
 
-                MessageBox.Show(this, text, Properties.Resources.ApplicationName);
+                MessageBox.Show(this, text, Properties.Resources.ApplicationName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -71,7 +75,9 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName);
+                log.Error(e);
+
+                MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

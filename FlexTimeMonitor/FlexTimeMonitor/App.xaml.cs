@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
+using NLog;
 
 namespace FlexTimeMonitor
 {
@@ -76,12 +78,15 @@ namespace FlexTimeMonitor
             FORCEMINIMIZE = 11,
         };
 
-
+        private readonly ILogger _logger;
         private static Mutex firstInstanceMutex;
 
         public App()
         {
             EnforceSingleInstance();
+
+            LogManager.Configuration = CreateLoggerConfig();
+            _logger = LogManager.GetLogger(GetType().Name);
 
             // See https://stackoverflow.com/questions/1472498/wpf-global-exception-handler/1472562#1472562
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
@@ -89,11 +94,32 @@ namespace FlexTimeMonitor
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
         }
 
+        private static NLog.Config.LoggingConfiguration CreateLoggerConfig()
+        {
+            var logFileName = CreateLogFileName();
+            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = logFileName, Layout = "${longdate}|${level:uppercase=true}|${logger}|${callsite}|${message}" };
+
+            var config = new NLog.Config.LoggingConfiguration();
+            config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
+
+            return config;
+        }
+
+        private static string CreateLogFileName()
+        {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var folder = "Flex Time Monitor";
+            var file = "FlexTimeMonitor.log";
+            var logFileName = Path.Combine(appData, folder, file);
+
+            return logFileName;
+        }
+
         private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             if (e.Exception != null)
             {
-                ShowException(e.Exception);
+                HandleException(e.Exception);
             }
         }
 
@@ -101,21 +127,21 @@ namespace FlexTimeMonitor
         {
             if (e.Exception != null)
             {
-                ShowException(e.Exception);
-            }
-        }
-        
-        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            if(e.ExceptionObject is Exception exception)
-            {
-                ShowException(exception);
+                HandleException(e.Exception);
             }
         }
 
-        private static void ShowException (Exception e)
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (e.ExceptionObject is Exception exception)
+            {
+                HandleException(exception);
+            }
+        }
+
+        private void HandleException(Exception e)
+        {
+            _logger.Fatal(e);
         }
 
         /// <summary>

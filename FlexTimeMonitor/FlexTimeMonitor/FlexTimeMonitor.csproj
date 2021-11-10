@@ -235,6 +235,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NLog">
+      <Version>4.7.12</Version>
+    </PackageReference>
     <PackageReference Include="PropertyChanged.Fody">
       <Version>2.5.9</Version>
     </PackageReference>
