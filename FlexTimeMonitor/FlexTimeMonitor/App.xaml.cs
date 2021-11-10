@@ -13,7 +13,10 @@ namespace A9N.FlexTimeMonitor
     {
         public App()
         {
-            SingleInstance.EnforceSingleInstance(Current.Shutdown);
+            if (!SingleInstance.CheckIsFirstInstance())
+            {
+                Current.Shutdown();
+            }
 
             AppLogging.Inititialize();
 

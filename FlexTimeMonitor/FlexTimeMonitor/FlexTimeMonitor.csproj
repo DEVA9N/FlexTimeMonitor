@@ -52,7 +52,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>FlexTimeMonitor.App</StartupObject>
+    <StartupObject>A9N.FlexTimeMonitor.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\performance-clock-speed.ico</ApplicationIcon>
@@ -102,6 +102,7 @@
     </ApplicationDefinition>
     <Compile Include="Facility\AppLogging.cs" />
     <Compile Include="Facility\SingleInstance.cs" />
+    <Compile Include="Facility\User32Wrapper.cs" />
     <Compile Include="Notifications\NotificationIcon.cs" />
     <Compile Include="Registry\RegistrySettings.cs" />
     <Compile Include="MainViewModel.cs" />
