@@ -100,6 +100,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Facility\AppLogging.cs" />
+    <Compile Include="Facility\SingleInstance.cs" />
     <Compile Include="Notifications\NotificationIcon.cs" />
     <Compile Include="Registry\RegistrySettings.cs" />
     <Compile Include="MainViewModel.cs" />
