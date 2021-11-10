@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkHistoryService.cs" />
+    <Compile Include="Legacy\XmlFileImporter.cs" />
+    <Compile Include="Legacy\WorkDay.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlexTimeMonitor.Contracts\FlexTimeMonitor.Contracts.csproj">
