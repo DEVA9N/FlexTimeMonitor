@@ -52,15 +52,15 @@ namespace A9N.FlexTimeMonitor.Views
         /// <param name="e">The <see cref="SelectionChangedEventArgs" /> instance containing the event data.</param>
         private void DataGridWorkDays_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!(DataContext is MainViewModel mainViewModel))
+            if (!(DataContext is WorkDayGridViewModel viewModel))
             {
                 return;
             }
 
-            var selection = new SelectionViewModel(DataGridWorkDays.SelectedItems.OfType<WorkDayGridItemViewModel>());
+            var selection = new SelectionViewModel(DataGridWorkDays.SelectedItems.OfType<WorkDayGridItemViewModel>().Select(i => i.ToEntity()));
 
-            mainViewModel.Selection = selection;
-            mainViewModel.SelectionPopupVisible = selection.DayCount > 1;
+            viewModel.Selection = selection;
+            viewModel.SelectionPopupVisible = selection.DayCount > 1;
         }
     }
 }

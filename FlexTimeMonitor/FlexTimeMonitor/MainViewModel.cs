@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using A9N.FlexTimeMonitor.Contracts;
-using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Views;
 
@@ -12,26 +9,12 @@ namespace A9N.FlexTimeMonitor
     internal sealed class MainViewModel : ViewModel
     {
         private readonly IWorkHistoryService _historyService;
-        public bool SelectionPopupVisible { get; set; }
+        
         public MenuViewModel Menu { get; }
+        
         public WorkDayGridViewModel Grid { get; private set; }
-        public SelectionViewModel Selection { get; set; }
-        public String BalloonText => CreateBalloonText(Grid?.Today);
-
-        private static String CreateBalloonText(WorkDayGridItemViewModel today)
-        {
-            if (today == null)
-            {
-                return string.Empty;
-            }
-
-            var balloonText = $"{"Start:",-16}\t{today.Start.TimeOfDay.ToHhmmss(),10}\n";
-            balloonText += $"{"Estimated:",-16}\t{today.Estimated.ToHhmmss(),10}\n";
-            balloonText += $"{"Elapsed:",-16}\t{today.Elapsed.ToHhmmss(),10}\n";
-            balloonText += $"{"Remaining:",-16}\t{today.Remaining.ToHhmmss(),10}\n";
-
-            return balloonText;
-        }
+      
+        public String BalloonText => NotificationTextCreator.TryCreateText(Grid.Today?.ToEntity());
 
         public MainViewModel(MenuViewModel menu, IWorkHistoryService historyService)
         {
@@ -48,8 +31,7 @@ namespace A9N.FlexTimeMonitor
 
         internal void SaveHistory()
         {
-            Grid.Today.End = DateTime.Now;
-            var data = Grid.Items.Select(i => i.ToWorkDayData());
+            var data = Grid.Items.Select(i => i.ToEntity());
 
             _historyService.SaveItems(data);
         }

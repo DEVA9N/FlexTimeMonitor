@@ -136,11 +136,12 @@
     <Compile Include="Views\SelectionView.xaml.cs">
       <DependentUpon>SelectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Notifications\NotificationTextCreator.cs" />
+    <Compile Include="Views\WorkDayGridItemViewModel.cs" />
     <Compile Include="Views\WorkDayGridView.xaml.cs">
       <DependentUpon>WorkDayGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WorkDayGridViewModel.cs" />
-    <Compile Include="Views\WorkDayGridItemViewModel.cs" />
     <Page Include="Views\AboutDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

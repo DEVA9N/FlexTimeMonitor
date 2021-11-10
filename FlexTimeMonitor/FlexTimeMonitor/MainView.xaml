@@ -15,9 +15,6 @@
         <KeyBinding Key="F4" Modifiers="Alt" Command="Close"/>
     </Window.InputBindings>
     <DockPanel>
-        <Popup IsOpen="{Binding SelectionPopupVisible}" AllowsTransparency="True" Placement="MousePoint" HorizontalOffset="20" VerticalOffset="20">
-            <views:SelectionView DataContext="{Binding Selection}"/>
-        </Popup>
         <views:MenuView DataContext="{Binding Menu}" DockPanel.Dock="Top"/>
         <views:WorkdayGrid DataContext="{Binding Grid}" x:Name="WorkdayGrid"/>
     </DockPanel>

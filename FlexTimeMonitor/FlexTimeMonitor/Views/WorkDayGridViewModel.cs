@@ -13,12 +13,16 @@ namespace A9N.FlexTimeMonitor.Views
 
         public WorkDayGridItemViewModel Today { get; }
 
+        public SelectionViewModel Selection { get; set; }
+        
+        public bool SelectionPopupVisible { get; set; }
+
         public WorkDayGridViewModel(IEnumerable<WorkDayEntity> items)
         {
             var viewModels = CreateViewModels(items);
             Items = new ObservableCollection<WorkDayGridItemViewModel>(viewModels);
 
-            Today = GetToday();
+            Today = Items.FirstOrDefault(i => i.IsToday);
         }
 
         private ObservableCollection<WorkDayGridItemViewModel> CreateViewModels(IEnumerable<WorkDayEntity> items)
@@ -38,13 +42,6 @@ namespace A9N.FlexTimeMonitor.Views
             }
 
             return items;
-        }
-
-        private WorkDayGridItemViewModel GetToday()
-        {
-            return (from day in Items
-                    where day.Date.Date == DateTime.Now.Date
-                    select day).LastOrDefault();
         }
     }
 }

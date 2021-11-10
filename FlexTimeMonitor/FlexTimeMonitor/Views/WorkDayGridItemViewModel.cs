@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Mvvm;
@@ -14,35 +13,31 @@ namespace A9N.FlexTimeMonitor.Views
 {
     internal sealed class WorkDayGridItemViewModel : ViewModel
     {
+        private const String DefaultTimeFormat = "T";
         private readonly WorkDayEntity _entity;
+        private readonly WorkDayProgress _progress;
 
         public WorkDayGridItemViewModel(WorkDayEntity entity)
         {
             _entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            _progress = new WorkDayProgress(entity, Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
         }
 
-        public DateTime Date
+        public String DayOfWeek => _entity.Start.DayOfWeek.ToString();
+
+        public String Date => _entity.Start.ToString("yyyy-MM-dd");
+
+        public String Start
         {
-            get => _entity.Start;
+            get => _entity.Start.ToString(DefaultTimeFormat);
+            set => _entity.Start = _entity.Start.Date + DateTime.Parse(value).TimeOfDay;
         }
 
-        public DateTime Start
+        public String End
         {
-            get => _entity.Start;
-            set => _entity.Start = value;
+            get => _entity.End.ToString(DefaultTimeFormat);
+            set => _entity.End = _entity.End.Date + DateTime.Parse(value).TimeOfDay;
         }
-
-        public DateTime End
-        {
-            get => _entity.End;
-            set => _entity.End = value;
-        }
-
-        /// <summary>
-        /// The difference between Difference and the complete workday (including break period)
-        /// </summary>
-        /// <value>The over time.</value>
-        public TimeSpan OverTime => Elapsed - (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
 
         /// <summary>
         /// Gets or sets the discrepancy. Discrepancy is a positive or negative time offset that is taken into account
@@ -50,62 +45,26 @@ namespace A9N.FlexTimeMonitor.Views
         /// appointment can be set by -1h.
         /// </summary>
         /// <value>The discrepancy.</value>
-        public TimeSpan Discrepancy
+        public String Discrepancy
         {
-            get => _entity.Discrepancy.TimeOfDay;
-            set => _entity.Discrepancy = value.ToDateTime(Date);
+            get => _entity.Discrepancy.ToString();
+            set => _entity.Discrepancy = DateTime.MinValue + DateTime.Parse(value).TimeOfDay;
         }
 
-        /// <summary>
-        /// Difference between start and now also considering a possible discrepancy.
-        /// </summary>
-        /// <value>The elapsed.</value>
-        public TimeSpan Elapsed => IsToday
-            ? DateTime.Now - Start + Discrepancy
-            : End - Start + Discrepancy;
-
-        /// <summary>
-        /// Estimated end time
-        /// </summary>
-        /// <value>The estimated.</value>
-        public TimeSpan Estimated => Start.TimeOfDay - Discrepancy + (Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
-
-        /// <summary>
-        /// Remaining time - opposite of OverTime (5min Remaining == -5min OverTime)
-        /// </summary>
-        /// <value>The remaining.</value>
-        public TimeSpan Remaining => -OverTime;
-
-        /// <summary>
-        /// Additional note
-        /// </summary>
-        /// <value>The note.</value>
         public String Note
         {
             get => _entity.Note;
             set => _entity.Note = value;
         }
 
-        /*
-         * Instead of using enhanced WPF patterns to achieve certain benefits I took the fast approach and am using some
-         * helper properties instead. These helper methods are used in the datagrid for trigger and display purposes.
-         * 
-         */
+        public String OverTime => _progress.OverTime.ToHhmmss();
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is odd week.
-        /// </summary>
-        /// <remarks>
-        /// This value is used to highlight the odd weeks in the datagrid.
-        /// </remarks>
-        /// <value><c>true</c> if this instance is odd week; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
         public bool IsOddWeek
         {
             get
             {
-                var calendar = System.Globalization.DateTimeFormatInfo.CurrentInfo?.Calendar;
-                var weekNumber = calendar?.GetWeekOfYear(Date, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday) ?? 0;
+                var calendar = DateTimeFormatInfo.CurrentInfo?.Calendar;
+                var weekNumber = calendar?.GetWeekOfYear(_entity.Start, CalendarWeekRule.FirstDay, System.DayOfWeek.Monday) ?? 0;
 
                 if (weekNumber > 0)
                 {
@@ -116,33 +75,17 @@ namespace A9N.FlexTimeMonitor.Views
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is today.
-        /// </summary>
-        /// <remarks>
-        /// This value is used to highlight today in the datagrid.
-        /// </remarks>
-        /// <value><c>true</c> if this instance is today; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
-        public bool IsToday => Date.Date == DateTime.Now.Date;
+        public bool IsToday => _entity.Start.Date == DateTime.Now.Date;
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has discrepancy which is either Discrepancy != Zero or negative OverTim.
-        /// </summary>
-        /// <value><c>true</c> if this instance has discrepancy; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
-        public bool HasNegativeOvertime => OverTime < TimeSpan.Zero && !IsToday;
+        public bool HasNegativeOvertime => !IsToday && _progress.OverTime < TimeSpan.Zero;
 
-        /// <summary>
-        /// This is a workaround for the missing capability of TimeSpan formating to handle negative values.
-        /// This property is used as a binding in the xaml code.
-        /// </summary>
-        /// <value>The over time string.</value>
-        [XmlIgnore]
-        public String OverTimeString => OverTime.ToHhmmss();
-
-        public WorkDayEntity ToWorkDayData()
+        public WorkDayEntity ToEntity()
         {
+            if (IsToday)
+            {
+                _entity.End = DateTime.Now;
+            }
+
             return _entity;
         }
     }

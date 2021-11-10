@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Properties;
@@ -14,7 +15,7 @@ namespace A9N.FlexTimeMonitor.Views
         public String Intended { get; set; }
         public String Difference { get; set; }
 
-        public SelectionViewModel(IEnumerable<WorkDayGridItemViewModel> workDays)
+        public SelectionViewModel(IEnumerable<WorkDayEntity> workDays)
         {
             var workDaysList = workDays.ToList();
             var timeOverall = CalculateOverall(workDaysList);
@@ -26,14 +27,15 @@ namespace A9N.FlexTimeMonitor.Views
             Difference = (timeOverall - timeIntended).ToTotalHhmmss();
         }
 
-        private static TimeSpan CalculateOverall(List<WorkDayGridItemViewModel> workDays)
+        private static TimeSpan CalculateOverall(List<WorkDayEntity> workDays)
         {
-            var overallTicks = workDays.ToList().Sum(w => w.Elapsed.Ticks - Settings.Default.BreakPeriod.Ticks);
+            var requiredTotal = Settings.Default.WorkPeriod + Settings.Default.BreakPeriod;
+            var overallTicks = workDays.ToList().Sum(w => new WorkDayProgress(w, requiredTotal).Elapsed.Ticks - Settings.Default.BreakPeriod.Ticks);
 
             return new TimeSpan(overallTicks);
         }
 
-        private static TimeSpan CalculateIntended(List<WorkDayGridItemViewModel> workDays)
+        private static TimeSpan CalculateIntended(List<WorkDayEntity> workDays)
         {
             var intendedTicks = Settings.Default.WorkPeriod.Ticks * workDays.Count;
 
