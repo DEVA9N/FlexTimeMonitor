@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Threading.Tasks;
 using NLog;
-using A9N.FlexTimeMonitor.Facility;
+using A9N.FlexTimeMonitor.Infrastructure;
 
 namespace A9N.FlexTimeMonitor
 {

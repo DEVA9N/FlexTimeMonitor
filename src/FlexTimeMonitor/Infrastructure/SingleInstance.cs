@@ -1,9 +1,10 @@
-﻿using System;
+﻿using A9N.FlexTimeMonitor.Win32;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-namespace A9N.FlexTimeMonitor.Facility
+namespace A9N.FlexTimeMonitor.Infrastructure
 {
     internal static class SingleInstance
     {
@@ -29,7 +30,7 @@ namespace A9N.FlexTimeMonitor.Facility
 
             if (otherInstance != null)
             {
-                User32Wrapper.ShowWindow(otherInstance);
+                Window.Show(otherInstance);
             }
         }
     }

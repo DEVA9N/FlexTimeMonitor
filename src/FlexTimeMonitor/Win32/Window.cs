@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security;
 
-namespace A9N.FlexTimeMonitor.Facility
+namespace A9N.FlexTimeMonitor.Win32
 {
-    internal static class User32Wrapper
+    internal static class Window
     {
         private enum SW
         {
@@ -62,19 +59,21 @@ namespace A9N.FlexTimeMonitor.Facility
             FORCEMINIMIZE = 11,
         };
 
-        [DllImport("user32.dll")]
-        //[return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-
-        internal static void ShowWindow(Process process)
+        internal static void Show(Process process)
         {
-            SetForegroundWindow(process.MainWindowHandle);
-            ShowWindowAsync(process.MainWindowHandle, (int)SW.SHOW);
-            ShowWindowAsync(process.MainWindowHandle, (int)SW.RESTORE);
+            UnsafeNativeMethods.SetForegroundWindow(process.MainWindowHandle);
+            UnsafeNativeMethods.ShowWindowAsync(process.MainWindowHandle, (int)SW.SHOW);
+            UnsafeNativeMethods.ShowWindowAsync(process.MainWindowHandle, (int)SW.RESTORE);
         }
+    }
 
+    [SuppressUnmanagedCodeSecurity]
+    internal static class UnsafeNativeMethods
+    {
+        [DllImport("user32.dll")]
+        internal static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        internal static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
     }
 }

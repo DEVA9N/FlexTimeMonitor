@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using A9N.FlexTimeMonitor.Mvvm;
 using A9N.FlexTimeMonitor.Properties;
-using A9N.FlexTimeMonitor.Registry;
+using A9N.FlexTimeMonitor.Win32;
 
 namespace A9N.FlexTimeMonitor.Views
 {
@@ -21,7 +21,10 @@ namespace A9N.FlexTimeMonitor.Views
 
         public OptionsViewModel(Action close)
         {
-            if (close == null) throw new ArgumentNullException(nameof(close));
+            if (close == null)
+            {
+                throw new ArgumentNullException(nameof(close));
+            }
 
             // Can't bind AutoStart directly to this setting or else Cancel does not affect this setting
             _registry = new RegistrySettings();
