@@ -49,6 +49,12 @@
     <ApplicationIcon>Resources\performance-clock-speed.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Registry\**" />
+    <EmbeddedResource Remove="Registry\**" />
+    <None Remove="Registry\**" />
+    <Page Remove="Registry\**" />
+  </ItemGroup>
+  <ItemGroup>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -105,8 +111,5 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Registry\" />
   </ItemGroup>
 </Project>
