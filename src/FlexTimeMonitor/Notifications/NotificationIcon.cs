@@ -9,7 +9,9 @@ using System.Windows.Forms;
 
 namespace A9N.FlexTimeMonitor
 {
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     internal class NotificationIcon
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         private const int BalloonTimeOut = 3000;
         private readonly NotifyIcon _notificationIcon;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace A9N.FlexTimeMonitor.Facility
+namespace A9N.FlexTimeMonitor.Infrastructure
 {
     internal class AppLogging
     {

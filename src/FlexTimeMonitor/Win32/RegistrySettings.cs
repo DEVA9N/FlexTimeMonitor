@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Versioning;
 
-namespace A9N.FlexTimeMonitor.Registry
+namespace A9N.FlexTimeMonitor.Win32
 {
     /// <summary>
     /// Class RegistrySettings handles access to all FlexTimeMonitor settings that are stored in the registry.
     /// </summary>
+    [SupportedOSPlatform("windows")]
     internal sealed class RegistrySettings
     {
-        private const String RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-        private const String AutoStartKey = @"FlexTimeMonitor";
-        private const String AutoStartTarget = @"AppData\Roaming\Microsoft\Windows\Start Menu\Programs\A9N\FlexTimeMonitor.appref-ms";
+        private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+        private const string AutoStartKey = @"FlexTimeMonitor";
+        private const string AutoStartTarget = @"AppData\Roaming\Microsoft\Windows\Start Menu\Programs\A9N\FlexTimeMonitor.appref-ms";
 
-        private readonly String autoStartValue;
+        private readonly string autoStartValue;
 
         public RegistrySettings()
         {
@@ -24,7 +23,7 @@ namespace A9N.FlexTimeMonitor.Registry
             // location is to start it via the start menu entry.
             var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            this.autoStartValue = Path.Combine(userProfilePath, AutoStartTarget);
+            autoStartValue = Path.Combine(userProfilePath, AutoStartTarget);
         }
 
         /// <summary>
@@ -36,11 +35,11 @@ namespace A9N.FlexTimeMonitor.Registry
             get
             {
 
-                var subKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey);
+                var subKey = Registry.CurrentUser.OpenSubKey(RunKey);
 
                 if (subKey != null)
                 {
-                    var result = subKey.GetValue(AutoStartKey, String.Empty);
+                    var result = subKey.GetValue(AutoStartKey, string.Empty);
 
                     return autoStartValue.Equals(result);
                 }
@@ -49,7 +48,7 @@ namespace A9N.FlexTimeMonitor.Registry
             }
             set
             {
-                var subKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey, true);
+                var subKey = Registry.CurrentUser.OpenSubKey(RunKey, true);
 
                 if (subKey == null)
                 {

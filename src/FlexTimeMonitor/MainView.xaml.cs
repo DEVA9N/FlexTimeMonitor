@@ -5,17 +5,18 @@ using System.Windows.Input;
 using A9N.FlexTimeMonitor.DataAccess;
 using A9N.FlexTimeMonitor.Properties;
 using A9N.FlexTimeMonitor.Views;
-using Microsoft.Win32;
+using A9N.FlexTimeMonitor.Win32;
 using NLog;
 
 namespace A9N.FlexTimeMonitor
 {
-    public partial class MainView : Window
+    public partial class MainView : System.Windows.Window
     {
         // Keep reference to prevent GC to collect item
         private readonly NotificationIcon notificationIcon;
+        private readonly PowerModeObserver powerModeObserver;
         private readonly ILogger log = LogManager.GetLogger(nameof(MainView));
-
+        
         public MainView()
         {
             InitializeComponent();
@@ -25,9 +26,9 @@ namespace A9N.FlexTimeMonitor
             var historyService = new WorkHistoryService(Properties.Resources.ApplicationName);
             DataContext = new MainViewModel(new MenuViewModel(this), historyService);
 
-            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
-
             Load();
+
+            powerModeObserver = new PowerModeObserver(Save);
 
             notificationIcon = new NotificationIcon(
                 Properties.Resources.ApplicationName,
@@ -78,14 +79,6 @@ namespace A9N.FlexTimeMonitor
                 log.Error(e);
 
                 MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
-        {
-            if (e.Mode == PowerModes.Suspend)
-            {
-                Save();
             }
         }
 
