@@ -47,7 +47,7 @@ namespace A9N.FlexTimeMonitor.Views
         /// <value>The discrepancy.</value>
         public String Discrepancy
         {
-            get => _entity.Discrepancy.ToString();
+            get => _entity.Discrepancy.ToString(DefaultTimeFormat);
             set => _entity.Discrepancy = DateTime.MinValue + DateTime.Parse(value).TimeOfDay;
         }
 
