@@ -30,14 +30,18 @@ namespace A9N.FlexTimeMonitor.Views
             BreakPeriod = Settings.Default.BreakPeriod;
             WorkPeriod = Settings.Default.WorkPeriod;
 
-            AcceptCommand = new RelayCommand(SaveValues);
+            AcceptCommand = new RelayCommand(() =>
+            {
+                SaveValues();
+                close();
+            });
             CancelCommand = new RelayCommand(close);
         }
 
         private void SaveValues()
         {
             _registry.AutoStart = AutoStart;
-           
+
             Settings.Default.WorkPeriod = WorkPeriod;
             Settings.Default.BreakPeriod = BreakPeriod;
             Settings.Default.Save();

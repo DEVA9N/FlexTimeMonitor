@@ -30,8 +30,8 @@
     </UserControl.Resources>
     <DockPanel>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="20">
-            <Button Content="Accept" Command="{Binding AcceptCommand}" Name="AcceptButton"/>
-            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Content="Accept" Command="{Binding AcceptCommand}" IsDefault="True"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" IsCancel="True"/>
         </WrapPanel>
 
         <StackPanel Margin="20" Background="WhiteSmoke">

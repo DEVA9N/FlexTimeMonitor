@@ -39,11 +39,11 @@ namespace A9N.FlexTimeMonitor
 
         private static void UpdateSettings()
         {
-            if (Settings.Default.UpdateSettings)
+            if (Settings.Default.UpdateRequired)
             {
                 Settings.Default.Upgrade();
                 // Custom user variable that triggers the update process (true by default)
-                Settings.Default.UpdateSettings = false;
+                Settings.Default.UpdateRequired = false;
                 Settings.Default.Save();
             }
         }

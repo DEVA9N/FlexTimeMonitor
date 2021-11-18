@@ -50,12 +50,12 @@ namespace A9N.FlexTimeMonitor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UpdateSettings {
+        public bool UpdateRequired {
             get {
-                return ((bool)(this["UpdateSettings"]));
+                return ((bool)(this["UpdateRequired"]));
             }
             set {
-                this["UpdateSettings"] = value;
+                this["UpdateRequired"] = value;
             }
         }
     }
