@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:A9N.FlexTimeMonitor.Views"
         mc:Ignorable="d"
-        Title="Options" Height="450" Width="404.205">
+        Title="Options" Height="450" Width="404.205"
+        d:DataContext="{d:DesignInstance local:OptionsViewModel, IsDesignTimeCreatable=False}">
     <Grid>
         <local:OptionsView/>
     </Grid>
