@@ -42,7 +42,7 @@ namespace A9N.FlexTimeMonitor.DataAccess
 
         public void SaveItems(IEnumerable<WorkDayEntity> days)
         {
-            var json = JsonConvert.SerializeObject(days, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(days, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
             // Creates all directories if required
             Directory.CreateDirectory(_path);

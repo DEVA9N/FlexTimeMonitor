@@ -19,29 +19,18 @@ namespace A9N.FlexTimeMonitor.Views
 
         public WorkDayGridViewModel(IEnumerable<WorkDayEntity> items)
         {
-            var viewModels = CreateViewModels(items);
-            Items = new ObservableCollection<WorkDayGridItemViewModel>(viewModels);
+            Items = CreateViewModels(items);
 
             Today = Items.FirstOrDefault(i => i.IsToday);
         }
 
         private ObservableCollection<WorkDayGridItemViewModel> CreateViewModels(IEnumerable<WorkDayEntity> items)
         {
-            var updatedItems = AddToday(items.ToList());
-            var viewModels = from item in updatedItems
+            var viewModels = from item in items
                              select new WorkDayGridItemViewModel(item);
 
             return new ObservableCollection<WorkDayGridItemViewModel>(viewModels);
         }
 
-        private IEnumerable<WorkDayEntity> AddToday(List<WorkDayEntity> items)
-        {
-            if (items.All(d => d.Start.Date != DateTime.Now.Date))
-            {
-                items.Add(new WorkDayEntity { Start = DateTime.Now, End = DateTime.Now });
-            }
-
-            return items;
-        }
     }
 }
