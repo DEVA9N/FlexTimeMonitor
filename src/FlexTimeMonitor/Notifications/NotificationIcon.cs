@@ -16,10 +16,10 @@ namespace A9N.FlexTimeMonitor
         private const int BalloonTimeOut = 3000;
         private readonly NotifyIcon _notificationIcon;
         private readonly string _applicationName;
-        private readonly Action<WindowState> _setWindowState;
+        private readonly Action _restoreWindow;
         private readonly Func<String> _getBalloonText;
 
-        public NotificationIcon(String applicationName, Icon applicationIcon, Action<WindowState> setWindowState, Func<String> getBalloonText)
+        public NotificationIcon(String applicationName, Icon applicationIcon, Action restoreWindow, Func<String> getBalloonText)
         {
             if (applicationIcon is null)
             {
@@ -27,7 +27,7 @@ namespace A9N.FlexTimeMonitor
             }
 
             _applicationName = applicationName ?? throw new ArgumentNullException(nameof(applicationName));
-            _setWindowState = setWindowState ?? throw new ArgumentNullException(nameof(setWindowState));
+            _restoreWindow = restoreWindow ?? throw new ArgumentNullException(nameof(restoreWindow));
             _getBalloonText = getBalloonText ?? throw new ArgumentNullException(nameof(getBalloonText));
 
             _notificationIcon = new NotifyIcon { Icon = applicationIcon, Text = applicationName, Visible = true };
@@ -47,7 +47,7 @@ namespace A9N.FlexTimeMonitor
 
         private void notificationIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            _setWindowState(WindowState.Normal);
+            _restoreWindow();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace A9N.FlexTimeMonitor
             notificationIcon = new NotificationIcon(
                 Properties.Resources.ApplicationName,
                 Properties.Resources.ApplicationIcon,
-                state => WindowState = state,
+                () => WindowState = WindowState.Normal,
                 () => (DataContext as MainViewModel)?.BalloonText);
         }
 
