@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <RootNamespace>A9N.FlexTimeMonitor</RootNamespace>
@@ -85,15 +85,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog">
-      <Version>4.7.12</Version>
+      <Version>5.3.4</Version>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody" PrivateAssets="All">
-      <Version>3.4.0</Version>
+      <Version>4.1.0</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.255803">
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.421302">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.10" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlexTimeMonitor.Contracts\FlexTimeMonitor.Contracts.csproj" />
