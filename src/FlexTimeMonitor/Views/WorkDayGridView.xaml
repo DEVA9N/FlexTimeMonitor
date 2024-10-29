@@ -18,7 +18,8 @@
               GridLinesVisibility="None" 
               SelectionChanged="DataGridWorkDays_SelectionChanged" 
               IsReadOnly="False"
-              CanUserAddRows="False" >
+              CanUserAddRows="False" 
+              FontSize="18">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Day"  Binding="{Binding DayOfWeek, Mode=OneWay}" IsReadOnly="True" MinWidth="80">
                     <DataGridTextColumn.HeaderStyle>
