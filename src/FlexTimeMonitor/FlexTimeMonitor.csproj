@@ -89,11 +89,11 @@
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody" PrivateAssets="All">
       <Version>4.1.0</Version>
+      <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.421302">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.10" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlexTimeMonitor.Contracts\FlexTimeMonitor.Contracts.csproj" />

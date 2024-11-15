@@ -13,9 +13,11 @@ namespace A9N.FlexTimeMonitor
     public partial class MainView : System.Windows.Window
     {
         // Keep reference to prevent GC to collect item
-        private readonly NotificationIcon notificationIcon;
-        private readonly PowerModeObserver powerModeObserver;
-        private readonly ILogger log = LogManager.GetLogger(nameof(MainView));
+        // ReSharper disable once NotAccessedField.Local
+        private readonly NotificationIcon _notificationIcon;
+        // ReSharper disable once NotAccessedField.Local
+        private readonly PowerModeObserver _powerModeObserver;
+        private readonly ILogger _log = LogManager.GetLogger(nameof(MainView));
         
         public MainView()
         {
@@ -28,9 +30,9 @@ namespace A9N.FlexTimeMonitor
 
             Load();
 
-            powerModeObserver = new PowerModeObserver(Save);
+            _powerModeObserver = new PowerModeObserver(Save);
 
-            notificationIcon = new NotificationIcon(
+            _notificationIcon = new NotificationIcon(
                 Properties.Resources.ApplicationName,
                 Properties.Resources.ApplicationIcon,
                 () => WindowState = WindowState.Normal,
@@ -58,7 +60,7 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
-                log.Error(e);
+                _log.Error(e);
 
                 var text = String.Format(Properties.Resources.Status_ErrorLoadingHistory, e);
 
@@ -76,7 +78,7 @@ namespace A9N.FlexTimeMonitor
             }
             catch (Exception e)
             {
-                log.Error(e);
+                _log.Error(e);
 
                 MessageBox.Show(this, e.Message, Properties.Resources.ApplicationName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -86,7 +88,7 @@ namespace A9N.FlexTimeMonitor
         {
             base.OnStateChanged(e);
 
-            ShowInTaskbar = WindowState == WindowState.Minimized ? false : true;
+            ShowInTaskbar = WindowState != WindowState.Minimized;
         }
 
         protected override void OnClosing(CancelEventArgs e)
