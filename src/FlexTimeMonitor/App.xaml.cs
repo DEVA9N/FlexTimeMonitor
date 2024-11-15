@@ -18,7 +18,7 @@ namespace A9N.FlexTimeMonitor
                 Current.Shutdown();
             }
 
-            AppLogging.Inititialize();
+            AppLogging.Initialize();
 
             // See https://stackoverflow.com/questions/1472498/wpf-global-exception-handler/1472562#1472562
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
