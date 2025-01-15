@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Threading.Tasks;
 using NLog;
 using A9N.FlexTimeMonitor.Infrastructure;
+using A9N.FlexTimeMonitor.Properties;
+using Microsoft.VisualBasic.Logging;
 
 namespace A9N.FlexTimeMonitor
 {
@@ -11,6 +14,8 @@ namespace A9N.FlexTimeMonitor
     /// </summary>
     public partial class App : Application
     {
+        private readonly ILogger _logger;
+
         public App()
         {
             if (!SingleInstance.CheckIsFirstInstance())
@@ -19,11 +24,23 @@ namespace A9N.FlexTimeMonitor
             }
 
             AppLogging.Initialize();
+            _logger = LogManager.GetLogger(GetType().Name);
+
+            LogApplicationStart();
 
             // See https://stackoverflow.com/questions/1472498/wpf-global-exception-handler/1472562#1472562
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+        }
+
+        private void LogApplicationStart()
+        {
+            var appInfo = $"FlexTimeMonitor {Assembly.GetExecutingAssembly().GetName().Version} started";
+
+            _logger.Info(new String('-', appInfo.Length));
+            _logger.Info(appInfo);
+            _logger.Info(new String('-', appInfo.Length));
         }
 
         private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -52,9 +69,7 @@ namespace A9N.FlexTimeMonitor
 
         private void HandleException(Exception e)
         {
-            var logger = LogManager.GetLogger(GetType().Name);
-
-            logger.Fatal(e);
+            _logger.Fatal(e);
         }
     }
 }

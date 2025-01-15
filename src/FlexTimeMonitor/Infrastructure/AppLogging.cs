@@ -30,10 +30,10 @@ namespace A9N.FlexTimeMonitor.Infrastructure
 
         private static string GetLogFileName()
         {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var folder = "Flex Time Monitor";
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var folder = "FlexTimeMonitor";
             var file = "FlexTimeMonitor.log";
-            var logFileName = Path.Combine(appData, folder, file);
+            var logFileName = Path.Combine(appData, "A9N", folder, file);
 
             return logFileName;
         }
