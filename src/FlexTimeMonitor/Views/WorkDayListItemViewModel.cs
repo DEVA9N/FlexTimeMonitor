@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using A9N.FlexTimeMonitor.Contracts;
 using A9N.FlexTimeMonitor.Extensions;
 using A9N.FlexTimeMonitor.Mvvm;
@@ -11,19 +8,37 @@ using A9N.FlexTimeMonitor.Properties;
 
 namespace A9N.FlexTimeMonitor.Views
 {
-    internal sealed class WorkDayGridItemViewModel : ViewModel
+    internal sealed class WorkDayListItemViewModel : ViewModel
     {
         private const String DefaultTimeFormat = "T";
         private readonly WorkDayEntity _entity;
         private readonly WorkDayProgress _progress;
 
-        public WorkDayGridItemViewModel(WorkDayEntity entity)
+        public WorkDayListItemViewModel(WorkDayEntity entity)
         {
             _entity = entity ?? throw new ArgumentNullException(nameof(entity));
             _progress = new WorkDayProgress(entity, Settings.Default.WorkPeriod + Settings.Default.BreakPeriod);
         }
 
-        public String DayOfWeek => _entity.Start.DayOfWeek.ToString();
+        public Brush Background
+        {
+            get
+            {
+                if (IsToday)
+                {
+                    return Brushes.PaleGreen;
+                }
+
+                if (IsOddWeek)
+                {
+                    return Brushes.CornflowerBlue;
+                }
+
+                return Brushes.WhiteSmoke;
+            }
+        }
+
+        public String DayOfWeek => _entity.Start.DayOfWeek.ToString().Substring(0, 2) + ".";
 
         public String Date => _entity.Start.ToString("yyyy-MM-dd");
 

@@ -55,8 +55,6 @@ namespace A9N.FlexTimeMonitor
             try
             {
                 (DataContext as MainViewModel)?.OpenHistory();
-
-                WorkdayGrid.SortByDateDescending();
             }
             catch (Exception e)
             {
@@ -72,8 +70,6 @@ namespace A9N.FlexTimeMonitor
         {
             try
             {
-                WorkdayGrid.CommitChanges();
-
                 (DataContext as MainViewModel)?.SaveHistory();
             }
             catch (Exception e)

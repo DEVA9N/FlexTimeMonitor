@@ -9,9 +9,9 @@ namespace A9N.FlexTimeMonitor.Views
 {
     internal class WorkDayGridViewModel : ViewModel
     {
-        public ObservableCollection<WorkDayGridItemViewModel> Items { get; }
+        public ObservableCollection<WorkDayListItemViewModel> Items { get; }
 
-        public WorkDayGridItemViewModel Today { get; }
+        public WorkDayListItemViewModel Today { get; }
 
         public SelectionViewModel Selection { get; set; }
         
@@ -24,12 +24,12 @@ namespace A9N.FlexTimeMonitor.Views
             Today = Items.FirstOrDefault(i => i.IsToday);
         }
 
-        private ObservableCollection<WorkDayGridItemViewModel> CreateViewModels(IEnumerable<WorkDayEntity> items)
+        private ObservableCollection<WorkDayListItemViewModel> CreateViewModels(IEnumerable<WorkDayEntity> items)
         {
             var viewModels = from item in items
-                             select new WorkDayGridItemViewModel(item);
+                             select new WorkDayListItemViewModel(item);
 
-            return new ObservableCollection<WorkDayGridItemViewModel>(viewModels);
+            return new ObservableCollection<WorkDayListItemViewModel>(viewModels);
         }
 
     }
