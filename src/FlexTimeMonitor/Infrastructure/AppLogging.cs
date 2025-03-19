@@ -20,7 +20,7 @@ namespace A9N.FlexTimeMonitor.Infrastructure
         private static LoggingConfiguration CreateLoggerConfig()
         {
             var logFileName = GetLogFileName();
-            var logfile = new FileTarget("logfile") { FileName = logFileName, Layout = "${longdate}|${level:uppercase=true}|${logger}|${callsite}|${message}" };
+            var logfile = new FileTarget("logfile") { FileName = logFileName };
 
             var config = new LoggingConfiguration();
             config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);

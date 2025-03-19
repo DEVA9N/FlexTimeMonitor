@@ -53,10 +53,7 @@ namespace A9N.FlexTimeMonitor
 
         private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            if (e.Exception != null)
-            {
-                HandleException(e.Exception);
-            }
+            HandleException(e.Exception);
         }
 
         private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -69,7 +66,7 @@ namespace A9N.FlexTimeMonitor
 
         private void HandleException(Exception e)
         {
-            _logger.Fatal(e);
+            _logger.Fatal(e, "Unhandled Exception occured.");
         }
     }
 }
